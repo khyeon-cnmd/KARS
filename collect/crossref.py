@@ -4,6 +4,7 @@ from crossref.restful import Works, Etiquette
 import json
 from tqdm import tqdm
 import subprocess
+import time 
 
 class crossref:
     def __init__(self, keywords, save_path, DB_name, email):
@@ -30,7 +31,6 @@ class crossref:
         python_path = subprocess.run([f"ls {envs} | grep python | tail -n 1"],shell=True,stdout=subprocess.PIPE).stdout.decode('utf-8').strip() + '/site-packages'
         envs_path = envs+python_path
         
-        #envs_path = subprocess.run(["conda info --system | grep 'conda location' | cut -d':' -f2 | rev | cut -d'/' -f2- | rev"],shell=True,stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
         subprocess.run([f"sed -i -e 's/LIMIT = .*/LIMIT = {LIMIT}/' -e 's/MAXOFFSET = .*/MAXOFFSET = {MAXOFFSET}/' -e 's/FACETS_MAX_LIMIT = .*/FACETS_MAX_LIMIT = {FACETS_MAX_LIMIT}/' {envs_path}/crossref/restful.py"], shell=True)
 
     def Article_search_keyword(self):
@@ -42,8 +42,8 @@ class crossref:
             for word in keyword:
                 if count >= self.API.query(bibliographic=word).count():
                     min_word = word
-
             with tqdm(total= self.API.query(bibliographic=min_word).count()) as pbar:
+                time.sleep(3)
                 query = self.API.query(bibliographic=min_word)
                 for q in query:
                     count = 0

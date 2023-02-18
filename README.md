@@ -7,15 +7,15 @@
     conda activate KBRS
 
 ## 2. python libraries 설치
-    pip install pandas <br>
-    pip install tqdm <br>
-    pip install crossrefapi <br>
-    pip install -U pip setuptools wheel <br>
-    pip install scikit-learn <br>
-    pip install jsonlines <br>
-    pip install pylatexenc <br>
-    pip install networkx[default] <br>
-    pip install -U spacy <br>
+    pip install pandas
+    pip install tqdm
+    pip install crossrefapi
+    pip install -U pip setuptools wheel
+    pip install scikit-learn
+    pip install jsonlines
+    pip install pylatexenc
+    pip install networkx[default]
+    pip install -U spacy
 
 ## 3. Spacy 언어팩 설치
     python -m spacy download en_core_web_sm 

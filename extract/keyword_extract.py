@@ -12,9 +12,11 @@ from sklearn.feature_extraction.text import CountVectorizer
 from spacy.tokenizer import Tokenizer
 
 class keyword_extract:
-    def __init__(self, save_path, DB_name):          
+    def __init__(self, save_path, DB_name, mode, text_type):          
         self.save_path = save_path
         self.DB_name = DB_name
+        self.mode = mode
+        self.text_type = text_type
         self.metadata_list = []
         with jsonlines.open(f"{save_path}/{DB_name}/{DB_name}.jsonl", 'r') as f:
             for line in f.iter():
@@ -24,11 +26,11 @@ class keyword_extract:
         self.edge_dict = {}
         self.tokenize()
 
-    def tokenize(self, mode="efficiency"):
+    def tokenize(self):
         # 1. load spacy model
-        if mode == "efficiency":
+        if self.mode == "efficiency":
             nlp = spacy.load("en_core_web_sm") #trf
-        elif mode == "accuracy":
+        elif self.mode == "accuracy":
             nlp = spacy.load("en_core_web_trf")
 
         # 2. Use only space tokenizer
@@ -40,16 +42,23 @@ class keyword_extract:
                 # 3-1. Get metadatas
                 if 'published-print' in metadata.keys():
                     year = str(metadata['published-print']["date-parts"][0][0])
+                elif 'published-online' in metadata.keys():
+                    year = str(metadata['published-online']["date-parts"][0][0])
                 else:
                     continue
 
-                # 3-2. title preprocessing
-                title = LatexNodes2Text().latex_to_text(str(metadata['title'])).replace('\n', '').replace('\r', '').replace('\t', ' ')
-                title = re.sub(r'[^a-zA-Z0-9\s]', ' ', title)
+                # 3-2. text preprocessing
+                if self.text_type == "title":
+                    text = LatexNodes2Text().latex_to_text(str(metadata['title'])).replace('\n', '').replace('\r', '').replace('\t', ' ')
+                if self.text_type == "abstract":
+                    if not 'abstract' in metadata.keys():
+                        continue
+                    text = LatexNodes2Text().latex_to_text(str(metadata['abstract'])).replace('\n', '').replace('\r', '').replace('\t', ' ')
+                text = re.sub(r'[^a-zA-Z0-9\s]', ' ', text)
 
                 # 3-3. Node extraction
-                new_title = ""
-                doc = nlp(title)            
+                new_text = ""
+                doc = nlp(text)            
                 for token in doc:
                     if token.pos_ in ["ADJ", "NOUN", "PROPN", "VERB"] and len(token.lemma_) > 1:
                         has_number = lambda stringVal: any(char.isdigit() for char in stringVal)
@@ -62,10 +71,10 @@ class keyword_extract:
                                     self.node_dict[keyword][year] = 0
                                 self.node_dict[keyword]["total"] += 1
                                 self.node_dict[keyword][year] += 1
-                                new_title = new_title + " " + keyword
+                                new_text = new_text + " " + keyword
 
                 # 3-4. Edge extraction
-                X = self.cv.fit_transform([new_title])
+                X = self.cv.fit_transform([new_text])
                 Xc = (X.T * X) # matrix manipulation
                 Xc.setdiag(0) # set the diagonals to be zeroes as it's pointless to be 1
                 names = self.cv.get_feature_names_out() # This are the entity names (i.e. keywords)
@@ -85,7 +94,6 @@ class keyword_extract:
                                     self.edge_dict[edge_name][year] = 0
                                 self.edge_dict[edge_name]["total"] += 1
                                 self.edge_dict[edge_name][year] += 1
-                    
                 pbar.update(1)
 
         # 4. save dict to json
@@ -93,8 +101,7 @@ class keyword_extract:
             json.dump(self.node_dict, f)
         with open(f"{self.save_path}/{self.DB_name}/edge_feature.json", 'w') as f:
             json.dump(self.edge_dict, f)
-        #pd.DataFrame(self.node_dict).T.to_csv(f"{self.save_path}/node_feature.csv")
-        #pd.DataFrame(self.edge_dict).T.to_csv(f"{self.save_path}/edge_feature.csv")
+
 
 
 

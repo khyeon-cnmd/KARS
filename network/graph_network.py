@@ -26,10 +26,13 @@ class graph_network:
         self.modularity(freq="total")
         self.node_size()
         self.edge_width()
+        # Save graph data as json
+        with open(f"{self.save_path}/graph.json", "w") as f:
+            json.dump(nx.node_link_data(self.G), f, indent=4)
         
     def __call__(self, save_path):
         self.save_path = save_path
-        with open(f"{save_path}/subgraph.json", "r", encoding="utf-8") as f:
+        with open(f"{save_path}/graph.json", "r", encoding="utf-8") as f:
             subgraph = json.load(f)
         self.G = nx.node_link_graph(subgraph)
         self.modularity(freq="total")
@@ -53,10 +56,6 @@ class graph_network:
         print("Graph information")
         print("Node number: ", self.G.number_of_nodes())
         print("Edge number: ", self.G.number_of_edges())
-        
-        # Save graph data as json
-        with open(f"{self.save_path}/graph.json", "w") as f:
-            json.dump(nx.node_link_data(self.G), f, indent=4)
 
     def pagerank(self, freq):
         node_pagerank = nx.pagerank(self.G, alpha=0.85, max_iter=20, tol=1e-06, weight=freq, dangling=None)
@@ -142,7 +141,7 @@ class graph_network:
                 plt.clf()
 
                 # Save graph data as json
-                with open(f"{self.save_path}/{folder_name}/subgraph.json", "w") as f:
+                with open(f"{self.save_path}/{folder_name}/graph.json", "w") as f:
                     json.dump(nx.node_link_data(subgraph), f, indent=4)
 
                 # Save node ranks as csv

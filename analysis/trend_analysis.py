@@ -10,9 +10,10 @@ import torch
 from torch.nn import functional as F
 
 class trend_analysis:
-    def __init__(self,save_path, fit_type):
+    def __init__(self,save_path, fit_type, community_limit):
         self.save_path = save_path
         self.fit_type = fit_type
+        self.community_limit = community_limit
         self.keywords_freq_dict = {}
         with open(f"{self.save_path}/node_feature.json", 'r') as f:
             self.node_feature = json.load(f)
@@ -141,7 +142,6 @@ class trend_analysis:
 
     def trend_interpolation(self):
         # 1. get total keywords frequency per year
-        # make x as range from 0 to len(year_freq)
         x = np.linspace(0, len(self.keywords_freq_dict["total"]["year_freq"]), len(self.keywords_freq_dict["total"]["year_freq"]), endpoint=False)
         y = np.array(list(self.keywords_freq_dict["total"]["year_freq"].values())).astype(float)
 
@@ -273,17 +273,23 @@ class trend_analysis:
     def plot_community_year_trend(self):
         # 3. multi plots
         colors = plt.cm.rainbow
+        legend = []
         plt.subplots(figsize=(10, 5))
         for i, community in enumerate(self.keywords_freq_dict.keys()):
             if not community == "total":
-                # get x into int type
-                x = self.keywords_freq_dict[community]["year_percent"].keys()
-                x = [int(i) for i in x]
-                y = self.keywords_freq_dict[community]["year_percent"].values()
-                y = [float(i) for i in y]
-                
-                # draw lines
-                plt.plot(x, y, color=colors(i/len(self.keywords_freq_dict.keys())), label=community)
+                community_percent = float(community.split("%")[0].split("(")[1])
+                if not community_percent <= self.community_limit:
+                    # get x into int type
+                    x = self.keywords_freq_dict[community]["year_percent"].keys()
+                    x = [int(i) for i in x]
+                    y = self.keywords_freq_dict[community]["year_percent"].values()
+                    y = [float(i) for i in y]
+                    
+                    # draw lines
+                    plt.plot(x, y, color=colors(i/len(self.keywords_freq_dict.keys())), label=community)
+
+                    # append legend
+                    legend.append(community)
                 
         # 6. make vertical line by mu-3sigma, mu-sigma, mu+sigma, mu+3sigma. label these as development, introduction, growth, and maturity on the top of lines
         plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["development"], color='gray', linestyle='--', label="Development")
@@ -296,8 +302,6 @@ class trend_analysis:
         plt.xlim(int(self.keywords_freq_dict["total"]["PLC"]["development"]), int(self.keywords_freq_dict["total"]["max_year"]))
         plt.gca().set_ylim(bottom=0)
         plt.xticks(np.arange(int(self.keywords_freq_dict["total"]["PLC"]["development"]), int(self.keywords_freq_dict["total"]["max_year"]), 5))
-        legend = list(self.keywords_freq_dict.keys())
-        legend.remove("total")
         legend.append("PLC")
         plt.legend(legend, loc='upper left')
         plt.grid(alpha=0.5, linestyle='--')

@@ -10,31 +10,67 @@ import torch
 from torch.nn import functional as F
 
 class trend_analysis:
-    def __init__(self,save_path, fit_type, community_limit):
+    def __init__(self,save_path, fit_type, community_limit, year_range):
         self.save_path = save_path
         self.fit_type = fit_type
         self.community_limit = community_limit
+        self.year_range = year_range
         self.keywords_freq_dict = {}
         with open(f"{self.save_path}/node_feature.json", 'r') as f:
             self.node_feature = json.load(f)
-        self.keywords_freq_year()
+        self.total_freq_year()
+        self.community_freq_year()
         self.trend_interpolation()
         self.plot_total_year_trend()
         self.plot_community_year_trend()
         self.save_keywords_freq_dict()
     
-    def __call__(self,save_path, fit_type):
+    def __call__(self,save_path):
         self.save_path = save_path
-        self.fit_type
-        self.keywords_freq_dict = {}
-        self.keywords_freq_year()
-        self.trend_interpolation()
+        # delete keys containing % sign
+        self.keywords_freq_dict = {key: value for key, value in self.keywords_freq_dict.items() if not "%" in key}
+        self.community_freq_year()
         self.plot_total_year_trend()
         self.plot_community_year_trend()
         self.save_keywords_freq_dict()
         
-    def keywords_freq_year(self):
-        # 1. Get community keywords
+    def total_freq_year(self):
+        # 1. Get Total keywords & frequency per year
+        self.keywords_freq_dict["total"] = {"keywords":[], "year_freq":{}, "min_year":None, "max_year":None, "PLC": {}}
+        for keyword, value in tqdm(self.node_feature.items()):
+            self.keywords_freq_dict["total"]["keywords"] = [node for node in self.node_feature.keys()]
+            for year, freq in value.items():
+                if not year == "total":
+                    year = int(year)
+                    if not year in self.keywords_freq_dict["total"]["year_freq"].keys():
+                        self.keywords_freq_dict["total"]["year_freq"][year] = 0
+                    self.keywords_freq_dict["total"]["year_freq"][year] += freq
+
+        # 2. Delete latest year and get max year
+        max_year = max(self.keywords_freq_dict["total"]["year_freq"].keys())
+        del self.keywords_freq_dict["total"]["year_freq"][max_year]
+        max_year = max(self.keywords_freq_dict["total"]["year_freq"].keys())
+        self.keywords_freq_dict["total"]["max_year"] = int(max_year)
+
+        # 3. Get min year by year_range
+        min_year = max_year - self.year_range + 1
+        self.keywords_freq_dict["total"]["min_year"] = int(min_year)
+
+        # 4. Delete the out of range year
+        for year in range(min_year):
+            if year in self.keywords_freq_dict["total"]["year_freq"].keys():
+                del self.keywords_freq_dict["total"]["year_freq"][year]
+            
+        # 3. add 0 to empty
+        for year in range(min_year, max_year+1):
+            if not year in self.keywords_freq_dict["total"]["year_freq"].keys():
+                self.keywords_freq_dict["total"]["year_freq"][year] = 0
+
+        # 5. sort by year
+        self.keywords_freq_dict["total"]["year_freq"] = dict(sorted(self.keywords_freq_dict["total"]["year_freq"].items()))
+
+    def community_freq_year(self):
+        # 1. Get community keywords and year list
         for community in os.listdir(f"{self.save_path}/"):
             if os.path.isdir(f"{self.save_path}/{community}"):
                 with open(f"{self.save_path}/{community}/graph.json", 'r') as f:
@@ -42,53 +78,18 @@ class trend_analysis:
                 if not community in self.keywords_freq_dict.keys():
                     self.keywords_freq_dict[community] = {"keywords":[], "year_freq":{}, "year_percent":{}}
                 self.keywords_freq_dict[community]["keywords"] = [node["id"] for node in subgraph["nodes"]]
+                self.keywords_freq_dict[community]["year_freq"] = {year:0 for year in self.keywords_freq_dict["total"]["year_freq"].keys()}
 
-        # 2. Get keywords frequency per year
+        # 2. Get community frequency per year
         for keyword, value in tqdm(self.node_feature.items()):
             for community in self.keywords_freq_dict.keys():
-                if keyword in self.keywords_freq_dict[community]["keywords"]:
+                if not community == "total" and keyword in self.keywords_freq_dict[community]["keywords"]:
                     for year, freq in value.items():
-                        if not year == "total":
-                            if not year in self.keywords_freq_dict[community]["year_freq"].keys():
-                                self.keywords_freq_dict[community]["year_freq"][year] = 0
-                            self.keywords_freq_dict[community]["year_freq"][year] += freq
+                        if not year == "total" and int(year) in self.keywords_freq_dict[community]["year_freq"].keys():
+                                year = int(year)
+                                self.keywords_freq_dict[community]["year_freq"][year] += freq
 
-        # 3. find min & max year from all communities
-        min_year = 9999
-        max_year = 0
-        for community in self.keywords_freq_dict.keys():
-            for year in self.keywords_freq_dict[community]["year_freq"].keys():
-                if int(year) < min_year:
-                    min_year = int(year)
-                if int(year) > max_year:
-                    max_year = int(year)
-
-        # 4. add 0 to all year
-        for community in self.keywords_freq_dict.keys():
-            for year in range(min_year, max_year+1):
-                if not str(year) in self.keywords_freq_dict[community]["year_freq"].keys():
-                    self.keywords_freq_dict[community]["year_freq"][str(year)] = 0
-
-        # 5. sort by year
-        for community in self.keywords_freq_dict.keys():
-            self.keywords_freq_dict[community]["year_freq"] = dict(sorted(self.keywords_freq_dict[community]["year_freq"].items(), key=lambda x: x[0]))
-
-        # 6. delete data of last year
-        for community in self.keywords_freq_dict.keys():
-            del self.keywords_freq_dict[community]["year_freq"][str(max_year)]
-
-        # 6. make total keywords frequency per year
-        self.keywords_freq_dict["total"] = {"keywords":[], "year_freq":{}, "year_percent":{}, "PLC":{}}
-        for year in range(min_year, max_year):
-            self.keywords_freq_dict["total"]["year_freq"][str(year)] = 0
-        for community in self.keywords_freq_dict.keys():
-            if not community == "total":
-                for year, freq in self.keywords_freq_dict[community]["year_freq"].items():
-                    self.keywords_freq_dict["total"]["year_freq"][year] += freq
-        self.keywords_freq_dict["total"]["min_year"] = min_year
-        self.keywords_freq_dict["total"]["max_year"] = max_year-1
-
-        # 7. year percent of total 
+        # 3. year percent of total 
         for community in self.keywords_freq_dict.keys():
             if not community == "total":
                 for year, freq in self.keywords_freq_dict[community]["year_freq"].items():
@@ -191,16 +192,14 @@ class trend_analysis:
             y_fit = model(x).detach().numpy()
 
         # 3. get mu-3sigma, mu-sigma, mu+sigma, mu+3sigma
-        min_year = self.keywords_freq_dict["total"]["min_year"]
+        min_year = int(self.keywords_freq_dict["total"]["min_year"])
         mu_3sigma = mu - 3*sigma + min_year
         mu_2sigma = mu - 2*sigma + min_year
-        mu = mu + min_year
+        mu_sigma = mu - sigma + min_year
         mu_plus_sigma = mu + sigma + min_year
-        PLC = {"development":mu_3sigma, "introduction":mu_2sigma, "growth":mu, "maturity":mu_plus_sigma}
-
-        # 4. save PLC to self.keywords_freq_dict
-        self.keywords_freq_dict["total"]["PLC"] = PLC
-
+        mu_plus_3sigma = mu + 3*sigma + min_year
+        self.keywords_freq_dict["total"]["PLC"] = {"development":mu_3sigma, "introduction":mu_2sigma, "growth":mu_sigma, "maturity":mu_plus_sigma, "decline":mu_plus_3sigma}
+        
         # 5. plot gaussian interpolation with total keywords frequency per year but x axis is year
         plt.subplots(figsize=(10, 5))
         x = [int(year) for year in list(self.keywords_freq_dict["total"]["year_freq"].keys())]
@@ -210,20 +209,49 @@ class trend_analysis:
         plt.legend()
         plt.xlabel("Year")
         plt.ylabel("Frequency")
-        plt.title("Gaussian Interpolation")
 
         # 6. make vertical line by mu-3sigma, mu-sigma, mu+sigma, mu+3sigma. label these as development, introduction, growth, and maturity on the top of lines
-        plt.axvline(x=mu_3sigma, color='gray', linestyle='--', label="Development")
-        plt.axvline(x=mu_2sigma, color='gray', linestyle='--', label="Introduction")
-        plt.axvline(x=mu, color='gray', linestyle='--', label="Growth")
-        plt.axvline(x=mu_plus_sigma, color='gray', linestyle='--', label="Maturity")
+        plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["development"], color='gray', linestyle='--', label="Development")
+        plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["introduction"], color='gray', linestyle='--', label="Introduction")
+        plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["growth"], color='gray', linestyle='--', label="Growth")
+        plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["maturity"], color='gray', linestyle='--', label="Maturity")
+        plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["decline"], color='gray', linestyle='--', label="Decline")
+
+        # 7. write the label between axvline, at top of box
+        y_max = plt.axis()[3]
+        if x[-1] < self.keywords_freq_dict["total"]["PLC"]["development"]:
+            plt.text((x[0]+x[-1])/2, y_max,"Development", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+        elif x[0] < self.keywords_freq_dict["total"]["PLC"]["development"] < x[-1]:
+            plt.text((x[0]+self.keywords_freq_dict["total"]["PLC"]["development"])/2, y_max,"Development", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+
+            if x[-1] < self.keywords_freq_dict["total"]["PLC"]["introduction"]:
+                plt.text((self.keywords_freq_dict["total"]["PLC"]["development"]+x[-1])/2, y_max, "Introduction", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+            elif x[0] < self.keywords_freq_dict["total"]["PLC"]["introduction"] < x[-1]:
+                plt.text((self.keywords_freq_dict["total"]["PLC"]["development"]+self.keywords_freq_dict["total"]["PLC"]["introduction"])/2, y_max, "Introduction", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+
+                if x[-1] < self.keywords_freq_dict["total"]["PLC"]["growth"]:
+                    plt.text((self.keywords_freq_dict["total"]["PLC"]["introduction"]+x[-1])/2, y_max, "Growth", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+                elif x[0] < self.keywords_freq_dict["total"]["PLC"]["growth"] < x[-1]:
+                    plt.text((self.keywords_freq_dict["total"]["PLC"]["introduction"]+self.keywords_freq_dict["total"]["PLC"]["growth"])/2, y_max, "Growth", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+
+                    if x[-1] < self.keywords_freq_dict["total"]["PLC"]["maturity"]:
+                        plt.text((self.keywords_freq_dict["total"]["PLC"]["growth"]+x[-1])/2, y_max, "Maturity", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+                    elif x[0] < self.keywords_freq_dict["total"]["PLC"]["maturity"] < x[-1]:
+                        plt.text((self.keywords_freq_dict["total"]["PLC"]["growth"]+self.keywords_freq_dict["total"]["PLC"]["maturity"])/2, y_max, "Maturity", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+
+                        if x[-1] < self.keywords_freq_dict["total"]["PLC"]["decline"]:
+                            plt.text((self.keywords_freq_dict["total"]["PLC"]["maturity"]+x[-1])/2, y_max, "Decline", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+                        elif x[0] < self.keywords_freq_dict["total"]["PLC"]["decline"] < x[-1]:
+                            plt.text((self.keywords_freq_dict["total"]["PLC"]["maturity"]+self.keywords_freq_dict["total"]["PLC"]["decline"])/2, y_max, "Decline", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+
         plt.legend()
         plt.savefig(f"{self.save_path}/gaussian_interpolation.png")
 
     def plot_total_year_trend(self):
         # 1. plot keywords frequency per year
         plt.subplots(figsize=(10, 5))
-        for i, community in enumerate(self.keywords_freq_dict.keys()):
+        i = 0
+        for community in self.keywords_freq_dict.keys():
             if not community == "total":
                 if i == 0:
                     xy = self.keywords_freq_dict[community]["year_freq"]
@@ -231,6 +259,7 @@ class trend_analysis:
                     #set all year to 0
                     for year, freq in xy.items():
                         xy_old[year] = 0
+                    i+=1
                 else:
                     xy_old = xy.copy()
                     for year, freq in self.keywords_freq_dict[community]["year_freq"].items():
@@ -253,9 +282,36 @@ class trend_analysis:
         plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["introduction"], color='gray', linestyle='--', label="Introduction")
         plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["growth"], color='gray', linestyle='--', label="Growth")
         plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["maturity"], color='gray', linestyle='--', label="Maturity")
+        plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["decline"], color='gray', linestyle='--', label="Decline")
+
+        # 7. write the label between axvline, at top of box
+        y_max = plt.axis()[3]
+        if x[-1] < self.keywords_freq_dict["total"]["PLC"]["development"]:
+            plt.text((x[0]+x[-1])/2, y_max,"Development", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+        elif x[0] < self.keywords_freq_dict["total"]["PLC"]["development"] < x[-1]:
+            plt.text((x[0]+self.keywords_freq_dict["total"]["PLC"]["development"])/2, y_max,"Development", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+
+            if x[-1] < self.keywords_freq_dict["total"]["PLC"]["introduction"]:
+                plt.text((self.keywords_freq_dict["total"]["PLC"]["development"]+x[-1])/2, y_max, "Introduction", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+            elif x[0] < self.keywords_freq_dict["total"]["PLC"]["introduction"] < x[-1]:
+                plt.text((self.keywords_freq_dict["total"]["PLC"]["development"]+self.keywords_freq_dict["total"]["PLC"]["introduction"])/2, y_max, "Introduction", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+
+                if x[-1] < self.keywords_freq_dict["total"]["PLC"]["growth"]:
+                    plt.text((self.keywords_freq_dict["total"]["PLC"]["introduction"]+x[-1])/2, y_max, "Growth", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+                elif x[0] < self.keywords_freq_dict["total"]["PLC"]["growth"] < x[-1]:
+                    plt.text((self.keywords_freq_dict["total"]["PLC"]["introduction"]+self.keywords_freq_dict["total"]["PLC"]["growth"])/2, y_max, "Growth", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+
+                    if x[-1] < self.keywords_freq_dict["total"]["PLC"]["maturity"]:
+                        plt.text((self.keywords_freq_dict["total"]["PLC"]["growth"]+x[-1])/2, y_max, "Maturity", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+                    elif x[0] < self.keywords_freq_dict["total"]["PLC"]["maturity"] < x[-1]:
+                        plt.text((self.keywords_freq_dict["total"]["PLC"]["growth"]+self.keywords_freq_dict["total"]["PLC"]["maturity"])/2, y_max, "Maturity", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+
+                        if x[-1] < self.keywords_freq_dict["total"]["PLC"]["decline"]:
+                            plt.text((self.keywords_freq_dict["total"]["PLC"]["maturity"]+x[-1])/2, y_max, "Decline", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+                        elif x[0] < self.keywords_freq_dict["total"]["PLC"]["decline"] < x[-1]:
+                            plt.text((self.keywords_freq_dict["total"]["PLC"]["maturity"]+self.keywords_freq_dict["total"]["PLC"]["decline"])/2, y_max, "Decline", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
 
         # plot graphs
-        plt.title("Keywords Frequency per Year")
         plt.xlim(int(self.keywords_freq_dict["total"]["min_year"]), int(self.keywords_freq_dict["total"]["max_year"]))
         plt.gca().set_ylim(bottom=0)
         plt.xticks(np.arange(int(self.keywords_freq_dict["total"]["min_year"]), int(self.keywords_freq_dict["total"]["max_year"]), 5))
@@ -271,7 +327,19 @@ class trend_analysis:
         plt.savefig(f"{self.save_path}/total_year_trend.png")
 
     def plot_community_year_trend(self):
-        # 3. multi plots
+        # 1. Limit X-axis 
+        x_min = self.keywords_freq_dict["total"]["min_year"]
+        x_max = self.keywords_freq_dict["total"]["max_year"]
+        if x_min < self.keywords_freq_dict["total"]["PLC"]["development"]:
+            x_lower = int(self.keywords_freq_dict["total"]["PLC"]["development"])
+        else:
+            x_lower = int(x_min)
+        if x_max > self.keywords_freq_dict["total"]["PLC"]["decline"]:
+            x_upper = int(self.keywords_freq_dict["total"]["PLC"]["decline"])
+        else:
+            x_upper = int(x_max)
+        
+        # 2. plot data
         colors = plt.cm.rainbow
         legend = []
         plt.subplots(figsize=(10, 5))
@@ -279,26 +347,57 @@ class trend_analysis:
             if not community == "total":
                 community_percent = float(community.split("%")[0].split("(")[1])
                 if not community_percent <= self.community_limit:
-                    # get x into int type
-                    x = self.keywords_freq_dict[community]["year_percent"].keys()
-                    x = [int(i) for i in x]
-                    y = self.keywords_freq_dict[community]["year_percent"].values()
-                    y = [float(i) for i in y]
-                    
+                    x = []
+                    y = []
+                    for year in self.keywords_freq_dict[community]["year_percent"].keys():
+                        if x_lower <= int(year) <= x_upper:
+                            x.append(int(year))
+                            y.append(self.keywords_freq_dict[community]["year_percent"][year])
+       
                     # draw lines
                     plt.plot(x, y, color=colors(i/len(self.keywords_freq_dict.keys())), label=community)
 
                     # append legend
                     legend.append(community)
+
+                    # i ++
+                    i += 1
                 
         # 6. make vertical line by mu-3sigma, mu-sigma, mu+sigma, mu+3sigma. label these as development, introduction, growth, and maturity on the top of lines
         plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["development"], color='gray', linestyle='--', label="Development")
         plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["introduction"], color='gray', linestyle='--', label="Introduction")
         plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["growth"], color='gray', linestyle='--', label="Growth")
         plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["maturity"], color='gray', linestyle='--', label="Maturity")
+        plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["decline"], color='gray', linestyle='--', label="Decline")
 
-        # limit x from introduction to maturity
-        plt.title("comunities trend per Year")
+        # 7. write the label between axvline, at top of box
+        y_max = plt.axis()[3]
+        if x[-1] < self.keywords_freq_dict["total"]["PLC"]["development"]:
+            plt.text((x[0]+x[-1])/2, y_max,"Development", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+        elif x[0] < self.keywords_freq_dict["total"]["PLC"]["development"] < x[-1]:
+            plt.text((x[0]+self.keywords_freq_dict["total"]["PLC"]["development"])/2, y_max,"Development", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+
+            if x[-1] < self.keywords_freq_dict["total"]["PLC"]["introduction"]:
+                plt.text((self.keywords_freq_dict["total"]["PLC"]["development"]+x[-1])/2, y_max, "Introduction", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+            elif x[0] < self.keywords_freq_dict["total"]["PLC"]["introduction"] < x[-1]:
+                plt.text((self.keywords_freq_dict["total"]["PLC"]["development"]+self.keywords_freq_dict["total"]["PLC"]["introduction"])/2, y_max, "Introduction", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+
+                if x[-1] < self.keywords_freq_dict["total"]["PLC"]["growth"]:
+                    plt.text((self.keywords_freq_dict["total"]["PLC"]["introduction"]+x[-1])/2, y_max, "Growth", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+                elif x[0] < self.keywords_freq_dict["total"]["PLC"]["growth"] < x[-1]:
+                    plt.text((self.keywords_freq_dict["total"]["PLC"]["introduction"]+self.keywords_freq_dict["total"]["PLC"]["growth"])/2, y_max, "Growth", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+
+                    if x[-1] < self.keywords_freq_dict["total"]["PLC"]["maturity"]:
+                        plt.text((self.keywords_freq_dict["total"]["PLC"]["growth"]+x[-1])/2, y_max, "Maturity", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+                    elif x[0] < self.keywords_freq_dict["total"]["PLC"]["maturity"] < x[-1]:
+                        plt.text((self.keywords_freq_dict["total"]["PLC"]["growth"]+self.keywords_freq_dict["total"]["PLC"]["maturity"])/2, y_max, "Maturity", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+
+                        if x[-1] < self.keywords_freq_dict["total"]["PLC"]["decline"]:
+                            plt.text((self.keywords_freq_dict["total"]["PLC"]["maturity"]+x[-1])/2, y_max, "Decline", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+                        elif x[0] < self.keywords_freq_dict["total"]["PLC"]["decline"] < x[-1]:
+                            plt.text((self.keywords_freq_dict["total"]["PLC"]["maturity"]+self.keywords_freq_dict["total"]["PLC"]["decline"])/2, y_max, "Decline", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
+
+        # 6. set other parameters
         plt.xlim(int(self.keywords_freq_dict["total"]["PLC"]["development"]), int(self.keywords_freq_dict["total"]["max_year"]))
         plt.gca().set_ylim(bottom=0)
         plt.xticks(np.arange(int(self.keywords_freq_dict["total"]["PLC"]["development"]), int(self.keywords_freq_dict["total"]["max_year"]), 5))

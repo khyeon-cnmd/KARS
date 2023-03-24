@@ -35,7 +35,7 @@ if __name__ == "__main__":
     #crossref(keywords,save_path, DB_name, email) #works!
 
     # 2. keyword to Graph data
-    #keyword_extract(save_path, DB_name, mode, text_type, ngram_range)
+    keyword_extract(save_path, DB_name, mode, text_type, ngram_range)
 
     # 3. Research field structurization
     gn = graph_network(save_path, DB_name, filter_percent, community_seed, community_resolution)
@@ -46,9 +46,9 @@ if __name__ == "__main__":
                 gn(save_path=f"{path}/{dir}")
 
     # 4. Research trend analysis
-    ta = trend_analysis(save_path=f"{save_path}/{DB_name}", fit_type=fit_type, community_limit=community_limit, year_range=year_range)
-    for path, dirs, file in os.walk(f"{save_path}/{DB_name}"):
-        for dir in dirs:          
-            share_percent = dir.split("%")[0].split("(")[1]
-            if float(share_percent) > subgraph_limit:
-                ta(save_path=f"{path}/{dir}")
+    #ta = trend_analysis(save_path=f"{save_path}/{DB_name}", fit_type=fit_type, community_limit=community_limit, year_range=year_range)
+    #for path, dirs, file in os.walk(f"{save_path}/{DB_name}"):
+    #    for dir in dirs:          
+    #        share_percent = dir.split("%")[0].split("(")[1]
+    #        if float(share_percent) > subgraph_limit:
+    #            ta(save_path=f"{path}/{dir}")

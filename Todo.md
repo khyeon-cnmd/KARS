@@ -10,12 +10,8 @@
     * 단어간 연결관계를 통한 방향성 네트워크 구축 가능성
 
 ## 3. Graph network construction
-    * Node 개수를 기준으로 % 정하지 말고, Keyword frequencies 기준으로 %를 정하는게 좋을 듯?
-    * 키워드 간 유사도 계산 -> 중복 키워드를 줄이자. (ReRAM RRAM -> 합치자)
-    * 키워드 중요성과 빈도수를 통해 주요 키워드 선별 모듈 적용
+    * 키워드 간 유사도 계산 -> 중복 키워드를 줄이자. (ReRAM RRAM -> 합치자) <======= similarity 이론을 써도, Clustering 처럼 결과가 나타나기 때문에 불가능한 듯 함.
     * Community 의 subgraph를 계속 그려도 노드 사이즈가 더이상 작아지지 않는 경우 -> 무한히 loop 를 돌게 됨. limit 필요
-    * Graph plot -> circular layout 을 노드 크기별로 sorting 할 수 있는지?
-    * PYvis: https://towardsdatascience.com/making-network-graphs-interactive-with-python-and-pyvis-b754c22c270
 
 ## 4. Research trend analysis
     * 연도별 그래프 추출 -> Interactive 한 그래프 개형 변화 확인
@@ -25,6 +21,7 @@
 ## 5. Keyword to docs
     * 그래프간 유사도를 활용해서, subgraph 들과 논문 제목 graph 와의 유사도 비교 
     * 논문 제목으로 만든 subgraph 가 전체 graph 중 어떤 keyword cluster graph 에 매칭하는지 점수로 판단
+    
 ## 6. NLP-based research overviewing
     * 재료 공학적 지식에 기반해 수집된 데이터를 분석하는 모듈
     * 커뮤너티 별 주요 키워드를 포함하는 논문을 Metadata 의 제목으로부터 선별하는 모델 -> 이후 해당 키워드에 대해서 그래프 재추출?
@@ -43,6 +40,9 @@
 ## 3. Graph network construction
     * Pagerank 기반의 중요 키워드 추출
     * Louvain modularity 기반의 keyword clustering
+    * 키워드의 Pagerank Limit을 통해 그래프 내 주요 키워드 선별 기능
+    * 전체 Keyword frequencies 대비 커뮤니티의 Keyword frequencies를 기준으로 그래프 내 비율 나타냄
+    * PYvis 기반의 Interactive graph visualization 구현 (ref: https://towardsdatascience.com/making-network-graphs-interactive-with-python-and-pyvis-b754c22c270, https://visjs.github.io/vis-network/docs/network/)
 
 ## 4. Research trend analysis
     * subgraphs 에 대한 trend analysis 자동화

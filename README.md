@@ -15,8 +15,10 @@
     pip install jsonlines
     pip install pylatexenc
     pip install networkx[default]
+    pip install pyvis
     pip install -U spacy
     pip install torch==1.12.1+cu102  --extra-index-url https://download.pytorch.org/whl/cu102
+    pip install chemdataextractor2
 
 ## 3. Spacy 언어팩 설치
     python -m spacy download en_core_web_sm 
@@ -53,12 +55,13 @@
 ## 1. n (xx.xx%) 폴더들
     연구 분야를 구조화한 결과로, 각 커뮤니티별로 구분되어 있습니다.
     1) n: 구분된 커뮤니티의 index
-    2) (xx.xx%): 해당 커뮤니티의 전체 키워드 대비 키워드 분포 비율
+    2) (xx.xx%): 전체 키워드의 Pagerank 대비 커뮤니티의 키워드 Pagerank 비율
 
     폴더 내에 존재하는 파일은 다음과 같습니다.
-    1) community.png: 구조화된 커뮤니티의 키워드 이미지
+    1) community.html: 구조화된 커뮤니티의 키워드 interactive graph
     2) pagerank.csv: 구조화된 커뮤니티의 주요 키워드를 1순위부터 기술
-    3) subgraph.json: 구조화된 커뮤니티의 그래프 데이터
+    3) pagerank_doc.csv: 구조화된 커뮤니티의 주요 키워드를 포함하는 논문 정보를 1순위부터 기술
+    4) subgraph.json: 구조화된 커뮤니티의 그래프 데이터
 
     또한, 해당 커뮤니티의 키워드 분포 비율이 >20% 인 경우, 커뮤니티를 한번 더 세분화 합니다.
 

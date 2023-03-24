@@ -87,11 +87,17 @@ class keyword_extract:
                 doc = self.nlp(metadata[self.text_type])            
                 for token in doc:
                     if token.pos_ in ["ADJ", "NOUN", "PROPN", "VERB"] and len(token.lemma_) > 1:
-                        # filter string which only have number
+                        # 4-2 filter string which only have number
                         if not re.match("^[0-9]+$", str(token)):
-                            keyword = token.lemma_.lower()
+                            # 4-3 Make keyword into lemmatized form
+                            keyword = token.lemma_
                             if not keyword == "":
+                                # 4-4. Check the keyword is chemical composition like HfO2, TiO2, or Au/SiO2/Pt
+                                pattern = r"[A-Z][a-z]?\d*(?:[A-Z][a-z]?\d*)*"
+                                if not re.match(pattern, keyword):
+                                    keyword = keyword.lower()
                                 new_text = new_text + " " + keyword
+
                 #remove first space
                 new_text = new_text[1:]
 
@@ -118,20 +124,32 @@ class keyword_extract:
                 if self.text_type == "title":
                     text = metadata["title_cleaned"]
                 elif self.text_type == "abstract":
-                    text = metadata["abstract_cleaned"]
+                    text = metadata["abstract_cleaned"]              
 
-                # 3-3. Node extraction      
+                # 3-3. Node extraction 
                 X = self.cv.fit_transform([text])
                 word_count_list = X.toarray().sum(axis=0)
                 keyword_list = self.cv.get_feature_names_out()
                 for keyword, word_count in zip(keyword_list, word_count_list):
+                    # 3-3-1. year freq feature
                     if not keyword in self.node_dict.keys():
-                        self.node_dict[keyword] = {"total":0}
-                    if not year in self.node_dict[keyword]:
-                        self.node_dict[keyword][year] = 0
-                    self.node_dict[keyword]["total"] += int(word_count)
-                    self.node_dict[keyword][year] += int(word_count)
+                        self.node_dict[keyword] = {"year":{"total":0}, "NER":None}
+                    if not year in self.node_dict[keyword]["year"].keys():
+                        self.node_dict[keyword]["year"][year] = 0
 
+                    self.node_dict[keyword]["year"]["total"] += int(word_count)
+                    self.node_dict[keyword]["year"][year] += int(word_count)
+
+                    # 3-3-2. NER feature
+                    # if upper case alphabet exist, it is device
+                    pattern = r"[A-Z]"
+                    if "/" in keyword and re.match(pattern, keyword):
+                        self.node_dict[keyword]["NER"] = "device"
+                    elif re.match(pattern, keyword):
+                        self.node_dict[keyword]["NER"] = "material"
+                    else:
+                        self.node_dict[keyword]["NER"] = "other"
+                        
                 # 3-4. Edge extraction
                 Xc = (X.T * X) # matrix manipulation
                 Xc.setdiag(0) # set the diagonals to be zeroes as it's pointless to be 1
@@ -146,11 +164,11 @@ class keyword_extract:
                                 else:
                                     edge_name = f"{names[j]}-{names[i]}"
                                 if not edge_name in self.edge_dict.keys():
-                                    self.edge_dict[edge_name] = {"total":0}
-                                if not year in self.edge_dict[edge_name]:
-                                    self.edge_dict[edge_name][year] = 0
-                                self.edge_dict[edge_name]["total"] += 1
-                                self.edge_dict[edge_name][year] += 1
+                                    self.edge_dict[edge_name] = {"year":{"total":0}}
+                                if not year in self.edge_dict[edge_name]["year"].keys():
+                                    self.edge_dict[edge_name]["year"][year] = 0
+                                self.edge_dict[edge_name]["year"]["total"] += 1
+                                self.edge_dict[edge_name]["year"][year] += 1
                 pbar.update(1)
 
     def save_json(self):

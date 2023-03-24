@@ -2,10 +2,7 @@ import os
 import shutil
 import numpy as np
 import networkx as nx
-from bokeh.io import output_notebook, show, save
-from bokeh.models import Range1d, Circle, ColumnDataSource, MultiLine, EdgesAndLinkedNodes, NodesAndLinkedEdges, LabelSet
-from bokeh.plotting import figure, from_networkx
-from networkx.algorithms import community
+import netgraph
 import pyvis
 import json
 import pandas as pd
@@ -44,18 +41,20 @@ class graph_network:
         
     def __call__(self, save_path):
         self.save_path = save_path
-        with open(f"{save_path}/community.json", "r", encoding="utf-8") as f:
+        with open(f"{save_path}/graph.json", "r", encoding="utf-8") as f:
             subgraph = json.load(f)
         self.G = nx.node_link_graph(subgraph)
         self.modularity(freq="total")
-        self.save_graph()
         self.save_subgraph()
+        # Save graph data as json
+        with open(f"{self.save_path}/graph.json", "w") as f:
+            json.dump(nx.node_link_data(self.G), f, indent=4)
 
     def graph_construct(self,freq):
         self.G = nx.Graph()
         node_list = []
         for key, value in self.node_feature.items():
-            node_list.append((key,{"freq":value["year"][freq],"NER":value["NER"],"pagerank":None}))
+            node_list.append((key,{"freq":value["year"][freq],"NER":value["NER"],"pagerank":None,"modularity":None}))
         self.G.add_nodes_from(node_list)
 
         edge_list = []
@@ -73,7 +72,6 @@ class graph_network:
         node_pagerank = nx.pagerank(self.G, alpha=0.85, max_iter=20, tol=1e-06, weight=freq, dangling=None)
         for key, value in self.G.nodes.data():
             self.G.nodes[key]['pagerank'] = node_pagerank[key]
-            self.G.nodes[key]['size'] = node_pagerank[key] * 10000
         print("Pagerank calculation finished")
 
     def synonyms(self):
@@ -207,101 +205,66 @@ class graph_network:
         plt.savefig(f"{self.save_path}/integrated_pagerank.png")
 
     def modularity(self, freq):
-        colors = plt.cm.rainbow
         self.node_modularity = nx.algorithms.community.louvain_communities(self.G, weight=freq, resolution=self.community_resolution, seed=self.community_seed)
-        
         # sorting community by size
         self.node_modularity = sorted(self.node_modularity, key=len, reverse=True)
-        for idx, community in enumerate(self.node_modularity):
-            #sort community by pagerank
-            community = sorted(community, key=lambda x: self.G.nodes[x]['pagerank'], reverse=True)
-            #print top 30 nodes in community
-            print(f"Community {idx+1} top 30 nodes")
-            print("==============================")
-            for idx2, node in enumerate(community[:30]):
-                print(idx2, node, self.G.nodes[node]['pagerank'])
-            #get label of community by input
-            label = input("Choose community label. 1) material 2) processing 3) structure 4) property 5) performance\n:")
-            if label == '1':
-                label = 'material'
-            elif label == '2':
-                label = 'processing'
-            elif label == '3':
-                label = 'structure'
-            elif label == '4':
-                label = 'property'
-            elif label == '5':
-                label = 'performance'
-            
-            # assign label to community
-            for node in community:
-                if self.G.nodes[node]['NER'] == 'material' or self.G.nodes[node]['NER'] == 'device':
-                    continue
-                self.G.nodes[node]['NER'] = label
-                self.G.nodes[node]['color'] = matplotlib.colors.to_hex(colors(idx/len(self.node_modularity)))
-            
-        # for materials and device, apply new color
         for key, value in self.G.nodes.data():
-            if value['NER'] == 'material':
-                self.G.nodes[key]["color"] = "#FF0000"
-            elif value['NER'] == 'device':
-                self.G.nodes[key]["color"] = "#0000FF"
+            for idx, community in enumerate(self.node_modularity):
+                if key in community:
+                    self.G.nodes[key]['modularity'] = idx
+                    break
         
         print("Modularity information")
         print("Community number: ", len(self.node_modularity))
         print("Community size: ", [len(community) for community in self.node_modularity])
         print("Community pagerank: ", [sum([self.G.nodes[node]['pagerank'] for node in community]) for community in self.node_modularity])
 
-    def interactive_graph(self,G):
-        #Establish which categories will appear when hovering over each node
-        HOVER_TOOLTIPS = [("freq","@freq"), ("NER", "@NER"), ("pagerank", "@pagerank"), ("modularity", "@modularity"), ("color",'$color[swatch]:color')]
-
-        #Create a plot — set dimensions, toolbar, and title
-        plot = figure(tooltips = HOVER_TOOLTIPS,
-                    tools="pan,wheel_zoom,save,reset", active_scroll='wheel_zoom',
-                    x_range=Range1d(-10.1, 10.1), y_range=Range1d(-10.1, 10.1))
-
-        
-        # generate a layout dictionary using the spring layout algorithm
-        layout = nx.spring_layout(G)
-
-        #Create a network graph object
-        network_graph = from_networkx(G, layout, scale=10, center=(0, 0))
-
-        #Set node sizes and colors according to node degree (color as category from attribute)
-        network_graph.node_renderer.glyph = Circle(size="size", fill_color="color")
-
-        #Set node highlight colors
-        network_graph.node_renderer.hover_glyph = Circle(size="size", fill_color="#F2DC23", line_width=2)
-        network_graph.node_renderer.selection_glyph = Circle(size="size", fill_color="#F2DC23", line_width=2)
-
-        #Set edge opacity and width
-        network_graph.edge_renderer.glyph = MultiLine(line_alpha=0.5, line_width=1)
-
-        #Set edge highlight colors
-        network_graph.edge_renderer.selection_glyph = MultiLine(line_color="#F2DC23", line_width=2)
-        network_graph.edge_renderer.hover_glyph = MultiLine(line_color="#F2DC23", line_width=2)
-
-        #Highlight nodes and edges
-        network_graph.selection_policy = NodesAndLinkedEdges()
-        network_graph.inspection_policy = NodesAndLinkedEdges()
-
-        #plot graph
-        plot.renderers.append(network_graph)
-
-        #Add Labels
-        x, y = zip(*network_graph.layout_provider.graph_layout.values())
-        node_labels = list(G.nodes())
-        source = ColumnDataSource({'x': x, 'y': y, 'name': [node_labels[i] for i in range(len(x))]})
-        labels = LabelSet(x='x', y='y', text='name', source=source, text_font_size='10px', background_fill_alpha=.7)
-        plot.renderers.append(labels)
-
-        save(plot, filename=f"{self.save_path}/graph.html")
-
     def save_graph(self):
-        # Save graph into gexf
-        nx.write_gexf(self.G, f"{self.save_path}/graph.gexf")
+        # Set colors
+        colors = plt.cm.rainbow
+        node_color = {node: colors(self.G.nodes[node]['modularity']/len(self.node_modularity)) for node in self.G.nodes}
 
+        # make graph plot by netgraph
+        #netgraph.Graph(self.G, 
+        #node_color=node_color,
+        #node_edge_width=0,
+        #edge_alpha=0.1,
+        #node_layout="community", node_layout_kwargs=dict(node_to_community=self.G.nodes.data('modularity')),
+        #edge_layout="bundled"
+        #)
+        #plt.savefig(f"{self.save_path}/graph.png")
+
+
+        # make interactive html based graph network using pyvis
+        nt = pyvis.network.Network(height="1000px", width="100%", bgcolor="#ffffff", font_color="#000000", layout={}, filter_menu=True, select_menu=True) 
+        nt.from_nx(self.G)
+        # change font size of node by pagerank
+        for node in nt.nodes:
+            for i, community in enumerate(self.node_modularity):
+                if node["id"] in community:
+                    color = colors(i/len(self.node_modularity))
+                    color = matplotlib.colors.to_hex(color)
+                    node["value"] = self.G.nodes[node["id"]]["pagerank"]
+                    node["title"] = f"Node: {node['id']}<br>Pagerank: {self.G.nodes[node['id']]['pagerank']}<br>Modularity: {i}"
+                    node["color"] = {"background": color, "highlight": "#F2DC23", "hover": color, "border": "#000000"}
+                    break
+        # change width of edge by freq
+        for edge in nt.edges:
+            edge["value"] = edge["freq"]
+            edge["color"] = {"color": "#808080", "highlight": "#F2DC23", "hover": "#F2DC23"} 
+            edge["arrows"] = {"to": {"enabled": True, "scaleFactor": 1}}
+            edge["selectionWidth"] = 3
+        # Make a group
+        
+#
+        nt.force_atlas_2based(gravity=-50, central_gravity=0.3, spring_length=100, spring_strength=0.08, damping=0.4, overlap=1)
+        nt.show_buttons(filter_=["physics","interaction","nodes","edges","layout"])
+        nt.options.layout = {"improvedLayout":True, "clusterThreshold":500}
+        nt.options.interaction.navigationButtons = True
+        nt.options.interaction.keyboard = True
+        nt.options.physics.enabled = False
+        nt.write_html(f"{self.save_path}/graph.html", local=True, notebook=False, open_browser=True)
+        
         # Save graph data as json
         with open(f"{self.save_path}/graph.json", "w") as f:
             json.dump(nx.node_link_data(self.G), f, indent=4)
@@ -334,11 +297,33 @@ class graph_network:
                 if not os.path.exists(f"{self.save_path}/{folder_name}"):
                     os.makedirs(f"{self.save_path}/{folder_name}")
 
-                # Save graph into gexf
-                nx.write_gexf(self.G, f"{self.save_path}/{folder_name}/community.gexf")
+                # make interactive html based graph network using pyvis
+                nt = pyvis.network.Network(height="1000px", width="100%", bgcolor="#ffffff", font_color="#000000", layout={}) #directed=False, select_menu=True, filter_menu=True, , width="80%", 
+                nt.from_nx(subgraph)
+                # change font size of node by pagerank
+                for node in nt.nodes:
+                    node["value"] = node["pagerank"]
+                    color = colors(i/len(self.node_modularity))
+                    color = matplotlib.colors.to_hex(color)
+                    node["color"] = {"background": color, "highlight": "#F2DC23", "hover": color, "border": "#000000"}
+                # change width of edge by freq
+                for edge in nt.edges:
+                    edge["value"] = edge["freq"]
+                    edge["color"] = {"color": "#808080", "highlight": "#F2DC23", "hover": "#F2DC23"} 
+                    edge["arrows"] = {"to": {"enabled": True, "scaleFactor": 1}}
+                    edge["selectionWidth"] = 3
+                #nt.barnes_hut(gravity=-80000, central_gravity=0.3, spring_length=250, spring_strength=0.001, damping=0.09, overlap=1)
+                nt.force_atlas_2based(gravity=-50, central_gravity=0.3, spring_length=100, spring_strength=0.08, damping=0.4, overlap=1)
+                nt.show_buttons(filter_=["physics","interaction","nodes","edges","layout"])
+                nt.options.layout = {"improvedLayout":True, "clusterThreshold":500}
+                #nt.options.autoResize = True
+                nt.options.interaction.navigationButtons = True
+                nt.options.interaction.keyboard = True
+                nt.options.physics.enabled = False
+                nt.write_html(f"{self.save_path}/{folder_name}/community.html", local=True, notebook=False, open_browser=True)
 
                 # Save graph data as json
-                with open(f"{self.save_path}/{folder_name}/community.json", "w") as f:
+                with open(f"{self.save_path}/{folder_name}/graph.json", "w") as f:
                     json.dump(nx.node_link_data(subgraph), f, indent=4)
 
                 # Save node ranks as csv

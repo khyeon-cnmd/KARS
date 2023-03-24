@@ -35,7 +35,7 @@ if __name__ == "__main__":
     #crossref(keywords,save_path, DB_name, email) #works!
 
     # 2. keyword to Graph data
-    keyword_extract(save_path, DB_name, mode, text_type, ngram_range)
+    #keyword_extract(save_path, DB_name, mode, text_type, ngram_range)
 
     # 3. Research field structurization
     gn = graph_network(save_path, DB_name, filter_percent, community_seed, community_resolution)

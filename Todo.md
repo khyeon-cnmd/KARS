@@ -12,6 +12,7 @@
 ## 3. Graph network construction
     * 키워드 간 유사도 계산 -> 중복 키워드를 줄이자. (ReRAM RRAM -> 합치자) <======= similarity 이론을 써도, Clustering 처럼 결과가 나타나기 때문에 불가능한 듯 함.
     * Community 의 subgraph를 계속 그려도 노드 사이즈가 더이상 작아지지 않는 경우 -> 무한히 loop 를 돌게 됨. limit 필요
+    * Gephi toolkit 을 활용해 gexf 형식의 파일을 백그라운드로 변형해 pdf로 출력하도록 하기!(https://github.com/jsundram/pygephi)
 
 ## 4. Research trend analysis
     * 연도별 그래프 추출 -> Interactive 한 그래프 개형 변화 확인

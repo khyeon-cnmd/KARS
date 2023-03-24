@@ -22,7 +22,7 @@ class keyword_extract:
         with jsonlines.open(f"{save_path}/{DB_name}/{DB_name}.jsonl", 'r') as f:
             for line in f.iter():
                 self.metadata_list.append(line)
-        self.cv = CountVectorizer(ngram_range=ngram_range, stop_words = None, tokenizer=lambda x: x.split(' '))
+        self.cv = CountVectorizer(ngram_range=ngram_range, stop_words = None, lowercase=False, tokenizer=lambda x: x.split(' '))
         # 2. load spacy model
         if self.mode == "efficiency":
             self.nlp = spacy.load("en_core_web_sm") #trf
@@ -35,6 +35,40 @@ class keyword_extract:
         self.keyword_extract()
         self.graph_construct()
         self.save_json()
+
+    def NER(self, word):
+        def count_upper(text):
+            """
+            Returns the number of upper case letters in the given text.
+            """
+            return sum(1 for c in text if c.isupper())
+
+        def count_element(text):
+            """
+            Returns the number of elements in the given text.
+            """
+            elements = {'A': ['As', 'Am', 'Ac', 'At', 'Ar', 'Ag', 'Al', 'Au'], 'B': ['Bk', 'Br', 'Bi', 'Ba', 'Be', 'Bh', 'B'], 'C': ['Cf', 'Cd', 'Cl', 'Cs', 'Co', 'Cn', 'Ce', 'Cu', 'Cr', 'Cm', 'Ca', 'C'], 'D': ['Ds', 'Dy', 'Db'], 'E': ['Er', 'Es', 'Eu'], 'F': ['Fl', 'Fm', 'Fr', 'Fe', 'F'], 'G': ['Ge', 'Gd', 'Ga'], 'H': ['Hg', 'Hs', 'Ho', 'Hf', 'He', 'H'], 'I': ['In', 'Ir', 'I'], 'K': ['Kr', 'K'], 'L': ['Lv', 'Lu', 'La', 'Lr', 'Li'], 'M': ['Mc', 'Md', 'Mg', 'Mt', 'Mo', 'Mn'], 'N': ['Na', 'Nd', 'Ne', 'Np', 'Nh', 'Nb', 'No', 'Ni', 'N'], 'O': ['Os', 'Og', 'O'], 'P': ['Po', 'Pu', 'Pb', 'Pd', 'Pa', 'Pt', 'Pm', 'Pr', 'P'], 'R': ['Rg', 'Ru', 'Ra', 'Rb', 'Re', 'Rf', 'Rn', 'Rh'], 'S': ['Sg', 'Sc', 'Si', 'Sn', 'Sr', 'Sb', 'Se', 'Sm', 'S'], 'T': ['Tb', 'Tc', 'Tm', 'Tl', 'Ts', 'Ta', 'Te', 'Ti', 'Th'], 'U': ['U'], 'V': ['V'], 'W': ['W'], 'X': ['Xe'], 'Y': ['Yb', 'Y'], 'Z': ['Zr', 'Zn']}
+            count = 0
+            for element in elements.values():
+                for e in element:
+                    if e in text:
+                        count += 1
+                        break
+            return count
+
+        if "/" in word:
+            for w in word.split("/"):
+                if count_upper(word) < round(len(word)/2):
+                    return "other"
+                if count_upper(word) == count_element(word):
+                    return "material"
+
+            return "device"
+        if count_upper(word) < round(len(word)/2):
+            return "other"
+        if count_upper(word) == count_element(word):
+            return "material"
+        return "other"
 
     def keyword_extract(self):
         print(f"Loaded number of articles: {len(self.metadata_list)}\n")
@@ -91,10 +125,9 @@ class keyword_extract:
                         if not re.match("^[0-9]+$", str(token)):
                             # 4-3 Make keyword into lemmatized form
                             keyword = token.lemma_
+                            # 4-4 check material or device using NER
                             if not keyword == "":
-                                # 4-4. Check the keyword is chemical composition like HfO2, TiO2, or Au/SiO2/Pt
-                                pattern = r"[A-Z][a-z]?\d*(?:[A-Z][a-z]?\d*)*"
-                                if not re.match(pattern, keyword):
+                                if self.NER(keyword) == "other":
                                     keyword = keyword.lower()
                                 new_text = new_text + " " + keyword
 
@@ -141,14 +174,8 @@ class keyword_extract:
                     self.node_dict[keyword]["year"][year] += int(word_count)
 
                     # 3-3-2. NER feature
-                    # if upper case alphabet exist, it is device
-                    pattern = r"[A-Z]"
-                    if "/" in keyword and re.match(pattern, keyword):
-                        self.node_dict[keyword]["NER"] = "device"
-                    elif re.match(pattern, keyword):
-                        self.node_dict[keyword]["NER"] = "material"
-                    else:
-                        self.node_dict[keyword]["NER"] = "other"
+                    self.node_dict[keyword]["NER"] = self.NER(keyword)
+                    
                         
                 # 3-4. Edge extraction
                 Xc = (X.T * X) # matrix manipulation

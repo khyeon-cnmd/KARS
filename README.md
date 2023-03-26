@@ -15,11 +15,11 @@
     pip install jsonlines
     pip install pylatexenc
     pip install networkx[default]
-    
-    #pip install pyvis
-    #pip install bokeh
+    pip install tabulate
     pip install -U spacy
     pip install torch==1.12.1+cu102  --extra-index-url https://download.pytorch.org/whl/cu102
+    #pip install pyvis
+    #pip install bokeh
 
 ## 3. Spacy 언어팩 설치
     python -m spacy download en_core_web_sm 

@@ -2,15 +2,9 @@ import os
 import shutil
 import numpy as np
 import networkx as nx
-from bokeh.io import output_notebook, show, save
-from bokeh.models import Range1d, Circle, ColumnDataSource, MultiLine, EdgesAndLinkedNodes, NodesAndLinkedEdges, LabelSet
-from bokeh.plotting import figure, from_networkx
-from networkx.algorithms import community
-import pyvis
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib
 from tqdm import tqdm
 import warnings
 warnings.filterwarnings(action="ignore", category=FutureWarning)
@@ -36,26 +30,16 @@ class graph_network:
             self.metadata_list = [json.loads(line) for line in f]
         #for total
         self.graph_construct(freq="total")   
-        self.pagerank(freq="total")
+        self.research_structurization(freq="total")
         self.keyword_filter(percent=self.filter_percent)
-        self.modularity(freq="total")
+        self.community_labeling()
         self.save_graph()
-        self.save_subgraph()
-        
-    def __call__(self, save_path):
-        self.save_path = save_path
-        with open(f"{save_path}/community.json", "r", encoding="utf-8") as f:
-            subgraph = json.load(f)
-        self.G = nx.node_link_graph(subgraph)
-        self.modularity(freq="total")
-        self.save_graph()
-        self.save_subgraph()
 
     def graph_construct(self,freq):
         self.G = nx.Graph()
         node_list = []
         for key, value in self.node_feature.items():
-            node_list.append((key,{"freq":value["year"][freq],"NER":value["NER"],"pagerank":None}))
+            node_list.append((key,{"freq":value["year"][freq],"NER":value["NER"],"pagerank":None, "community":None}))
         self.G.add_nodes_from(node_list)
 
         edge_list = []
@@ -68,13 +52,6 @@ class graph_network:
         print("Graph information")
         print("Node number: ", self.G.number_of_nodes())
         print("Edge number: ", self.G.number_of_edges())
-
-    def pagerank(self, freq):
-        node_pagerank = nx.pagerank(self.G, alpha=0.85, max_iter=20, tol=1e-06, weight=freq, dangling=None)
-        for key, value in self.G.nodes.data():
-            self.G.nodes[key]['pagerank'] = node_pagerank[key]
-            self.G.nodes[key]['size'] = node_pagerank[key] * 10000
-        print("Pagerank calculation finished")
 
     def synonyms(self):
         # finding synonyms using edge linkage information
@@ -162,7 +139,71 @@ class graph_network:
         #    #panther = nx.panther_similarity(self.G, source=node, k=5, path_length=5, c=0.5, delta=0.1, eps=None)
         #    #print(node, sorted(panther.items(), key=lambda x: x[1], reverse=True)[:10])
 
+    def research_structurization(self, freq):
+        def pagerank(self, freq):
+            node_pagerank = nx.pagerank(self.G, alpha=0.85, max_iter=20, tol=1e-06, weight=freq, dangling=None)
+            for key, value in self.G.nodes.data():
+                self.G.nodes[key]['pagerank'] = node_pagerank[key]
+                self.G.nodes[key]['size'] = node_pagerank[key] * 10000
+            print("Pagerank calculation finished")
+
+        def modularity(self, G, freq):
+            # calculate modularity using Louvain method
+            node_modularity = nx.algorithms.community.louvain_communities(G, weight=freq, resolution=self.community_resolution, seed=self.community_seed)
+            #node_modularity = nx.algorithms.community.greedy_modularity_communities(G, weight=freq)
+            # sorting community by size
+            node_modularity = sorted(node_modularity, key=len, reverse=True)
+
+            return node_modularity
+
+        # calculate pagerank
+        pagerank(self, freq=freq)
+
+        # 1. calculate pagerank sum of graph
+        total_pagerank = sum([self.G.nodes[node]['pagerank'] for node in self.G.nodes])
+
+        # 2. recursively modularize graph
+        graphs = [self.G]
+        modularized_graphs = []
+        max_recursion = 1
+        for i in range(0,max_recursion):
+            queue_graphs = []
+            for G in graphs:
+                node_modularity = modularity(self, G, freq=freq)
+                for idx, community in enumerate(node_modularity):
+                    # make subgraph by community
+                    subgraph = G.subgraph(community)
+                    
+                    # calculate pagerank sum of community
+                    community_pagerank = sum([G.nodes[node]['pagerank'] for node in community])
+                    print(f"community {idx} pagerank: {community_pagerank} ({community_pagerank/total_pagerank*100}%)")
+
+                    # if pagerank sum of community is less than 10% of total pagerank, stop modularization and append graph to modularized_graphs
+                    if community_pagerank/total_pagerank < 0.05:
+                        modularized_graphs.append(subgraph)
+                    # else, append subgraph to queue_graphs
+                    else:
+                        queue_graphs.append(subgraph)
+            
+            # print graphs and modularized_graphs
+            print(f"unmodularized Graphs: {len(queue_graphs)}")
+            print(f"modularized Graphs: {len(modularized_graphs)}")
+
+            # if modularized_graphs is not empty, break loop
+            graphs = queue_graphs
+            if not graphs:
+                break
+        
+        # unmodularized graphs are appended to modularized_graphs
+        modularized_graphs.extend(graphs)
+
+        # label community in self.G
+        for idx, G in enumerate(modularized_graphs):
+            for node in G.nodes:
+                self.G.nodes[node]['community'] = idx
+
     def keyword_filter(self, percent):
+
         # sort self.G.nodes by pagerank
         node_list = sorted(self.G.nodes, key=lambda x: self.G.nodes[x]['pagerank'], reverse=True)
         x = [i for i in range(0, len(node_list)+1)]
@@ -206,22 +247,43 @@ class graph_network:
         plt.gca().set_ylim(bottom=0)
         plt.savefig(f"{self.save_path}/integrated_pagerank.png")
 
-    def modularity(self, freq):
-        colors = plt.cm.rainbow
-        self.node_modularity = nx.algorithms.community.louvain_communities(self.G, weight=freq, resolution=self.community_resolution, seed=self.community_seed)
+    def community_labeling(self):
+        # 0. Assign colors of 1) material 2) processing 3) structure 4) property 5) performance Enter) others
+        color_dict = {"material":"#36C5F0", "processing":"#E01E5A", "structure":"ECB22E", "property":"2EB67D","performance":"4A154B","others":"#737373"}
+       
+        # 1. Calculate pagerank of each community
+        community_pagerank = {}
+        for node in self.G.nodes:
+            community = self.G.nodes[node]['community']
+            if community not in community_pagerank:
+                community_pagerank[community] = 0
+            community_pagerank[community] += self.G.nodes[node]['pagerank']
+
+        # 2. Sort community by pagerank
+        community_list = sorted(community_pagerank, key=lambda x: community_pagerank[x], reverse=True)
+        print(community_list)
+
+        # 3. Get community nodes
+        for idx, community in enumerate(community_list):
+            community_nodes = [node for node in self.G.nodes if self.G.nodes[node]['community'] == community]
+            community_nodes = sorted(community_nodes, key=lambda x: self.G.nodes[x]['pagerank'], reverse=True)
+            community_pagerank = sum([self.G.nodes[node]['pagerank'] for node in community_nodes])
         
-        # sorting community by size
-        self.node_modularity = sorted(self.node_modularity, key=len, reverse=True)
-        for idx, community in enumerate(self.node_modularity):
-            #sort community by pagerank
-            community = sorted(community, key=lambda x: self.G.nodes[x]['pagerank'], reverse=True)
             #print top 30 nodes in community
-            print(f"Community {idx+1} top 30 nodes")
+            print(f"Community {community}, node number: {len(community_nodes)}, pagerank: {community_pagerank/self.total_pagerank*100:.2f}%")
             print("==============================")
-            for idx2, node in enumerate(community[:30]):
-                print(idx2, node, self.G.nodes[node]['pagerank'])
+            idx2=0
+            for node in community_nodes:
+                if self.G.nodes[node]['NER'] == 'material' or self.G.nodes[node]['NER'] == 'device':
+                    continue
+                else:
+                    print(f"{idx2+1} {node} {self.G.nodes[node]['pagerank']}")
+                    idx2+=1
+                if idx2 == 30:
+                    break
+
             #get label of community by input
-            label = input("Choose community label. 1) material 2) processing 3) structure 4) property 5) performance\n:")
+            label = input("Choose community label. 1) material 2) processing 3) structure 4) property 5) performance Enter) others\n:")
             if label == '1':
                 label = 'material'
             elif label == '2':
@@ -232,71 +294,16 @@ class graph_network:
                 label = 'property'
             elif label == '5':
                 label = 'performance'
+            else:
+                label = 'others'
             
-            # assign label to community
-            for node in community:
+            # assign label to NER
+            for node in community_nodes:
                 if self.G.nodes[node]['NER'] == 'material' or self.G.nodes[node]['NER'] == 'device':
-                    continue
-                self.G.nodes[node]['NER'] = label
-                self.G.nodes[node]['color'] = matplotlib.colors.to_hex(colors(idx/len(self.node_modularity)))
-            
-        # for materials and device, apply new color
-        for key, value in self.G.nodes.data():
-            if value['NER'] == 'material':
-                self.G.nodes[key]["color"] = "#FF0000"
-            elif value['NER'] == 'device':
-                self.G.nodes[key]["color"] = "#0000FF"
-        
-        print("Modularity information")
-        print("Community number: ", len(self.node_modularity))
-        print("Community size: ", [len(community) for community in self.node_modularity])
-        print("Community pagerank: ", [sum([self.G.nodes[node]['pagerank'] for node in community]) for community in self.node_modularity])
-
-    def interactive_graph(self,G):
-        #Establish which categories will appear when hovering over each node
-        HOVER_TOOLTIPS = [("freq","@freq"), ("NER", "@NER"), ("pagerank", "@pagerank"), ("modularity", "@modularity"), ("color",'$color[swatch]:color')]
-
-        #Create a plot — set dimensions, toolbar, and title
-        plot = figure(tooltips = HOVER_TOOLTIPS,
-                    tools="pan,wheel_zoom,save,reset", active_scroll='wheel_zoom',
-                    x_range=Range1d(-10.1, 10.1), y_range=Range1d(-10.1, 10.1))
-
-        
-        # generate a layout dictionary using the spring layout algorithm
-        layout = nx.spring_layout(G)
-
-        #Create a network graph object
-        network_graph = from_networkx(G, layout, scale=10, center=(0, 0))
-
-        #Set node sizes and colors according to node degree (color as category from attribute)
-        network_graph.node_renderer.glyph = Circle(size="size", fill_color="color")
-
-        #Set node highlight colors
-        network_graph.node_renderer.hover_glyph = Circle(size="size", fill_color="#F2DC23", line_width=2)
-        network_graph.node_renderer.selection_glyph = Circle(size="size", fill_color="#F2DC23", line_width=2)
-
-        #Set edge opacity and width
-        network_graph.edge_renderer.glyph = MultiLine(line_alpha=0.5, line_width=1)
-
-        #Set edge highlight colors
-        network_graph.edge_renderer.selection_glyph = MultiLine(line_color="#F2DC23", line_width=2)
-        network_graph.edge_renderer.hover_glyph = MultiLine(line_color="#F2DC23", line_width=2)
-
-        #Highlight nodes and edges
-        network_graph.selection_policy = NodesAndLinkedEdges()
-        network_graph.inspection_policy = NodesAndLinkedEdges()
-
-        #plot graph
-        plot.renderers.append(network_graph)
-
-        #Add Labels
-        x, y = zip(*network_graph.layout_provider.graph_layout.values())
-        node_labels = list(G.nodes())
-        source = ColumnDataSource({'x': x, 'y': y, 'name': [node_labels[i] for i in range(len(x))]})
-        labels = LabelSet(x='x', y='y', text='name', source=source, text_font_size='10px', background_fill_alpha=.7)
-        plot.renderers.append(labels)
-
-        save(plot, filename=f"{self.save_path}/graph.html")
+                    self.G.nodes[node]["color"] = color_dict[label]
+                else:
+                    self.G.nodes[node]['NER'] = label
+                    self.G.nodes[node]['color'] = color_dict[label]
 
     def save_graph(self):
         # Save graph into gexf

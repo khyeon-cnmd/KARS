@@ -33,6 +33,7 @@ class keyword_extract:
         self.node_dict = {}
         self.edge_dict = {}
         self.keyword_extract()
+        self.synonym_check()
         self.graph_construct()
         self.save_json()
 
@@ -56,14 +57,12 @@ class keyword_extract:
                         break
             return count
 
-        if "/" in word:
-            for w in word.split("/"):
-                if count_upper(word) < round(len(word)/2):
-                    return "other"
-                if count_upper(word) == count_element(word):
-                    return "material"
-
-            return "device"
+        #if "/" in word:
+        #    for w in word.split("/"):
+        #        if count_upper(word) < round(len(word)/2):
+        #            continue
+        #        if count_upper(word) == count_element(word):
+        #            return "device"
         if count_upper(word) < round(len(word)/2):
             return "other"
         if count_upper(word) == count_element(word):
@@ -106,7 +105,8 @@ class keyword_extract:
             # 3-6. make - to space
             text = re.sub(r'-', ' ', text)
             # 3-5. remove special characters except for /
-            text = re.sub(r'[^a-zA-Z0-9/\s]', '', text)
+            #text = re.sub(r'[^a-zA-Z0-9/\s]', '', text)
+            text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
             # 3-7. remove word which only have number
             text = re.sub(r'\b[0-9]+\b\s*', '', text)
             # 3-8. save text
@@ -142,6 +142,51 @@ class keyword_extract:
 
                 pbar.update(1)
         print(f"preprocessing text finished\n")
+
+    def synonym_check(self):
+        #1. get all keywords
+        #2. Upper Lower check
+        #3. abbreviation check
+
+        #1. get composition list
+        composition_list = []
+        for metadata in self.metadata_list:
+            if self.text_type == "title":
+                text = metadata['title_cleaned']
+            elif self.text_type == "abstract":
+                text = metadata['abstract_cleaned']
+            
+            keywords = text.split(" ")
+            for keyword in keywords:
+                #if upper letter exist,
+                if sum(1 for c in keyword if c.isupper()) >= 1:
+                    composition_list.append(keyword)
+
+        #2. for all keywords, check upper lower
+        with tqdm(total=len(self.metadata_list)) as pbar:
+            for i, metadata in enumerate(self.metadata_list):
+                if self.text_type == "title":
+                    text = metadata['title_cleaned']
+                elif self.text_type == "abstract":
+                    text = metadata['abstract_cleaned']
+
+                keywords = text.split(" ")
+                for keyword in keywords:
+                    for composition in composition_list:
+                        if keyword == composition.lower():
+                            text = text.replace(keyword, composition)
+
+                # 4-2. update metadata
+                if self.text_type == "title":
+                    self.metadata_list[i]['title_cleaned'] = text
+                elif self.text_type == "abstract":
+                    self.metadata_list[i]['abstract_cleaned'] = text
+
+                pbar.update(1)
+ 
+
+                 
+
 
     def graph_construct(self):
         print("Node & Edge extraction...")

@@ -6,9 +6,11 @@
     * keyword 추출 시 Vectorizer 종류를 Count 와 TF-IDF 선택 가능 -> 보류.. Graph network 에서 어떻게 작용할 지 모르겠음
     * node feature 에 추가할 수 있는 데이터: 논문 인용 수, ...
     * 단어간 연결관계를 통한 방향성 네트워크 구축 가능성
-    * Chemical composition 중 소문자로 존재하는 단어들을 동의어 처리 하기
     * Abbrebiation 인식하여 대문자 유지 및 동의어 처리
     * 키워드 간 유사도 계산 -> 중복 키워드를 줄이자. (ReRAM RRAM -> 합치자) <======= similarity 이론을 써도, Clustering 처럼 결과가 나타나기 때문에 불가능한 듯 함.
+    * Edge frequency 를 활용해서, single keywords 를 multi-keyword 화 할 수 있지 않을까?
+    * title, Abstract 는 결국 PSPP 관계가 모두 담겨있는 종합적 데이터를 포함하다 보니, 각 Community 는 종합적 결과에 따른 주제로 나타나게 됨.
+    따라서, PSPP 관계를 탐색하기 위해서는 NER 모델을 활용해 단어별 PSPP Labeling 을 하는 수 밖에 없음
 
 ## 3. Graph network construction
     * Modularity 를 통해 구해진 결과를 따로 저장 -> 이는 전체 데이터에 대한 종합적 결과로 research trend analysis 에 활용
@@ -20,6 +22,9 @@
     * Gaussian fitting 을 개선하는 new fitting curve
     * 각 커뮤너티를 자연어 처리를 활용해 자동으로 정의하는 모델 -> description 과 같은 요약 모델?
     
+## 5. PSPP analysis
+    * Materials node 로 부터 거리를 통해 M->P->S->P->P 를 정의할 수도 있지 않을까?
+
 ## 5. Keyword to docs
     * 그래프간 유사도를 활용해서, subgraph 들과 논문 제목 graph 와의 유사도 비교 
     * 논문 제목으로 만든 subgraph 가 전체 graph 중 어떤 keyword cluster graph 에 매칭하는지 점수로 판단
@@ -39,6 +44,7 @@
     * 논문 title 및 abstract 중 그래프 화 대상 선택 가능
     * ngram 크기 조절을 통해 keyword 길이 조절 가능
     * Chemical composition 을 인식하여 material 로 Labeling
+    * Chemical composition 중 소문자로 존재하는 단어들을 동의어 처리 하기
 
 ## 3. Graph network construction
     * Pagerank 기반의 중요 키워드 추출

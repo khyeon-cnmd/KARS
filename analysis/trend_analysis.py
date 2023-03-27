@@ -24,22 +24,13 @@ class trend_analysis:
         self.plot_total_year_trend()
         self.plot_community_year_trend()
         self.save_keywords_freq_dict()
-    
-    def __call__(self,save_path):
-        self.save_path = save_path
-        # delete keys containing % sign
-        self.keywords_freq_dict = {key: value for key, value in self.keywords_freq_dict.items() if not "%" in key}
-        self.community_freq_year()
-        self.plot_total_year_trend()
-        self.plot_community_year_trend()
-        self.save_keywords_freq_dict()
         
     def total_freq_year(self):
         # 1. Get Total keywords & frequency per year
         self.keywords_freq_dict["total"] = {"keywords":[], "year_freq":{}, "min_year":None, "max_year":None, "PLC": {}}
         for keyword, value in tqdm(self.node_feature.items()):
             self.keywords_freq_dict["total"]["keywords"] = [node for node in self.node_feature.keys()]
-            for year, freq in value.items():
+            for year, freq in value["year"].items():
                 if not year == "total":
                     year = int(year)
                     if not year in self.keywords_freq_dict["total"]["year_freq"].keys():
@@ -84,7 +75,7 @@ class trend_analysis:
         for keyword, value in tqdm(self.node_feature.items()):
             for community in self.keywords_freq_dict.keys():
                 if not community == "total" and keyword in self.keywords_freq_dict[community]["keywords"]:
-                    for year, freq in value.items():
+                    for year, freq in value["year"].items():
                         if not year == "total" and int(year) in self.keywords_freq_dict[community]["year_freq"].keys():
                                 year = int(year)
                                 self.keywords_freq_dict[community]["year_freq"][year] += freq

@@ -14,9 +14,67 @@ class MPSPP_analysis:
         self.save_path = save_path
         self.DB_name = DB_name
         self.G = nx.read_gexf(f"{save_path}/{DB_name}/graph.gexf")
-        self.NER_to_csv()
-        self.MPSPP_graph_query()
+        #self.NER_to_csv()
+        #self.MPSPP_graph_query()
 
+    def rule_based_NER(self):
+        # 0. Assign colors of 1) material 2) processing 3) structure 4) property 5) performance Enter) others
+        color_dict = {"material":"#36C5F0", "processing":"#E01E5A", "structure":"ECB22E", "property":"2EB67D","performance":"4A154B","others":"#737373"}
+       
+        # 1. Calculate pagerank of each community
+        community_pagerank = {}
+        for node in self.G.nodes:
+            community = self.G.nodes[node]['community']
+            if community not in community_pagerank:
+                community_pagerank[community] = 0
+            community_pagerank[community] += self.G.nodes[node]['pagerank']
+
+        # 2. Sort community by pagerank
+        community_list = sorted(community_pagerank, key=lambda x: community_pagerank[x], reverse=True)
+        print(community_list)
+
+        # 3. Get community nodes
+        for idx, community in enumerate(community_list):
+            community_nodes = [node for node in self.G.nodes if self.G.nodes[node]['community'] == community]
+            community_nodes = sorted(community_nodes, key=lambda x: self.G.nodes[x]['pagerank'], reverse=True)
+            community_pagerank = sum([self.G.nodes[node]['pagerank'] for node in community_nodes])
+        
+            #print top 30 nodes in community
+            print(f"Community {community}, node number: {len(community_nodes)}, pagerank: {community_pagerank/self.total_pagerank*100:.2f}%")
+            print("==============================")
+            idx2=0
+            for node in community_nodes:
+                if self.G.nodes[node]['NER'] == 'material' or self.G.nodes[node]['NER'] == 'device':
+                    continue
+                else:
+                    print(f"{idx2+1} {node} {self.G.nodes[node]['pagerank']}")
+                    idx2+=1
+                if idx2 == 30:
+                    break
+
+            #get label of community by input
+            label = input("Choose community label. 1) material 2) processing 3) structure 4) property 5) performance Enter) others\n:")
+            if label == '1':
+                label = 'material'
+            elif label == '2':
+                label = 'processing'
+            elif label == '3':
+                label = 'structure'
+            elif label == '4':
+                label = 'property'
+            elif label == '5':
+                label = 'performance'
+            else:
+                label = 'others'
+            
+            # assign label to NER
+            for node in community_nodes:
+                if self.G.nodes[node]['NER'] == 'material' or self.G.nodes[node]['NER'] == 'device':
+                    self.G.nodes[node]["color"] = color_dict[label]
+                else:
+                    self.G.nodes[node]['NER'] = label
+                    self.G.nodes[node]['color'] = color_dict[label]
+        
     def NER_to_csv(self):
         # make pandas dataframe from NER result
         self.NER_df = pd.DataFrame(columns=['material', 'material_PR', 'device', 'device_PR', 'process', 'process_PR' 'structure', 'structure_PR', 'property', 'property_PR','performance', 'performance_PR'])

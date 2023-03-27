@@ -5,6 +5,7 @@ import networkx as nx
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib
 from tqdm import tqdm
 import warnings
 warnings.filterwarnings(action="ignore", category=FutureWarning)
@@ -34,6 +35,7 @@ class graph_network:
         self.keyword_filter(percent=self.filter_percent)
         self.community_labeling()
         self.save_graph()
+        self.save_subgraph()
 
     def graph_construct(self,freq):
         self.G = nx.Graph()
@@ -140,13 +142,6 @@ class graph_network:
         #    #print(node, sorted(panther.items(), key=lambda x: x[1], reverse=True)[:10])
 
     def research_structurization(self, freq):
-        def pagerank(self, freq):
-            node_pagerank = nx.pagerank(self.G, alpha=0.85, max_iter=20, tol=1e-06, weight=freq, dangling=None)
-            for key, value in self.G.nodes.data():
-                self.G.nodes[key]['pagerank'] = node_pagerank[key]
-                self.G.nodes[key]['size'] = node_pagerank[key] * 10000
-            print("Pagerank calculation finished")
-
         def modularity(self, G, freq):
             # calculate modularity using Louvain method
             node_modularity = nx.algorithms.community.louvain_communities(G, weight=freq, resolution=self.community_resolution, seed=self.community_seed)
@@ -156,11 +151,8 @@ class graph_network:
 
             return node_modularity
 
-        # calculate pagerank
-        pagerank(self, freq=freq)
-
-        # 1. calculate pagerank sum of graph
-        total_pagerank = sum([self.G.nodes[node]['pagerank'] for node in self.G.nodes])
+        # 1. calculate freq sum of graph
+        self.total_freq = sum([self.G.nodes[node]['freq'] for node in self.G.nodes])
 
         # 2. recursively modularize graph
         graphs = [self.G]
@@ -175,11 +167,11 @@ class graph_network:
                     subgraph = G.subgraph(community)
                     
                     # calculate pagerank sum of community
-                    community_pagerank = sum([G.nodes[node]['pagerank'] for node in community])
-                    print(f"community {idx} pagerank: {community_pagerank} ({community_pagerank/total_pagerank*100}%)")
+                    community_freq = sum([G.nodes[node]['freq'] for node in community])
+                    print(f"community {idx} freq: {community_freq} ({community_freq/self.total_freq*100}%)")
 
                     # if pagerank sum of community is less than 10% of total pagerank, stop modularization and append graph to modularized_graphs
-                    if community_pagerank/total_pagerank < 0.05:
+                    if community_freq/self.total_freq < 0.15:
                         modularized_graphs.append(subgraph)
                     # else, append subgraph to queue_graphs
                     else:
@@ -203,6 +195,15 @@ class graph_network:
                 self.G.nodes[node]['community'] = idx
 
     def keyword_filter(self, percent):
+        def pagerank(self, freq):
+            node_pagerank = nx.pagerank(self.G, alpha=0.85, max_iter=20, tol=1e-06, weight=freq, dangling=None)
+            for key, value in self.G.nodes.data():
+                self.G.nodes[key]['pagerank'] = node_pagerank[key]
+                self.G.nodes[key]['size'] = node_pagerank[key] * 10000
+            print("Pagerank calculation finished")
+
+        # calculate pagerank
+        pagerank(self, freq="total")
 
         # sort self.G.nodes by pagerank
         node_list = sorted(self.G.nodes, key=lambda x: self.G.nodes[x]['pagerank'], reverse=True)
@@ -248,62 +249,45 @@ class graph_network:
         plt.savefig(f"{self.save_path}/integrated_pagerank.png")
 
     def community_labeling(self):
-        # 0. Assign colors of 1) material 2) processing 3) structure 4) property 5) performance Enter) others
-        color_dict = {"material":"#36C5F0", "processing":"#E01E5A", "structure":"ECB22E", "property":"2EB67D","performance":"4A154B","others":"#737373"}
+        # 0. Assign colors
+        colors = plt.cm.rainbow
        
-        # 1. Calculate pagerank of each community
-        community_pagerank = {}
+        # 1. Calculate freq sum of each community
+        community_freq = {}
         for node in self.G.nodes:
             community = self.G.nodes[node]['community']
-            if community not in community_pagerank:
-                community_pagerank[community] = 0
-            community_pagerank[community] += self.G.nodes[node]['pagerank']
+            if community not in community_freq:
+                community_freq[community] = 0
+            community_freq[community] += self.G.nodes[node]['freq']
 
-        # 2. Sort community by pagerank
-        community_list = sorted(community_pagerank, key=lambda x: community_pagerank[x], reverse=True)
-        print(community_list)
+        # 2. Sort community_freq by freq
+        community_list = sorted(community_freq, key=lambda x: community_freq[x], reverse=True)
 
         # 3. Get community nodes
         for idx, community in enumerate(community_list):
             community_nodes = [node for node in self.G.nodes if self.G.nodes[node]['community'] == community]
             community_nodes = sorted(community_nodes, key=lambda x: self.G.nodes[x]['pagerank'], reverse=True)
-            community_pagerank = sum([self.G.nodes[node]['pagerank'] for node in community_nodes])
+            community_freq = sum([self.G.nodes[node]['freq'] for node in community_nodes])
         
             #print top 30 nodes in community
-            print(f"Community {community}, node number: {len(community_nodes)}, pagerank: {community_pagerank/self.total_pagerank*100:.2f}%")
+            print(f"Community {community}, node number: {len(community_nodes)}, freq: {community_freq/self.total_freq*100:.2f}%")
             print("==============================")
-            idx2=0
-            for node in community_nodes:
-                if self.G.nodes[node]['NER'] == 'material' or self.G.nodes[node]['NER'] == 'device':
-                    continue
-                else:
-                    print(f"{idx2+1} {node} {self.G.nodes[node]['pagerank']}")
-                    idx2+=1
-                if idx2 == 30:
+            label = ""
+            for idx2, node in enumerate(community_nodes):
+                print(f"{idx2+1} {node} {self.G.nodes[node]['pagerank']}")
+                label = label + node + " "
+                if idx2 == 4:
                     break
 
             #get label of community by input
-            label = input("Choose community label. 1) material 2) processing 3) structure 4) property 5) performance Enter) others\n:")
-            if label == '1':
-                label = 'material'
-            elif label == '2':
-                label = 'processing'
-            elif label == '3':
-                label = 'structure'
-            elif label == '4':
-                label = 'property'
-            elif label == '5':
-                label = 'performance'
-            else:
-                label = 'others'
+            #label = input("Write the label of community (Enter=unrelated): ")
+            #if label == "":
+            #    label = "unrelated"
             
-            # assign label to NER
+            # assign label to community
             for node in community_nodes:
-                if self.G.nodes[node]['NER'] == 'material' or self.G.nodes[node]['NER'] == 'device':
-                    self.G.nodes[node]["color"] = color_dict[label]
-                else:
-                    self.G.nodes[node]['NER'] = label
-                    self.G.nodes[node]['color'] = color_dict[label]
+                self.G.nodes[node]['community'] = label
+                self.G.nodes[node]['color'] = matplotlib.colors.to_hex(colors(idx/len(community_list)))
 
     def save_graph(self):
         # Save graph into gexf
@@ -323,29 +307,40 @@ class graph_network:
         print("Saving graph data is done")
 
     def save_subgraph(self):
-        # Set colors
-        colors = plt.cm.rainbow
-        with tqdm(total=len(self.node_modularity), desc="Save graph") as pbar:
-            for i, community in enumerate(self.node_modularity):
+        # get community labels from self.G
+        community_list = set([self.G.nodes[node]['community'] for node in self.G.nodes])
+
+        # sort community by pagerank
+        community_freq = {}
+        for node in self.G.nodes:
+            community = self.G.nodes[node]['community']
+            if community not in community_freq:
+                community_freq[community] = 0
+            community_freq[community] += self.G.nodes[node]['freq']
+
+        community_list = sorted(community_freq, key=lambda x: community_freq[x], reverse=True)
+
+        with tqdm(total=len(community_list), desc="Save subgraph") as pbar:
+            for idx, community in enumerate(community_list):
+                # find nodes in community
+                community_nodes = [node for node in self.G.nodes if self.G.nodes[node]['community'] == community]
+
                 # make subgraph by community
-                def filter_node(n1):
-                    return n1 in community
-                subgraph = nx.subgraph_view(self.G, filter_node=filter_node)
+                subgraph = self.G.subgraph(community_nodes)
 
                 # make folder for each community
-                community_index = self.node_modularity.index(community)
-                subgraph_pagerank = sum([subgraph.nodes[node]['pagerank'] for node in subgraph.nodes])
-                percent_of_community = round(subgraph_pagerank/self.total_pagerank*100, 2)
-                folder_name = f"{community_index} ({percent_of_community}%)" 
-                print(f"Community {community_index} has {len(community)} nodes, {percent_of_community}% of total nodes")
+                subgraph_freq = sum([subgraph.nodes[node]['freq'] for node in subgraph.nodes])
+                percent_of_community = round(subgraph_freq/self.total_freq*100, 2)
+                folder_name = f"{idx} {community} ({percent_of_community}%)" 
+                print(f"Community '{community}' has {len(community_nodes)} nodes, {percent_of_community}% of total nodes")
                 if not os.path.exists(f"{self.save_path}/{folder_name}"):
                     os.makedirs(f"{self.save_path}/{folder_name}")
 
                 # Save graph into gexf
-                nx.write_gexf(self.G, f"{self.save_path}/{folder_name}/community.gexf")
+                nx.write_gexf(subgraph, f"{self.save_path}/{folder_name}/graph.gexf")
 
                 # Save graph data as json
-                with open(f"{self.save_path}/{folder_name}/community.json", "w") as f:
+                with open(f"{self.save_path}/{folder_name}/graph.json", "w") as f:
                     json.dump(nx.node_link_data(subgraph), f, indent=4)
 
                 # Save node ranks as csv

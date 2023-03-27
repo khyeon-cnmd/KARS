@@ -184,10 +184,6 @@ class keyword_extract:
 
                 pbar.update(1)
  
-
-                 
-
-
     def graph_construct(self):
         print("Node & Edge extraction...")
         with tqdm(total=len(self.metadata_list)) as pbar:
@@ -205,42 +201,39 @@ class keyword_extract:
                     text = metadata["abstract_cleaned"]              
 
                 # 3-3. Node extraction 
-                X = self.cv.fit_transform([text])
-                word_count_list = X.toarray().sum(axis=0)
-                keyword_list = self.cv.get_feature_names_out()
-                for keyword, word_count in zip(keyword_list, word_count_list):
+                keyword_list = text.split(" ")
+                for keyword in keyword_list:
                     # 3-3-1. year freq feature
                     if not keyword in self.node_dict.keys():
                         self.node_dict[keyword] = {"year":{"total":0}, "NER":None}
                     if not year in self.node_dict[keyword]["year"].keys():
                         self.node_dict[keyword]["year"][year] = 0
 
-                    self.node_dict[keyword]["year"]["total"] += int(word_count)
-                    self.node_dict[keyword]["year"][year] += int(word_count)
+                    self.node_dict[keyword]["year"]["total"] += 1
+                    self.node_dict[keyword]["year"][year] += 1
 
                     # 3-3-2. NER feature
                     self.node_dict[keyword]["NER"] = self.NER(keyword)
                     
                         
                 # 3-4. Edge extraction
-                Xc = (X.T * X) # matrix manipulation
-                Xc.setdiag(0) # set the diagonals to be zeroes as it's pointless to be 1
-                names = self.cv.get_feature_names_out() # This are the entity names (i.e. keywords)
-                for i in range(len(names)):
-                    for j in range(len(names)):
-                        if i < j:
-                            if not names[i] == "" and not names[j] == "":
-                                #sorting name sequence by alphabet
-                                if names[i] < names[j]:
-                                    edge_name = f"{names[i]}-{names[j]}"
-                                else:
-                                    edge_name = f"{names[j]}-{names[i]}"
-                                if not edge_name in self.edge_dict.keys():
-                                    self.edge_dict[edge_name] = {"year":{"total":0}}
-                                if not year in self.edge_dict[edge_name]["year"].keys():
-                                    self.edge_dict[edge_name]["year"][year] = 0
-                                self.edge_dict[edge_name]["year"]["total"] += 1
-                                self.edge_dict[edge_name]["year"][year] += 1
+                #count only keywords are in nearest neighbor
+                window = 1
+                for i in range(len(keyword_list)):
+                    for j in range(i+1, i+window+1):
+                        if j < len(keyword_list):
+
+                            #sorting name sequence by alphabet
+                            if keyword_list[i] < keyword_list[j]:
+                                edge_name = f"{keyword_list[i]}-{keyword_list[j]}"
+                            else:
+                                edge_name = f"{keyword_list[j]}-{keyword_list[i]}"
+                            if not edge_name in self.edge_dict.keys():
+                                self.edge_dict[edge_name] = {"year":{"total":0}}
+                            if not year in self.edge_dict[edge_name]["year"].keys():
+                                self.edge_dict[edge_name]["year"][year] = 0
+                            self.edge_dict[edge_name]["year"]["total"] += 1
+                            self.edge_dict[edge_name]["year"][year] += 1
                 pbar.update(1)
 
     def save_json(self):

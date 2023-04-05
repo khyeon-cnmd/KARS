@@ -1,4 +1,4 @@
-# Keyword-Based Research Structurization (KBRS)
+# Keyword-based Automatic Research Structurization (KARS)
 키워드에 기반해 논문의 메타데이터를 자동으로 수집, 연구 구조화, 연구 트랜드 분석을 자동화합니다.
 
 # Installation

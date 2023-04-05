@@ -4,11 +4,11 @@
 
 ## 2. Graph data extraction
     * keyword 추출 시 Vectorizer 종류를 Count 와 TF-IDF 선택 가능 -> 보류.. Graph network 에서 어떻게 작용할 지 모르겠음
-    * node feature 에 추가할 수 있는 데이터: 논문 인용 수, ...
+    * node feature 에 추가할 수 있는 데이터: 논문 인용 수, + Spacy 품사 분류 결과 -> Multi-keyword 분류에 활용할 수 도?
     * 단어간 연결관계를 통한 방향성 네트워크 구축 가능성
     * Abbrebiation 인식하여 대문자 유지 및 동의어 처리
     * 키워드 간 유사도 계산 -> 중복 키워드를 줄이자. (ReRAM RRAM -> 합치자) <======= similarity 이론을 써도, Clustering 처럼 결과가 나타나기 때문에 불가능한 듯 함.
-    * Edge frequency 를 활용해서, single keywords 를 multi-keyword 화 할 수 있지 않을까?
+    * Edge frequency 를 활용해서, single keywords 를 multi-keyword 화 할 수 있지 않을까? -> 이를 통해서 사용자는 Performance 등의 주요 키워드를 더 정확하게 확인 가능
     * title, Abstract 는 결국 PSPP 관계가 모두 담겨있는 종합적 데이터를 포함하다 보니, 각 Community 는 종합적 결과에 따른 주제로 나타나게 됨.
     따라서, PSPP 관계를 탐색하기 위해서는 NER 모델을 활용해 단어별 PSPP Labeling 을 하는 수 밖에 없음
 

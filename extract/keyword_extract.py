@@ -12,10 +12,11 @@ from sklearn.feature_extraction.text import CountVectorizer
 from spacy.tokenizer import Tokenizer
 
 class keyword_extract:
-    def __init__(self, save_path, DB_name, mode, text_type, ngram_range=(1,1)):          
+    def __init__(self, save_path, DB_name, mode, text_type, edge_count_type, ngram_range=(1,1)):          
         self.save_path = save_path
         self.DB_name = DB_name
         self.mode = mode
+        self.edge_count_type = edge_count_type
         self.text_type = text_type
         # 1. load metadata
         self.metadata_list = []
@@ -28,7 +29,6 @@ class keyword_extract:
             self.nlp = spacy.load("en_core_web_sm") #trf
         elif self.mode == "accuracy":
             self.nlp = spacy.load("en_core_web_trf")
-        # 3. set tokenizer
         self.nlp.tokenizer = Tokenizer(self.nlp.vocab, token_match=re.compile(r'\S+').match)
         self.node_dict = {}
         self.edge_dict = {}
@@ -72,27 +72,39 @@ class keyword_extract:
     def keyword_extract(self):
         print(f"Loaded number of articles: {len(self.metadata_list)}\n")
         # 1. Year filtering
+        remove_list = []
         for metadata in self.metadata_list:
             if not 'published-print' in metadata.keys():
                 if not 'published-online' in metadata.keys():
-                    self.metadata_list.remove(metadata)
+                    remove_list.append(metadata)
+        for metadata in remove_list:
+            self.metadata_list.remove(metadata)
         print(f"year filtered articles: {len(self.metadata_list)}\n")
         
         # 2. Text_type filtering
+        remove_list = []
         if self.text_type == "title":
             for metadata in self.metadata_list:
                 if not 'title' in metadata.keys():
-                    self.metadata_list.remove(metadata)
+                    remove_list.append(metadata)
         elif self.text_type == "abstract":
             for metadata in self.metadata_list:
                 if not 'abstract' in metadata.keys():
-                    self.metadata_list.remove(metadata)
+                    remove_list.append(metadata)
+        for metadata in remove_list:
+            self.metadata_list.remove(metadata)   
         print(f"text type filtered articles: {len(self.metadata_list)}\n")
 
         # 3. Text cleaning
         for i, metadata in enumerate(self.metadata_list):
-            # 3-0. get text
-            text = metadata[self.text_type][0]
+            # 3-0. get text list
+            if self.text_type == "title":
+                text = metadata[self.text_type][0]
+            elif self.text_type == "abstract":
+                text = metadata[self.text_type]
+
+            # 3-1. remove any et al written in lower or upper case
+            text = text.replace('et al', '').replace('et al.', '').replace('et. al', '').replace('Et. al.', '').replace('Et al', '').replace('Et al.', '').replace('Et. al', '').replace('Et. al.', '')
             # 3-1. latex to text & remove special characters
             text = LatexNodes2Text().latex_to_text(text).replace('\n', '').replace('\r', '').replace('\t', ' ')
             # 3-2. remove from "lt;" to "gt;" matching one by one
@@ -109,36 +121,54 @@ class keyword_extract:
             text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
             # 3-7. remove word which only have number
             text = re.sub(r'\b[0-9]+\b\s*', '', text)
-            # 3-8. save text
-            self.metadata_list[i][self.text_type] = text
+            # 3-8. save text to text_list
+            if self.text_type == "title":
+                text_list = [text]
+            elif self.text_type == "abstract":
+                text_list = re.split(r'(?<=[.?!])\s+(?=[A-Z])', text)
+
+            # 4-2. update metadata
+            if self.text_type == "title":
+                self.metadata_list[i]['title_cleaned'] = text_list
+            elif self.text_type == "abstract":
+                self.metadata_list[i]['abstract_cleaned'] = text_list
 
         # 4. Text preprocessing
         print("Text preprocessing...")
         with tqdm(total=len(self.metadata_list)) as pbar:
             for i, metadata in enumerate(self.metadata_list):
-                # 4-1. Space tokenize -> POS tagging -> number filtering -> lemmatization -> new text
-                new_text = ""
-                doc = self.nlp(metadata[self.text_type])            
-                for token in doc:
-                    if token.pos_ in ["ADJ", "NOUN", "PROPN", "VERB"] and len(token.lemma_) > 1:
-                        # 4-2 filter string which only have number
-                        if not re.match("^[0-9]+$", str(token)):
-                            # 4-3 Make keyword into lemmatized form
-                            keyword = token.lemma_
-                            # 4-4 check material or device using NER
-                            if not keyword == "":
-                                if self.NER(keyword) == "other":
-                                    keyword = keyword.lower()
-                                new_text = new_text + " " + keyword
+                # Load text_list
+                if self.text_type == "title":
+                    text_list = self.metadata_list[i]['title_cleaned']
+                elif self.text_type == "abstract":
+                    text_list = self.metadata_list[i]['abstract_cleaned']
+                for j, text in enumerate(text_list):
+                    # 4-1. Space tokenize -> POS tagging -> number filtering -> lemmatization -> new text
+                    new_text = ""
+                    doc = self.nlp(text)            
+                    for token in doc:
+                        if token.pos_ in ["ADJ", "NOUN", "PROPN", "VERB"] and len(token.lemma_) > 1:
+                            # 4-2 filter string which only have number
+                            if not re.match("^[0-9]+$", str(token)):
+                                # 4-3 Make keyword into lemmatized form
+                                keyword = token.lemma_
+                                # 4-4 check material or device using NER
+                                if not keyword == "":
+                                    if self.NER(keyword) == "other":
+                                        keyword = keyword.lower()
+                                    new_text = new_text + " " + keyword
 
-                #remove first space
-                new_text = new_text[1:]
+                    #remove first space
+                    new_text = new_text[1:]
+
+                    #save new text
+                    text_list[j] = new_text
 
                 # 4-2. update metadata
                 if self.text_type == "title":
-                    self.metadata_list[i]['title_cleaned'] = new_text
+                    self.metadata_list[i]['title_cleaned'] = text_list
                 elif self.text_type == "abstract":
-                    self.metadata_list[i]['abstract_cleaned'] = new_text
+                    self.metadata_list[i]['abstract_cleaned'] = text_list
 
                 pbar.update(1)
         print(f"preprocessing text finished\n")
@@ -152,35 +182,40 @@ class keyword_extract:
         composition_list = []
         for metadata in self.metadata_list:
             if self.text_type == "title":
-                text = metadata['title_cleaned']
+                text_list = metadata['title_cleaned']
             elif self.text_type == "abstract":
-                text = metadata['abstract_cleaned']
+                text_list = metadata['abstract_cleaned']
             
-            keywords = text.split(" ")
-            for keyword in keywords:
-                #if upper letter exist,
-                if sum(1 for c in keyword if c.isupper()) >= 1:
-                    composition_list.append(keyword)
+            for text in text_list:
+                keywords = text.split(" ")
+                for keyword in keywords:
+                    #if upper letter exist,
+                    if sum(1 for c in keyword if c.isupper()) >= 1:
+                        composition_list.append(keyword)
 
         #2. for all keywords, check upper lower
         with tqdm(total=len(self.metadata_list)) as pbar:
             for i, metadata in enumerate(self.metadata_list):
                 if self.text_type == "title":
-                    text = metadata['title_cleaned']
+                    text_list = metadata['title_cleaned']
                 elif self.text_type == "abstract":
-                    text = metadata['abstract_cleaned']
+                    text_list = metadata['abstract_cleaned']
 
-                keywords = text.split(" ")
-                for keyword in keywords:
-                    for composition in composition_list:
-                        if keyword == composition.lower():
-                            text = text.replace(keyword, composition)
+                for j, text in enumerate(text_list):
+                    keywords = text.split(" ")
+                    for keyword in keywords:
+                        for composition in composition_list:
+                            if keyword == composition.lower():
+                                text = text.replace(keyword, composition)
+
+                    #update text_list
+                    text_list[j] = text
 
                 # 4-2. update metadata
                 if self.text_type == "title":
-                    self.metadata_list[i]['title_cleaned'] = text
+                    self.metadata_list[i]['title_cleaned'] = text_list
                 elif self.text_type == "abstract":
-                    self.metadata_list[i]['abstract_cleaned'] = text
+                    self.metadata_list[i]['abstract_cleaned'] = text_list
 
                 pbar.update(1)
  
@@ -196,44 +231,97 @@ class keyword_extract:
 
                 # 3-2. Get text
                 if self.text_type == "title":
-                    text = metadata["title_cleaned"]
+                    text_list = metadata["title_cleaned"]
                 elif self.text_type == "abstract":
-                    text = metadata["abstract_cleaned"]              
+                    text_list = metadata["abstract_cleaned"]              
 
-                # 3-3. Node extraction 
-                keyword_list = text.split(" ")
-                for keyword in keyword_list:
-                    # 3-3-1. year freq feature
-                    if not keyword in self.node_dict.keys():
-                        self.node_dict[keyword] = {"year":{"total":0}, "NER":None}
-                    if not year in self.node_dict[keyword]["year"].keys():
-                        self.node_dict[keyword]["year"][year] = 0
+                if self.edge_count_type == "neighbor":
+                    # 3-3. Node extraction 
+                    for text in text_list:
+                        keyword_list = text.split(" ")
+                        for keyword in keyword_list:
+                            if not keyword == "":
+                                # 3-3-1. year freq feature
+                                if not keyword in self.node_dict.keys():
+                                    self.node_dict[keyword] = {"year":{"total":0}, "NER":None}
+                                if not year in self.node_dict[keyword]["year"].keys():
+                                    self.node_dict[keyword]["year"][year] = 0
 
-                    self.node_dict[keyword]["year"]["total"] += 1
-                    self.node_dict[keyword]["year"][year] += 1
+                                self.node_dict[keyword]["year"]["total"] += 1
+                                self.node_dict[keyword]["year"][year] += 1
 
-                    # 3-3-2. NER feature
-                    self.node_dict[keyword]["NER"] = self.NER(keyword)
-                    
-                        
-                # 3-4. Edge extraction
-                #count only keywords are in nearest neighbor
-                window = 1
-                for i in range(len(keyword_list)):
-                    for j in range(i+1, i+window+1):
-                        if j < len(keyword_list):
+                                # 3-3-2. NER feature
+                                self.node_dict[keyword]["NER"] = self.NER(keyword)
+                                
+                            
+                    # 3-4. Edge extraction
+                    for text in text_list:
+                        keyword_list = text.split(" ")
+                        #count only keywords are in nearest neighbor
+                        window = 1
+                        for i in range(len(keyword_list)):
+                            for j in range(i+1, i+window+1):
+                                if j < len(keyword_list):
+                                    if not keyword_list[i] == "" or not keyword_list[j] == "":
+                                        # 3-4-1. check same keyword
+                                        if not keyword_list[i] == keyword_list[j]:
+                                            #sorting name sequence by alphabet
+                                            if keyword_list[i] < keyword_list[j]:
+                                                edge_name = f"{keyword_list[i]}-{keyword_list[j]}"
+                                            else:
+                                                edge_name = f"{keyword_list[j]}-{keyword_list[i]}"
+                                            if not edge_name in self.edge_dict.keys():
+                                                self.edge_dict[edge_name] = {"year":{"total":0}}
+                                            if not year in self.edge_dict[edge_name]["year"].keys():
+                                                self.edge_dict[edge_name]["year"][year] = 0
+                                            self.edge_dict[edge_name]["year"]["total"] += 1
+                                            self.edge_dict[edge_name]["year"][year] += 1
 
-                            #sorting name sequence by alphabet
-                            if keyword_list[i] < keyword_list[j]:
-                                edge_name = f"{keyword_list[i]}-{keyword_list[j]}"
-                            else:
-                                edge_name = f"{keyword_list[j]}-{keyword_list[i]}"
-                            if not edge_name in self.edge_dict.keys():
-                                self.edge_dict[edge_name] = {"year":{"total":0}}
-                            if not year in self.edge_dict[edge_name]["year"].keys():
-                                self.edge_dict[edge_name]["year"][year] = 0
-                            self.edge_dict[edge_name]["year"]["total"] += 1
-                            self.edge_dict[edge_name]["year"][year] += 1
+                elif self.edge_count_type == "co-occurrence":
+                    # 3-3. Node extraction 
+                    for text in text_list:
+                        X = self.cv.fit_transform([text])
+                        keyword_list = self.cv.get_feature_names_out()
+                        for keyword in keyword_list:
+                            if not keyword == "":
+                                # 3-3-1. year freq feature
+                                if not keyword in self.node_dict.keys():
+                                    self.node_dict[keyword] = {"year":{"total":0}, "NER":None}
+                                if not year in self.node_dict[keyword]["year"].keys():
+                                    self.node_dict[keyword]["year"][year] = 0
+
+                                self.node_dict[keyword]["year"]["total"] += 1
+                                self.node_dict[keyword]["year"][year] += 1
+
+                                # 3-3-2. NER feature
+                                self.node_dict[keyword]["NER"] = self.NER(keyword)
+                                
+                            
+                    # 3-4. Edge extraction
+                    for text in text_list:
+                        X = self.cv.fit_transform([text])
+                        keyword_list = self.cv.get_feature_names_out()
+                        Xc = (X.T * X) # this is co-occurrence matrix in sparse csr format
+                        Xc.setdiag(0) # sometimes you want to fill same word cooccurence to 0
+                        cooccurrences = Xc.todok()
+                        for i, j in cooccurrences.keys():
+                            if i < j:
+                                count = int(cooccurrences[i, j])
+                                if not keyword_list[i] == "" or not keyword_list[j] == "":
+                                    # 3-4-1. check same keyword
+                                    if not keyword_list[i] == keyword_list[j]:
+                                        #sorting name sequence by alphabet
+                                        if keyword_list[i] < keyword_list[j]:
+                                            edge_name = f"{keyword_list[i]}-{keyword_list[j]}"
+                                        else:
+                                            edge_name = f"{keyword_list[j]}-{keyword_list[i]}"
+                                        if not edge_name in self.edge_dict.keys():
+                                            self.edge_dict[edge_name] = {"year":{"total":0}}
+                                        if not year in self.edge_dict[edge_name]["year"].keys():
+                                            self.edge_dict[edge_name]["year"][year] = 0
+                                        self.edge_dict[edge_name]["year"]["total"] += count
+                                        self.edge_dict[edge_name]["year"][year] += count
+
                 pbar.update(1)
 
     def save_json(self):

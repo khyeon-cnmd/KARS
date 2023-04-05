@@ -10,7 +10,7 @@ import torch
 from torch.nn import functional as F
 
 class trend_analysis:
-    def __init__(self,save_path, fit_type, community_limit, year_range):
+    def __init__(self, save_path, fit_type, community_limit, year_range):
         self.save_path = save_path
         self.fit_type = fit_type
         self.community_limit = community_limit

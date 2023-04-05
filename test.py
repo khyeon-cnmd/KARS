@@ -1,21 +1,19 @@
-import networkx as nx
+import gradio as gr
 
-from bokeh.palettes import Category20_20
-from bokeh.plotting import figure, from_networkx, show
+def change_textbox(choice):
+    if choice == "short":
+        return gr.update(lines=2, visible=True, value="Short story: ")
+    elif choice == "long":
+        return gr.update(lines=8, visible=True, value="Long story...")
+    else:
+        return gr.update(visible=False)
 
-G = nx.random_geometric_graph(100, 1.5)
+with gr.Blocks() as demo:
+    radio = gr.Radio(
+        ["short", "long", "none"], label="Essay Length to Write?"
+    )
+    text = gr.Textbox(lines=2, interactive=True)
+    radio.change(fn=change_textbox, inputs=radio, outputs=text)
 
-p = figure(x_range=(-2, 2), y_range=(-2, 2),
-           x_axis_location=None, y_axis_location=None,
-           tools="hover", tooltips="index: @index")
-p.grid.grid_line_color = None
-
-graph = from_networkx(G, nx.spring_layout, scale=1.8, center=(0,0))
-p.renderers.append(graph)
-
-# Add some new columns to the node renderer data source
-graph.node_renderer.data_source.data['index'] = list(range(len(G)))
-graph.node_renderer.data_source.data['colors'] = Category20_20
-
-graph.node_renderer.glyph.update(size=20, fill_color="colors")
-show(p)
+if __name__ == "__main__":
+    demo.launch()

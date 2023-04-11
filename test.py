@@ -1,19 +1,21 @@
+import os
+from zipfile import ZipFile
+
 import gradio as gr
 
-def change_textbox(choice):
-    if choice == "short":
-        return gr.update(lines=2, visible=True, value="Short story: ")
-    elif choice == "long":
-        return gr.update(lines=8, visible=True, value="Long story...")
-    else:
-        return gr.update(visible=False)
 
-with gr.Blocks() as demo:
-    radio = gr.Radio(
-        ["short", "long", "none"], label="Essay Length to Write?"
-    )
-    text = gr.Textbox(lines=2, interactive=True)
-    radio.change(fn=change_textbox, inputs=radio, outputs=text)
+def zip_files(files):
+    with ZipFile("tmp.zip", "w") as zipObj:
+        for idx, file in enumerate(files):
+            zipObj.write(file.name, file.name.split("/")[-1])
+    return "tmp.zip"
+
+demo = gr.Interface(
+    zip_files,
+    gr.File(file_count="multiple", file_types=["text", ".json", ".csv"]),
+    "file",
+    cache_examples=True
+)
 
 if __name__ == "__main__":
     demo.launch()

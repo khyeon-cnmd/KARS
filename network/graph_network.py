@@ -11,10 +11,11 @@ import warnings
 warnings.filterwarnings(action="ignore", category=FutureWarning)
 
 class graph_network:
-    def __init__(self, save_path, DB_name, text_type, filter_percent, community_seed, community_resolution):
+    def __init__(self, save_path, DB_name, text_type, modular_algorithm, filter_percent, community_seed, community_resolution):
         self.save_path = f"{save_path}/{DB_name}"
         self.DB_name = DB_name
         self.text_type = text_type
+        self.modular_algorithm = modular_algorithm
         self.filter_percent = filter_percent
         self.community_seed = community_seed
         self.community_resolution = community_resolution
@@ -111,9 +112,12 @@ class graph_network:
     def research_structurization(self, freq):
         def modularity(self, G, freq):
             # calculate modularity using Louvain method
-            #node_modularity = nx.algorithms.community.louvain_communities(G, weight=freq, resolution=self.community_resolution, seed=self.community_seed)
-            node_modularity = nx.algorithms.community.greedy_modularity_communities(G, weight=freq, resolution=self.community_resolution, cutoff=3, best_n=3)
-            #node_modularity = nx.algorithms.community.modularity_max.greedy_modularity_communities(G, weight=freq)
+            if self.modular_algorithm == "louvain":
+                node_modularity = nx.algorithms.community.louvain_communities(G, weight=freq, resolution=self.community_resolution, seed=self.community_seed)
+            elif self.modular_algorithm == "greedy":
+                node_modularity = nx.algorithms.community.greedy_modularity_communities(G, weight=freq, resolution=self.community_resolution)
+            elif self.modular_algorithm == "girvan-newman":
+                node_modularity = nx.algorithms.community.girvan_newman(G, weight=freq, resolution=self.community_resolution)
             # sorting community by size
             node_modularity = sorted(node_modularity, key=len, reverse=True)
 

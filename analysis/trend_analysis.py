@@ -3,7 +3,6 @@ from tqdm import tqdm
 import json
 import pandas as pd
 import numpy as np
-from scipy.stats import lognorm
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 import torch
@@ -175,12 +174,12 @@ class trend_analysis:
             mu = popt[1]
             sigma = popt[2]
 
-        elif self.fit_type == "gu":
-            # import necessary packages
-            output = self.gaussian_fit(x, y, lr=5, epochs=10000, verbose=True)
-            mu, sigma, coeff = output['mu'], output['sigma'], output['coeff']
-            model = output['model']
-            y_fit = model(x).detach().numpy()
+        #elif self.fit_type == "gu":
+        #    # import necessary packages
+        #    output = self.gaussian_fit(x, y, lr=5, epochs=10000, verbose=True)
+        #    mu, sigma, coeff = output['mu'], output['sigma'], output['coeff']
+        #    model = output['model']
+        #    y_fit = model(x).detach().numpy()
 
         # 3. get mu-3sigma, mu-sigma, mu+sigma, mu+3sigma
         min_year = int(self.keywords_freq_dict["total"]["min_year"])

@@ -17,13 +17,13 @@
     * Gephi toolkit 을 활용해 gexf 형식의 파일을 백그라운드로 변형해 Interactive graph로 출력하도록 하기!(https://github.com/jsundram/pygephi)
 
 ## 4. Research trend analysis
-    * Graph query 를 활용해서, PSPP 관계 탐색 기능 추가 필요: 방법1. M->P->S->P 순서로 입력 받아 Performance 예측 방법 2. 조건문을 걸어서 ex) HfO2-Layer, Au-Electrode, Nonvolatile 이렇게 했을 때, NER 별로 가장 Edge-freq 가 높은 최장거리 경로 탐색
     * 연도별 그래프 추출 -> Interactive 한 그래프 개형 변화 확인
     * Gaussian fitting 을 개선하는 new fitting curve
-    * 각 커뮤너티를 자연어 처리를 활용해 자동으로 정의하는 모델 -> description 과 같은 요약 모델?
     
-## 5. PSPP analysis
-    * Materials node 로 부터 거리를 통해 M->P->S->P->P 를 정의할 수도 있지 않을까?
+## 5. GUI
+    * 이미 데이터가 있는 경우, 코드 실행 단계에서 Output 만 읽도록 구성할 수 있을 듯?
+    * Interactive graph 는 HTML 형식으로 출력한 것 보도록
+    * 현존 데이터가 있더라도, Regeneration 할 수 있도록 구성
 
 ## 5. Keyword to docs
     * 그래프간 유사도를 활용해서, subgraph 들과 논문 제목 graph 와의 유사도 비교 
@@ -60,12 +60,6 @@
     * subgraphs 에 대한 trend analysis 자동화
     * Community_year_trend plot 에서 Outlier 필터링 기능 추가
     * Gaussian fitting 에서 얻은 PLC 라벨링 추가
-    * subgraph 의 community_trend_year 가 전체 대비가 아니라, subgraph 대비로 되어 있음... 고쳐야함.
 
-## 5. Keyword to docs
-    * 커뮤니티 별 키워드의 Pagerank score sum 을 기준으로, 논문 제목의 점수를 매겨 분류
-
-    
-## 6. NLP-based research overviewing
-    * 각 클러스터 별 논문 추출 후, 논문 본문들을 Semantic network 형성 -> clustering -> Dictionary based NER 라벨링
-    * 
+## 5. GUI
+    * Input field 를 통해 원하는 주제, 단계, 알고리즘으로 연구 동향을 분석하고 결과물을 출력하는 시스템 구축

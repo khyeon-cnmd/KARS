@@ -2,13 +2,14 @@ import os
 import gradio as gr
 import pandas as pd
 import shutil
+import time
 from collect.crossref import crossref
 from extract.keyword_extract import keyword_extract
-from network.graph_network import graph_network
+from network.research_structure import research_structure
 from analysis.trend_analysis import trend_analysis
 
 
-def KARS(email,DB_name,search_keywords,processes,keyword_extract_method,text_type,edge_count_type,modular_algorithm, modularity_resolution,modularity_seed,filter_percent,fitting_method,year_range):
+def KARS(email,DB_name,search_keywords,processes,keyword_extract_method,text_type,edge_count_type,modular_algorithm, modularity_resolution,modularity_seed,filter_percent,fitting_method,year_range,progress=gr.Progress()):
     # 1. Get user name from email
     user_name = email.split("@")[0]
 
@@ -22,6 +23,7 @@ def KARS(email,DB_name,search_keywords,processes,keyword_extract_method,text_typ
     # 3. default settings
     ngram_range = (1,1) #(1,2) <- not recommanded until collected more data
     community_limit = 1 # limit of percentage to plot community_year_trend
+    year_range = int(year_range)
 
     # 4. make search keyword list
     keywords = search_keywords.split(",")
@@ -30,15 +32,24 @@ def KARS(email,DB_name,search_keywords,processes,keyword_extract_method,text_typ
     modularity_resolution = float(modularity_resolution)
     modularity_seed = int(modularity_seed)
     filter_percent = int(filter_percent)
+    processes = int(processes)
 
     # 5. Keyword based Automatic Research Structurization
     if processes <= 1:
+        progress(0, desc="Collecting articles from Crossref")
+        time.sleep(1)
         crossref(keywords,save_path, DB_name, email) 
     if processes <= 2:
+        progress(0, desc="Extracting keywords from articles")
+        time.sleep(1)
         keyword_extract(save_path, DB_name, keyword_extract_method, text_type, edge_count_type, ngram_range)
     if processes <= 3:
+        progress(0, desc="Constructing keyword networks and structuring research field")
+        time.sleep(1)
         graph_network(save_path, DB_name, text_type, modular_algorithm, filter_percent, modularity_seed, modularity_resolution)
     if processes <= 4:
+        progress(0, desc="Analyzing research trend")
+        time.sleep(1)
         trend_analysis(f"{save_path}/{DB_name}", fitting_method, community_limit, year_range)
     
     # 6. outputs
@@ -46,6 +57,9 @@ def KARS(email,DB_name,search_keywords,processes,keyword_extract_method,text_typ
     gaussian_interpolation = f"{save_path}/{DB_name}/gaussian_interpolation.png"
     total_year_trend = f"{save_path}/{DB_name}/total_year_trend.png"
     community_year_trend = f"{save_path}/{DB_name}/community_year_trend.png"
+    #gaussian_interpolation = f"{save_path}/{DB_name}/gaussian_interpolation.html"
+    #total_year_trend = f"{save_path}/{DB_name}/total_year_trend.html"
+    #community_year_trend = f"{save_path}/{DB_name}/community_year_trend.html"
     df = pd.DataFrame()
     for root, dirs, files in os.walk(f"{save_path}/{DB_name}"):
         for dir in dirs:
@@ -62,15 +76,18 @@ def KARS(email,DB_name,search_keywords,processes,keyword_extract_method,text_typ
 
     return integrated_pagerank, gaussian_interpolation, total_year_trend, community_year_trend, df, zip
 
-
 if __name__ == "__main__":
     #0. Read input lists
     input_list = []
     for root, dirs, files in os.walk("/home1/khyeon/Researches/KARS/results"):
         for file in files:
             if file == "inputs.txt":
+                inputs = []
                 with open(os.path.join(root, file), "r") as f:
-                    input_list.append(f.readlines())
+                    inputs = f.readlines()
+                #remove \n in the end of each line
+                inputs = [input.replace("\n","") for input in inputs]
+                input_list.append(inputs)
 
     gui = gr.Interface(
         KARS,
@@ -94,6 +111,9 @@ if __name__ == "__main__":
             gr.Image(type="pil",info="The result of gaussian interpolation"),
             gr.Image(type="pil",info="The result of total year trend"),
             gr.Image(type="pil",info="The result of community year trend"),
+            #gr.HTML(info="The result of integrated gaussian interpolation"),
+            #gr.HTML(info="The result of total year trend"),
+            #gr.HTML(info="The result of community year trend"),
             gr.Dataframe(row_count=(20,"fixed"),col_count=(5,"dynamic"), interactive=False,info="The top 20 keywords of structured research communities"),
             gr.File(type="file",info="The result file of the research trend analysis"),
         ],

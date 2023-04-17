@@ -1,0 +1,232 @@
+Running on local URL:  http://127.0.0.1:7860
+Running on public URL: https://5bd5df53b525ad273f.gradio.live
+
+This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
+
+Now Searching for ['LiNiO2'] exclude for [] 
+
+  0%|          | 0/218 [00:00<?, ?it/s]  0%|          | 1/218 [00:30<1:49:57, 30.40s/it] 33%|███▎      | 72/218 [00:30<00:43,  3.35it/s]  72%|███████▏  | 157/218 [00:30<00:06,  8.97it/s]100%|██████████| 218/218 [00:48<00:00,  4.47it/s]
+Deleted 0 articles because of stopword
+
+stop_list examples: []
+
+Deleted 0 articles because of not enough keywords
+
+multi_list examples: []
+
+Deleted 0 duplicates
+
+Saved 218 articles
+
+Loaded number of articles: 218
+Articles filtering...
+year filtered articles: 214
+text type filtered articles: 214
+Text cleansing...
+  0%|          | 0/214 [00:00<?, ?it/s] 29%|██▉       | 62/214 [00:00<00:00, 587.16it/s] 71%|███████   | 152/214 [00:00<00:00, 755.00it/s]100%|██████████| 214/214 [00:00<00:00, 721.20it/s]
+Text filtering...
+  0%|          | 0/214 [00:00<?, ?it/s]  7%|▋         | 14/214 [00:00<00:01, 134.06it/s] 14%|█▎        | 29/214 [00:00<00:01, 142.81it/s] 21%|██        | 44/214 [00:00<00:01, 112.76it/s] 27%|██▋       | 58/214 [00:00<00:01, 117.78it/s] 33%|███▎      | 71/214 [00:00<00:01, 104.73it/s] 40%|███▉      | 85/214 [00:00<00:01, 113.78it/s] 46%|████▋     | 99/214 [00:00<00:00, 120.40it/s] 53%|█████▎    | 114/214 [00:00<00:00, 128.73it/s] 60%|██████    | 129/214 [00:01<00:00, 133.89it/s] 67%|██████▋   | 144/214 [00:01<00:00, 136.81it/s] 74%|███████▍  | 158/214 [00:01<00:00, 129.86it/s] 80%|████████  | 172/214 [00:01<00:00, 131.51it/s] 87%|████████▋ | 186/214 [00:01<00:00, 122.27it/s] 93%|█████████▎| 200/214 [00:01<00:00, 125.12it/s]100%|█████████▉| 213/214 [00:01<00:00, 115.54it/s]100%|██████████| 214/214 [00:01<00:00, 122.30it/s]
+Composition list making...
+Composition list
+['LiNiO2', 'LiNiO2', 'Ga', 'Al', 'LiNiO2', 'LiNiO2', 'Co', 'Ti', 'Mg', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Mg', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'NiO', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'NiOH2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'Co', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiFeO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'TiO2', 'ZnO', 'La2O3', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Ni', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Ti', 'Ni', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Co', 'Mn', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'NiOH2', 'LiOH', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiO', 'Li', 'Ni', 'Li', 'Ni', 'LiNiO2', 'CO2', 'LiCoO2', 'LiNiO2', 'Fe', 'LiNiO2', 'LiNiO2', 'LiOH', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Ni', 'Ni', 'Co', 'Co', 'LiNiO2', 'LiNiO2', 'Ni', 'LiNiO2', 'US', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Mg', 'Mn', 'LiNiO2', 'Li', 'Li', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Li', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'V2O5', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Al', 'LiNiO2', 'Al', 'Ti', 'Ni', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'Zn', 'Ti', 'Ni', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Mn', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNi', 'Co', 'O2', 'LiNiO2', 'LiNiO2', 'Li', 'LiNiO2', 'mHF', 'LiNiO2', 'Ni', 'LiNiO2', 'LiNiO2', 'Al', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'NiOH2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'O2', 'NF3', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'Li', 'LiNiO2', 'Co', 'LiNiO2', 'Li', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiFeO2', 'LiCrO2', 'LiNiO2', 'LiNiO2', 'LiNi', 'LiNiO2', 'LiNiO2', 'Nb', 'LiNiO2', 'Ga', 'In', 'Tl', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Al', 'Mg', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'Al', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'Li', 'LiCoO2', 'LiNiO2', 'Sb', 'LiNiO2', 'Li', 'LiNiO2', 'Mg', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'Mn', 'Co', 'Li', 'LiNiO2', 'Ni', 'LiNiO2', 'LiNiO2', 'Mg', 'Mn', 'LiNiO2', 'LiCoO2', 'Nb', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'Li', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Zn', 'Al', 'Ti', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiOH', 'Mg', 'LiNiO2', 'CoMn', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Li', 'Mg', 'LiNiO2', 'Li', 'LiNiO2', 'Sb', 'LiNiO2', 'CoTi', 'LiNiO2', 'Li', 'Li', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Cu', 'LiNiO2', 'Li', 'Mg', 'Al', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'NiOH2', 'LiOH', 'LiNiO2', 'NiOH2', 'LiNiO2', 'CoMn', 'LiNiO2', 'LiNiO2', 'NiO', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'Li', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'Ti', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'Li', 'Mg', 'Al', 'Co', 'LiNiO2', 'LiNiO2', 'Li', 'Ni', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Li', 'LiNiO2', 'AlMg', 'LiNiO2', 'LiNiO2', 'Li', 'Li', 'LiPF6', 'LiNiO2', 'Co', 'LiNiO2', 'Li', 'LiNiO2', 'Li', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Li', 'NiIV']
+Synonym checking...
+  0%|          | 0/214 [00:00<?, ?it/s]100%|██████████| 214/214 [00:00<00:00, 2893.70it/s]
+Node & Edge extraction...
+  0%|          | 0/214 [00:00<?, ?it/s] 15%|█▍        | 32/214 [00:00<00:00, 314.56it/s] 34%|███▍      | 73/214 [00:00<00:00, 370.20it/s] 53%|█████▎    | 114/214 [00:00<00:00, 388.26it/s] 72%|███████▏  | 154/214 [00:00<00:00, 390.30it/s] 91%|█████████ | 194/214 [00:00<00:00, 375.58it/s]100%|██████████| 214/214 [00:00<00:00, 370.37it/s]
+Graph information
+Node number:  600
+Edge number:  5951
+Pagerank calculation finished
+Keyword Filtered Graph information
+Node number:  255
+Edge number:  3365
+community 0 freq: 458 (28.254164096236888%)
+community 1 freq: 191 (11.782850092535472%)
+community 2 freq: 246 (15.175817396668723%)
+community 3 freq: 129 (7.95805058605799%)
+community 4 freq: 176 (10.857495373226403%)
+community 5 freq: 261 (16.10117211597779%)
+community 6 freq: 63 (3.8864898210980874%)
+community 7 freq: 83 (5.120296113510179%)
+community 8 freq: 14 (0.863664404688464%)
+unmodularized Graphs: 3
+modularized Graphs: 6
+Community 6, node number: 48, freq: 28.25%
+==============================
+1 cathode 0.017706163441077075
+2 electrochemical 0.01199969823524465
+3 property 0.009493415378000221
+4 synthesis 0.008700000377784027
+5 effect 0.007073351638334175
+Community 8, node number: 25, freq: 16.10%
+==============================
+1 LiNiO2 0.041935905314470355
+2 material 0.013829280783579024
+3 gradient 0.0016004376468207585
+4 enhance 0.0014650129751281303
+5 pengaruh 0.0014425278250144134
+Community 7, node number: 37, freq: 15.18%
+==============================
+1 lithium 0.016705309178633283
+2 LiCoO2 0.00765010448950987
+3 electrode 0.006199563586355321
+4 Co 0.004461500732741114
+5 investigation 0.00430357126375614
+Community 0, node number: 47, freq: 11.78%
+==============================
+1 study 0.008134466720284705
+2 prepare 0.0067328032328564874
+3 ray 0.004496924708490838
+4 solution 0.0041877583346002015
+5 substitute 0.004168724004239919
+Community 2, node number: 25, freq: 10.86%
+==============================
+1 ion 0.016049274849360775
+2 Li 0.007980768689873147
+3 dope 0.0063397265820596595
+4 high 0.006321841375879921
+5 first 0.0038354979403647793
+Community 1, node number: 33, freq: 7.96%
+==============================
+1 structure 0.006136266770278991
+2 layered 0.005713029275313346
+3 film 0.004654647747539546
+4 nickel 0.004413891900521461
+5 thin 0.0042242830186509095
+Community 4, node number: 11, freq: 5.12%
+==============================
+1 battery 0.014161836056847826
+2 situ 0.0035834847944575137
+3 degradation 0.003286385397769768
+4 oxide 0.002955371644658355
+5 mechanical 0.002370017274430506
+Community 3, node number: 21, freq: 3.89%
+==============================
+1 base 0.005019315634990683
+2 temperature 0.004781151795108984
+3 active 0.0030395331131914537
+4 cycling 0.002940260025347136
+5 phase 0.0026470201348302146
+Community 5, node number: 8, freq: 0.86%
+==============================
+1 system 0.004359600789064168
+2 thermodynamic 0.0012462390067020264
+3 description 0.0012462390067020264
+4 linio2nio2 0.0012462390067020264
+5 pseudo 0.0012462390067020264
+Saving graph data is done
+Save subgraph:   0%|          | 0/9 [00:00<?, ?it/s]Community 'cathode electrochemical property synthesis effect ' has 48 nodes, 28.25% of total nodes
+Save subgraph:  11%|█         | 1/9 [00:00<00:02,  2.97it/s]Community 'LiNiO2 material gradient enhance pengaruh ' has 25 nodes, 16.1% of total nodes
+Save subgraph:  22%|██▏       | 2/9 [00:00<00:02,  3.03it/s]Community 'lithium LiCoO2 electrode Co investigation ' has 37 nodes, 15.18% of total nodes
+Save subgraph:  33%|███▎      | 3/9 [00:00<00:01,  3.05it/s]Community 'study prepare ray solution substitute ' has 47 nodes, 11.78% of total nodes
+Save subgraph:  44%|████▍     | 4/9 [00:01<00:01,  3.04it/s]Community 'ion Li dope high first ' has 25 nodes, 10.86% of total nodes
+Save subgraph:  56%|█████▌    | 5/9 [00:01<00:01,  3.07it/s]Community 'structure layered film nickel thin ' has 33 nodes, 7.96% of total nodes
+Save subgraph:  67%|██████▋   | 6/9 [00:01<00:00,  3.08it/s]Community 'battery situ degradation oxide mechanical ' has 11 nodes, 5.12% of total nodes
+Save subgraph:  78%|███████▊  | 7/9 [00:02<00:00,  3.10it/s]Community 'base temperature active cycling phase ' has 21 nodes, 3.89% of total nodes
+Save subgraph:  89%|████████▉ | 8/9 [00:02<00:00,  3.11it/s]Community 'system thermodynamic description linio2nio2 pseudo ' has 8 nodes, 0.86% of total nodes
+Save subgraph: 100%|██████████| 9/9 [00:02<00:00,  3.13it/s]Save subgraph: 100%|██████████| 9/9 [00:02<00:00,  3.09it/s]
+Saving subgraph data is done
+  0%|          | 0/600 [00:00<?, ?it/s]100%|██████████| 600/600 [00:00<00:00, 22461.46it/s]
+dict_keys(['total', '0 cathode electrochemical property synthesis effect  (28.25%)', '1 LiNiO2 material gradient enhance pengaruh  (16.1%)', '2 lithium LiCoO2 electrode Co investigation  (15.18%)', '3 study prepare ray solution substitute  (11.78%)', '4 ion Li dope high first  (10.86%)', '5 structure layered film nickel thin  (7.96%)', '6 battery situ degradation oxide mechanical  (5.12%)', '7 base temperature active cycling phase  (3.89%)', '8 system thermodynamic description linio2nio2 pseudo  (0.86%)'])
+  0%|          | 0/600 [00:00<?, ?it/s]100%|██████████| 600/600 [00:00<00:00, 76246.21it/s]
+Node & Edge extraction...
+  0%|          | 0/214 [00:00<?, ?it/s]  0%|          | 0/214 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/routes.py", line 393, in run_predict
+    output = await app.get_blocks().process_api(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 1108, in process_api
+    result = await self.call_function(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 915, in call_function
+    prediction = await anyio.to_thread.run_sync(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/to_thread.py", line 31, in run_sync
+    return await get_asynclib().run_sync_in_worker_thread(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 937, in run_sync_in_worker_thread
+    return await future
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 867, in run
+    result = context.run(func, *args)
+  File "/home1/khyeon/Researches/KARS/KARS_GUI2.py", line 118, in RS
+    research_structure(self.save_path, self.DB_name, text_type, edge_type, start_year, end_year, modular_algorithm, modularity_resolution, modularity_seed, pagerank_filter)
+  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 35, in __init__
+    self.graph_dataficate()
+  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 162, in graph_dataficate
+    text_list = metadata["abstract_cleaned"]
+KeyError: 'abstract_cleaned'
+Node & Edge extraction...
+  0%|          | 0/214 [00:00<?, ?it/s]  0%|          | 0/214 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/routes.py", line 393, in run_predict
+    output = await app.get_blocks().process_api(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 1108, in process_api
+    result = await self.call_function(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 915, in call_function
+    prediction = await anyio.to_thread.run_sync(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/to_thread.py", line 31, in run_sync
+    return await get_asynclib().run_sync_in_worker_thread(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 937, in run_sync_in_worker_thread
+    return await future
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 867, in run
+    result = context.run(func, *args)
+  File "/home1/khyeon/Researches/KARS/KARS_GUI2.py", line 118, in RS
+    research_structure(self.save_path, self.DB_name, text_type, edge_type, start_year, end_year, modular_algorithm, modularity_resolution, modularity_seed, pagerank_filter)
+  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 35, in __init__
+    self.graph_dataficate()
+  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 162, in graph_dataficate
+    text_list = metadata["abstract_cleaned"]
+KeyError: 'abstract_cleaned'
+Node & Edge extraction...
+  0%|          | 0/214 [00:00<?, ?it/s]  0%|          | 0/214 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/routes.py", line 393, in run_predict
+    output = await app.get_blocks().process_api(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 1108, in process_api
+    result = await self.call_function(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 915, in call_function
+    prediction = await anyio.to_thread.run_sync(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/to_thread.py", line 31, in run_sync
+    return await get_asynclib().run_sync_in_worker_thread(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 937, in run_sync_in_worker_thread
+    return await future
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 867, in run
+    result = context.run(func, *args)
+  File "/home1/khyeon/Researches/KARS/KARS_GUI2.py", line 118, in RS
+    research_structure(self.save_path, self.DB_name, text_type, edge_type, start_year, end_year, modular_algorithm, modularity_resolution, modularity_seed, pagerank_filter)
+  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 35, in __init__
+    self.graph_dataficate()
+  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 162, in graph_dataficate
+    text_list = metadata["abstract_cleaned"]
+KeyError: 'abstract_cleaned'
+Node & Edge extraction...
+  0%|          | 0/214 [00:00<?, ?it/s]100%|██████████| 214/214 [00:00<00:00, 6677.34it/s]
+Graph information
+Node number:  600
+Edge number:  1173
+Traceback (most recent call last):
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/routes.py", line 393, in run_predict
+    output = await app.get_blocks().process_api(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 1108, in process_api
+    result = await self.call_function(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 915, in call_function
+    prediction = await anyio.to_thread.run_sync(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/to_thread.py", line 31, in run_sync
+    return await get_asynclib().run_sync_in_worker_thread(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 937, in run_sync_in_worker_thread
+    return await future
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 867, in run
+    result = context.run(func, *args)
+  File "/home1/khyeon/Researches/KARS/KARS_GUI2.py", line 118, in RS
+    research_structure(self.save_path, self.DB_name, text_type, edge_type, start_year, end_year, modular_algorithm, modularity_resolution, modularity_seed, pagerank_filter)
+  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 37, in __init__
+    self.pagerank()
+  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 199, in pagerank
+    node_pagerank = nx.pagerank(self.G, alpha=0.85, max_iter=20, tol=1e-06, weight="total", dangling=None)
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/networkx/classes/backends.py", line 145, in wrapper
+    return func(*args, **kwds)
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/networkx/algorithms/link_analysis/pagerank_alg.py", line 109, in pagerank
+    return _pagerank_scipy(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/networkx/algorithms/link_analysis/pagerank_alg.py", line 498, in _pagerank_scipy
+    raise nx.PowerIterationFailedConvergence(max_iter)
+networkx.exception.PowerIterationFailedConvergence: (PowerIterationFailedConvergence(...), 'power iteration failed to converge within 20 iterations')
+Running on local URL:  http://127.0.0.1:7860
+Running on public URL: https://190c4a140979ca7738.gradio.live
+
+This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces

@@ -9,6 +9,7 @@
 ## 2. python libraries 설치
     pip install pandas
     pip install tqdm
+    pip install mpld3
     pip install crossrefapi
     pip install -U pip setuptools wheel
     pip install scikit-learn

@@ -23,8 +23,8 @@ class crossref:
                     keywords["search_words"].remove(word)
         self.save_path = save_path
         self.DB_name = DB_name
-        if os.path.exists(f"{self.save_path}/{self.DB_name}/{self.DB_name}.jsonl"):
-            os.remove(f"{self.save_path}/{self.DB_name}/{self.DB_name}.jsonl")
+        if os.path.exists(f"{self.save_path}/Article_collection/{self.DB_name}.jsonl"):
+            os.remove(f"{self.save_path}/Article_collection/{self.DB_name}.jsonl")
         self.Article_search_keyword()
         self.save_metadata()
 
@@ -108,17 +108,12 @@ class crossref:
             print(f"Deleted {count} duplicates\n")
         
     def save_metadata(self):
-        #1. save keyword list
-        with open(f"{self.save_path}/{self.DB_name}/search_keyword_list.txt",encoding="utf-8",mode="w") as f:
-            for i in self.keyword_list: f.write(f"'{i}'" + "\n")
-
-        #2. save search results
-        with open(f"{self.save_path}/{self.DB_name}/{self.DB_name}.jsonl",encoding="utf-8",mode="a") as f:
+        #1. save search results
+        with open(f"{self.save_path}/Article_collection/{self.DB_name}.jsonl",encoding="utf-8",mode="a") as f:
             for i in self.total_query: f.write(json.dumps(i) + "\n")
         print(f"Saved {len(self.total_query)} articles\n")
 
-        #3. save search results as csv
-
+        #2. save search results as csv
         df = pd.DataFrame(columns=["Index","Title","Abstract","Published date","DOI"])
         for metadata in self.total_query:
             if "abstract" not in metadata.keys():
@@ -130,5 +125,5 @@ class crossref:
             else:
                 published_date = ""
             df = df.append({"Index":len(df),"Title":metadata["title"][0],"Abstract":metadata["abstract"],"Published date":published_date,"DOI":metadata["DOI"]},ignore_index=True)
-        df.to_csv(f"{self.save_path}/{self.DB_name}/{self.DB_name}.csv", index=False)
+        df.to_csv(f"{self.save_path}/Article_collection/{self.DB_name}.csv", index=False)
 

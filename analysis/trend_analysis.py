@@ -1,22 +1,23 @@
 import os
 from tqdm import tqdm
-import json
+import jsonlines
 import pandas as pd
 import numpy as np
 from scipy.optimize import curve_fit
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt, mpld3
 import torch
 from torch.nn import functional as F
 
 class trend_analysis:
-    def __init__(self, save_path, fit_type, community_limit, year_range):
+    def __init__(self, save_path, start_year, end_year, fit_type, community_limit):
         self.save_path = save_path
+        self.start_year = start_year
+        self.end_year = end_year
         self.fit_type = fit_type
         self.community_limit = community_limit
-        self.year_range = year_range
         self.keywords_freq_dict = {}
-        with open(f"{self.save_path}/node_feature.json", 'r') as f:
-            self.node_feature = json.load(f)
+        self.color_dict = {}
+        self.node_feature = list(jsonlines.open(f"{self.save_path}/Research_structure/node_feature.json", 'r'))[0]
         self.total_freq_year()
         self.community_freq_year()
         self.trend_interpolation()
@@ -37,22 +38,16 @@ class trend_analysis:
                     self.keywords_freq_dict["total"]["year_freq"][year] += freq
 
         # 2. Delete latest year and get max year
-        max_year = max(self.keywords_freq_dict["total"]["year_freq"].keys())
-        del self.keywords_freq_dict["total"]["year_freq"][max_year]
-        max_year = max(self.keywords_freq_dict["total"]["year_freq"].keys())
-        self.keywords_freq_dict["total"]["max_year"] = int(max_year)
-
-        # 3. Get min year by year_range
-        min_year = max_year - self.year_range + 1
-        self.keywords_freq_dict["total"]["min_year"] = int(min_year)
+        self.keywords_freq_dict["total"]["max_year"] = int(self.end_year)
+        self.keywords_freq_dict["total"]["min_year"] = int(self.start_year)
 
         # 4. Delete the out of range year
-        for year in range(min_year):
+        for year in range(self.start_year):
             if year in self.keywords_freq_dict["total"]["year_freq"].keys():
                 del self.keywords_freq_dict["total"]["year_freq"][year]
             
         # 3. add 0 to empty
-        for year in range(min_year, max_year+1):
+        for year in range(self.start_year, self.end_year+1):
             if not year in self.keywords_freq_dict["total"]["year_freq"].keys():
                 self.keywords_freq_dict["total"]["year_freq"][year] = 0
 
@@ -61,14 +56,14 @@ class trend_analysis:
 
     def community_freq_year(self):
         # 1. Get community keywords and year list
-        for community in os.listdir(f"{self.save_path}/"):
-            if os.path.isdir(f"{self.save_path}/{community}"):
-                with open(f"{self.save_path}/{community}/graph.json", 'r') as f:
-                    subgraph = json.load(f)
+        for community in os.listdir(f"{self.save_path}/Research_structure"):
+            if os.path.isdir(f"{self.save_path}/Research_structure/{community}"):
+                subgraph = list(jsonlines.open(f"{self.save_path}/Research_structure/{community}/graph.json", 'r'))[0]
                 if not community in self.keywords_freq_dict.keys():
                     self.keywords_freq_dict[community] = {"keywords":[], "year_freq":{}, "year_percent":{}}
                 self.keywords_freq_dict[community]["keywords"] = [node["id"] for node in subgraph["nodes"]]
                 self.keywords_freq_dict[community]["year_freq"] = {year:0 for year in self.keywords_freq_dict["total"]["year_freq"].keys()}
+        print(self.keywords_freq_dict.keys())
 
         # 2. Get community frequency per year
         for keyword, value in tqdm(self.node_feature.items()):
@@ -87,49 +82,6 @@ class trend_analysis:
                         self.keywords_freq_dict[community]["year_percent"][year] = freq/self.keywords_freq_dict["total"]["year_freq"][year]
                     else:
                         self.keywords_freq_dict[community]["year_percent"][year] = 0
-
-    def gaussian_fit(self, year_list, freq_list, lr=0.1, epochs=10000, verbose=False):
-        # define the model and input data
-        class SingleGaussianModel(torch.nn.Module):
-            def __init__(self):
-                super(SingleGaussianModel, self).__init__()
-                self.mu = torch.nn.Parameter(torch.tensor([0.]))
-                self.sigma = torch.nn.Parameter(torch.tensor([1.]))
-                self.coeff = torch.nn.Parameter(torch.tensor([1.]))
-                
-            def forward(self, x):
-                if not isinstance(x, torch.Tensor):
-                    x = torch.tensor(x, dtype=torch.float)
-                return self.coeff * torch.exp(- (x - self.mu) ** 2 / (2 * self.sigma ** 2))
-            
-            def coeff_init(self, x, y):
-                self.coeff = torch.nn.Parameter(torch.tensor([y.max()]))
-                self.mu = torch.nn.Parameter(torch.tensor([x[y.argmax()]]))
-                self.sigma = torch.nn.Parameter(torch.tensor([1.]))
-                
-        # Loss function
-        def loss_func(x, pred):
-            return F.mse_loss(x, pred)
-
-        x = torch.tensor(year_list, dtype=torch.float)
-        y = torch.tensor(freq_list, dtype=torch.float)
-
-        model = SingleGaussianModel()
-        model.coeff_init(x, y)
-        optim = torch.optim.Adam(model.parameters(), lr=lr)
-
-        # Training loop
-        epochs = epochs
-        for i in range(epochs):
-            pred = model(x) # forward pass
-            loss = loss_func(y, pred) # calculate the loss
-            optim.zero_grad() # zero grads
-            loss.backward() # backward pass
-            optim.step() # update weights
-            if verbose:
-                if i%100 == 0:
-                    print('Epoch: {}, Loss: {}'.format(i, loss.item()), model.mu.item(), model.sigma.item(), model.coeff.item())
-        return {'mu': model.mu.item(), 'sigma': model.sigma.item(), 'coeff': model.coeff.item(), 'model': model}
 
     def trend_interpolation(self):
         # 1. get total keywords frequency per year
@@ -174,13 +126,6 @@ class trend_analysis:
             mu = popt[1]
             sigma = popt[2]
 
-        #elif self.fit_type == "gu":
-        #    # import necessary packages
-        #    output = self.gaussian_fit(x, y, lr=5, epochs=10000, verbose=True)
-        #    mu, sigma, coeff = output['mu'], output['sigma'], output['coeff']
-        #    model = output['model']
-        #    y_fit = model(x).detach().numpy()
-
         # 3. get mu-3sigma, mu-sigma, mu+sigma, mu+3sigma
         min_year = int(self.keywords_freq_dict["total"]["min_year"])
         mu_3sigma = mu - 3*sigma + min_year
@@ -189,7 +134,7 @@ class trend_analysis:
         mu_plus_sigma = mu + sigma + min_year
         mu_plus_3sigma = mu + 3*sigma + min_year
         self.keywords_freq_dict["total"]["PLC"] = {"development":mu_3sigma, "introduction":mu_2sigma, "growth":mu_sigma, "maturity":mu_plus_sigma, "decline":mu_plus_3sigma}
-        
+
         # 5. plot gaussian interpolation with total keywords frequency per year but x axis is year
         plt.subplots(figsize=(10, 5))
         x = [int(year) for year in list(self.keywords_freq_dict["total"]["year_freq"].keys())]
@@ -197,8 +142,9 @@ class trend_analysis:
         plt.xlim(x[0], x[-1])
         plt.plot(x, y_fit, 'r-', label='fit')
         plt.legend()
-        plt.xlabel("Year")
-        plt.ylabel("Frequency")
+        plt.xlabel("Year", fontsize=12)
+        plt.ylabel("Keywords Frequency", fontsize=12)
+        plt.title("Gaussian Interpolation results for annual total keywords frequency", pad=20, fontsize=15)
 
         # 6. make vertical line by mu-3sigma, mu-sigma, mu+sigma, mu+3sigma. label these as development, introduction, growth, and maturity on the top of lines
         plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["development"], color='gray', linestyle='--', label="Development")
@@ -235,7 +181,10 @@ class trend_analysis:
                             plt.text((self.keywords_freq_dict["total"]["PLC"]["maturity"]+self.keywords_freq_dict["total"]["PLC"]["decline"])/2, y_max, "Decline", horizontalalignment='center', verticalalignment='bottom', fontsize=12)
 
         plt.legend()
-        plt.savefig(f"{self.save_path}/gaussian_interpolation.png")
+        plt.tight_layout()
+        plt.savefig(f"{self.save_path}/Trend_analysis/gaussian_interpolation.png")
+        mpld3.save_html(plt.gcf(), f"{self.save_path}/Trend_analysis/gaussian_interpolation.html")
+        plt.close()
 
     def plot_total_year_trend(self):
         # 1. plot keywords frequency per year
@@ -266,6 +215,8 @@ class trend_analysis:
                 yp = list(xy_old.values())
                 y = list(xy.values())
                 plt.fill_between(x, yp, y, alpha=0.5, cmap=plt.cm.rainbow)
+                # save color value
+                self.color_dict[community] = plt.gca().collections[-1].get_facecolors()
 
         # 6. make vertical line by mu-3sigma, mu-sigma, mu+sigma, mu+3sigma. label these as development, introduction, growth, and maturity on the top of lines
         plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["development"], color='gray', linestyle='--', label="Development")
@@ -310,11 +261,14 @@ class trend_analysis:
         legend.append("PLC")
         plt.legend(legend, loc='upper left')
         plt.grid(alpha=0.5, linestyle='--')
-        plt.xlabel("Year")
-        plt.ylabel("Keywords Frequency")
+        plt.xlabel("Year", fontsize=12)
+        plt.ylabel("Keywords Frequency", fontsize=12)
+        plt.title("Annual Trend of Keywords Frequency", pad=20, fontsize=15)
         plt.minorticks_on()
         plt.tight_layout()
-        plt.savefig(f"{self.save_path}/total_year_trend.png")
+        plt.savefig(f"{self.save_path}/Trend_analysis/total_year_trend.png")
+        mpld3.save_html(plt.gcf(), f"{self.save_path}/Trend_analysis/total_year_trend.html")
+        plt.close()
 
     def plot_community_year_trend(self):
         # 1. Limit X-axis 
@@ -330,7 +284,6 @@ class trend_analysis:
             x_upper = int(x_max)
         
         # 2. plot data
-        colors = plt.cm.rainbow
         legend = []
         plt.subplots(figsize=(10, 5))
         for i, community in enumerate(self.keywords_freq_dict.keys()):
@@ -345,13 +298,10 @@ class trend_analysis:
                             y.append(self.keywords_freq_dict[community]["year_percent"][year])
        
                     # draw lines
-                    plt.plot(x, y, color=colors(i/len(self.keywords_freq_dict.keys())), label=community)
+                    plt.plot(x, y, color=self.color_dict[community], label=community)
 
                     # append legend
                     legend.append(community)
-
-                    # i ++
-                    i += 1
                 
         # 6. make vertical line by mu-3sigma, mu-sigma, mu+sigma, mu+3sigma. label these as development, introduction, growth, and maturity on the top of lines
         plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["development"], color='gray', linestyle='--', label="Development")
@@ -392,14 +342,16 @@ class trend_analysis:
         plt.gca().set_ylim(bottom=0)
         plt.xticks(np.arange(int(self.keywords_freq_dict["total"]["PLC"]["development"]), int(self.keywords_freq_dict["total"]["max_year"]), 5))
         legend.append("PLC")
-        plt.legend(legend, loc='upper left')
+        plt.legend(legend, loc='upper right')
         plt.grid(alpha=0.5, linestyle='--')
-        plt.xlabel("Year")
-        plt.ylabel("% of Keywords Frequency")
+        plt.xlabel("Year", fontsize=12)
+        plt.ylabel("% of Keywords Frequency", fontsize=12)
+        plt.title("Communities' Annual Trend of Keywords Frequency", pad=20, fontsize=15)
         plt.minorticks_on()
         plt.tight_layout()
-        plt.savefig(f"{self.save_path}/community_year_trend.png")
+        plt.savefig(f"{self.save_path}/Trend_analysis/community_year_trend.png")
+        mpld3.save_html(plt.gcf(), f"{self.save_path}/Trend_analysis/community_year_trend.html")
+        plt.close()
 
     def save_keywords_freq_dict(self):
-        with open(f"{self.save_path}/keywords_freq_dict.json", "w") as f:
-            json.dump(self.keywords_freq_dict, f, indent=4)
+        jsonlines.open(f"{self.save_path}/Trend_analysis/trend_analysis.json", mode="w").write_all(self.keywords_freq_dict)

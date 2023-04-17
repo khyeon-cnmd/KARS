@@ -24,6 +24,7 @@
     * 이미 데이터가 있는 경우, 코드 실행 단계에서 Output 만 읽도록 구성할 수 있을 듯?
     * Interactive graph 는 HTML 형식으로 출력한 것 보도록
     * 현존 데이터가 있더라도, Regeneration 할 수 있도록 구성
+    * https://github.com/gephi/gephi-lite#readme
 
 ## 5. Keyword to docs
     * 그래프간 유사도를 활용해서, subgraph 들과 논문 제목 graph 와의 유사도 비교 

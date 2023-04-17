@@ -1,7 +1,7 @@
 import os
 from collect.crossref import crossref
 from extract.keyword_extract import keyword_extract
-from network.graph_network import graph_network
+from network.research_structure import research_structure
 from analysis.trend_analysis import trend_analysis
 
 # 1. Config

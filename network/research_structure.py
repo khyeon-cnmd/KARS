@@ -411,21 +411,14 @@ class research_structure:
                 df = pd.DataFrame(columns=["conformity","title","DOI"])
                 total_pagerank = sum([value['pagerank'] for key, value in subgraph.nodes.data()])
                 for metadata in self.metadata_list:
-                    if self.text_type == "abstract":
-                        text_list = metadata['abstract_cleaned']
-                        title = metadata['title']
-                    elif self.text_type == "title":
-                        text_list = metadata['title_cleaned']
+                    text_list = metadata['title_cleaned']
                     doi = metadata['DOI']
                     conformity = 0
                     for node in subgraph.nodes:
                         for text in text_list:
                             if node in text:
                                 conformity += subgraph.nodes[node]['pagerank']
-                    if self.text_type == "abstract":
-                        df = df.append({'DOI':doi, 'title':title, 'conformity':float(f"{conformity/total_pagerank*100:.2f}")}, ignore_index=True)
-                    elif self.text_type == "title":
-                        df = df.append({'DOI':doi, 'title':text_list, 'conformity':float(f"{conformity/total_pagerank*100:.2f}")}, ignore_index=True)
+                    df = df.append({'DOI':doi, 'title':text_list[0], 'conformity':float(f"{conformity/total_pagerank*100:.2f}")}, ignore_index=True)
                 df = df.sort_values(by=['conformity'], ascending=False)
                 df.to_csv(f"{self.save_path}/Research_structure/{folder_name}/pagerank_doc.csv", index=False)
 

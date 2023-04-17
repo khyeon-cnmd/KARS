@@ -188,35 +188,42 @@ class trend_analysis:
 
     def plot_total_year_trend(self):
         # 1. plot keywords frequency per year
+        legend = []
         plt.subplots(figsize=(10, 5))
         i = 0
         for community in self.keywords_freq_dict.keys():
             if not community == "total":
-                if i == 0:
-                    xy = self.keywords_freq_dict[community]["year_freq"]
-                    xy_old = {}
-                    #set all year to 0
-                    for year, freq in xy.items():
-                        xy_old[year] = 0
-                    i+=1
-                else:
-                    xy_old = xy.copy()
-                    for year, freq in self.keywords_freq_dict[community]["year_freq"].items():
-                        if not year in xy.keys():
-                            xy[year] = 0
+                community_percent = float(community.split("%")[0].split("(")[1])
+                if not community_percent <= self.community_limit:
+                    if i == 0:
+                        xy = self.keywords_freq_dict[community]["year_freq"]
+                        xy_old = {}
+                        #set all year to 0
+                        for year, freq in xy.items():
                             xy_old[year] = 0
-                        xy[year] += freq
+                        i+=1
+                    else:
+                        xy_old = xy.copy()
+                        for year, freq in self.keywords_freq_dict[community]["year_freq"].items():
+                            if not year in xy.keys():
+                                xy[year] = 0
+                                xy_old[year] = 0
+                            xy[year] += freq
 
-                # sort by year
-                xy = dict(sorted(xy.items(), key=lambda item: item[0]))
-                xy_old = dict(sorted(xy_old.items(), key=lambda item: item[0]))
-                x = list(xy_old.keys())
-                x = [int(i) for i in x]
-                yp = list(xy_old.values())
-                y = list(xy.values())
-                plt.fill_between(x, yp, y, alpha=0.5, cmap=plt.cm.rainbow)
-                # save color value
-                self.color_dict[community] = plt.gca().collections[-1].get_facecolors()
+                    # sort by year
+                    xy = dict(sorted(xy.items(), key=lambda item: item[0]))
+                    xy_old = dict(sorted(xy_old.items(), key=lambda item: item[0]))
+                    x = list(xy_old.keys())
+                    x = [int(i) for i in x]
+                    yp = list(xy_old.values())
+                    y = list(xy.values())
+                    plt.fill_between(x, yp, y, alpha=0.5, cmap=plt.cm.rainbow)
+                    
+                    # save color value
+                    self.color_dict[community] = plt.gca().collections[-1].get_facecolors()
+
+                    # append legend
+                    legend.append(community)
 
         # 6. make vertical line by mu-3sigma, mu-sigma, mu+sigma, mu+3sigma. label these as development, introduction, growth, and maturity on the top of lines
         plt.axvline(x=self.keywords_freq_dict["total"]["PLC"]["development"], color='gray', linestyle='--', label="Development")
@@ -256,8 +263,6 @@ class trend_analysis:
         plt.xlim(int(self.keywords_freq_dict["total"]["min_year"]), int(self.keywords_freq_dict["total"]["max_year"]))
         plt.gca().set_ylim(bottom=0)
         plt.xticks(np.arange(int(self.keywords_freq_dict["total"]["min_year"]), int(self.keywords_freq_dict["total"]["max_year"]), 5))
-        legend = list(self.keywords_freq_dict.keys())
-        legend.remove("total")
         legend.append("PLC")
         plt.legend(legend, loc='upper left')
         plt.grid(alpha=0.5, linestyle='--')

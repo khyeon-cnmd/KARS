@@ -33,7 +33,6 @@ class keyword_extract:
         self.synonym_checking()
         self.save_json()
         
-
     def NER(self, word):
         def count_upper(text):
             """
@@ -100,13 +99,17 @@ class keyword_extract:
             text = re.sub(r'<.*?>', '', text)
             # 3-4. remove hbox
             text = re.sub(r'hbox', '', text)
-            # 3-6. make - to space
-            text = re.sub(r'-', ' ', text)
-            # 3-5. remove special characters except for /
+            # 3-5. make -,/ to space
+            text = re.sub(r'[-/]', ' ', text)
+            # 3-6. remove special characters except for . and space
+            text = re.sub(r'[^a-zA-Z0-9.\s]', '', text)
+            # 3-7. remove . for the word doesn't have any number
+            text = re.sub(r'\b\.(?!\d)|(?<!\d)\.\b', '', text)
+            #text = re.sub(r'^[a-zA-Z]+|[+-]?(?:(?:\d+(?:\.\d*)?)|(?:\.\d+))$', '', text)
             #text = re.sub(r'[^a-zA-Z0-9/\s]', '', text)
-            text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
+            #text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
             # 3-7. remove word which only have number
-            text = re.sub(r'\b[0-9]+\b\s*', '', text)
+            #text = re.sub(r'\b[0-9]+\b\s*', '', text)
 
             return text
 
@@ -188,7 +191,10 @@ class keyword_extract:
                     #if upper letter exist,
                     if sum(1 for c in keyword if c.isupper()) >= 1:
                         composition_list.append(keyword)
+        #make unique
+        composition_list = list(set(composition_list))
         print(f"Composition list\n{composition_list}")
+        
 
         #2. for all keywords, check upper lower
         print("Synonym checking...")

@@ -1035,3 +1035,141 @@ This share link expires in 72 hours. For free permanent hosting and GPU upgrades
   0%|          | 0/4539 [00:00<?, ?it/s] 11%|█         | 479/4539 [00:00<00:00, 4782.29it/s] 25%|██▌       | 1143/4539 [00:00<00:00, 5873.31it/s] 40%|████      | 1833/4539 [00:00<00:00, 6338.85it/s] 56%|█████▌    | 2528/4539 [00:00<00:00, 6579.26it/s] 71%|███████   | 3223/4539 [00:00<00:00, 6710.53it/s] 86%|████████▋ | 3918/4539 [00:00<00:00, 6790.90it/s]100%|██████████| 4539/4539 [00:00<00:00, 6579.02it/s]
 dict_keys(['total', '0 study efficiency show result energy  (27.47%)', '1 use TiO2 method layer material  (25.77%)', '2 dssc dan yang dengan pada  (19.82%)', '3 dye base extract have acid  (13.82%)', '4 cell electron process solar low  (12.02%)', '5 de el Las Se con  (0.4%)', '6 olarak karbazol reaksiyonu ile boya  (0.25%)', '7 chem masuda commun appl mater  (0.07%)', '8 sub brassica arbor nyctanthes tritis  (0.04%)', '9 sentezlenen incelenmitir zellikleri hidrotermal termogravimetrik  (0.03%)', '10 pekinensis delonix lawsonia inermis regia  (0.03%)', '11 hl cuhlpopch2cl2 cuhlpph32h2o monoanion COmposition  (0.03%)', '12 pahtddt carbz S9 ca meTalloporphyrin  (0.03%)', '13 swis asal michael ilmuan gratzel  (0.02%)', '14 101cr  (0.02%)', '15 steric electrostatic groups3  (0.01%)', '16 petal ixora coccinea  (0.01%)', '17 whole blood tgf1tgf2pdgfpdgftnfin  (0.01%)', '18 porphyrinato isobutylphenyl zinciiyl  (0.01%)', '19 deficit vpd pressure  (0.01%)', '20 oxyamination dicarbonyls  (0.01%)', '21 framework  (0.01%)', '22 degradation  (0.01%)', '23 much  (0.01%)', '24 au4x au5x  (0.01%)', '25 syaraf  (0.01%)', '26 solucin esta  (0.01%)', '27 sativa  (0.01%)', '28 plot  (0.01%)', '29 pyrene  (0.01%)', '30 konjuge  (0.0%)', '31 aumentar  (0.0%)', '32 electrn  (0.0%)', '33 8000c  (0.0%)', '34 concentrate  (0.0%)'])
   0%|          | 0/4539 [00:00<?, ?it/s] 69%|██████▊   | 3113/4539 [00:00<00:00, 31128.55it/s]100%|██████████| 4539/4539 [00:00<00:00, 31614.73it/s]
+Running on local URL:  http://127.0.0.1:7860
+Running on public URL: https://2ae7c3224e0759a5c3.gradio.live
+
+This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
+
+Now Searching for ['DSSC'] exclude for [] 
+
+Traceback (most recent call last):
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/requests/models.py", line 971, in json
+    return complexjson.loads(self.text, **kwargs)
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/routes.py", line 393, in run_predict
+    output = await app.get_blocks().process_api(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 1108, in process_api
+    result = await self.call_function(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 915, in call_function
+    prediction = await anyio.to_thread.run_sync(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/to_thread.py", line 31, in run_sync
+    return await get_asynclib().run_sync_in_worker_thread(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 937, in run_sync_in_worker_thread
+    return await future
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 867, in run
+    result = context.run(func, *args)
+  File "/home1/khyeon/Researches/KARS/KARS_GUI.py", line 66, in AC
+    crossref(keywords, self.save_path, self.DB_name, self.email)
+  File "/home1/khyeon/Researches/KARS/collect/crossref.py", line 28, in __init__
+    self.Article_search_keyword()
+  File "/home1/khyeon/Researches/KARS/collect/crossref.py", line 55, in Article_search_keyword
+    count = self.API.query(bibliographic=keyword[0]).filter(type="journal-article").count()
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/crossref/restful.py", line 211, in count
+    result = self.do_http_request(
+  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/requests/models.py", line 975, in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+Now Searching for ['solarcell'] exclude for ['perovskite'] 
+
+  0%|          | 0/9 [00:00<?, ?it/s] 11%|█         | 1/9 [00:40<05:23, 40.43s/it]100%|██████████| 9/9 [01:02<00:00,  6.91s/it]
+Deleted 8 articles because of stopword
+
+stop_list examples: ['PERANCANGAN LAMPU TAMAN SOLARCELL OTOMATIS UNTUK MENGGUNAKAN MICROCONTROLLER ARDUINO UNO', 'Synthesis of cds/zns quantum dots for solarcell applications', 'Studi Analisis Pemanfaatan Transistor 2n3055 Menjadi Solarcell Sebagai Alternatif Pengecasan Handphone', 'Anatase Phase TiO$_2$ Anode of a Dye-Sensitized SolarCell Prepared by using RMFMS', 'Robotic arm controlled by Android app through Bluetooth connection for organic solarcell manipulation']
+
+Deleted 0 articles because of not enough keywords
+
+multi_list examples: []
+
+Deleted 0 duplicates
+
+Saved 1 articles
+
+Node & Edge extraction...
+  0%|          | 0/1051 [00:00<?, ?it/s]  3%|▎         | 32/1051 [00:00<00:03, 305.94it/s]  6%|▋         | 68/1051 [00:00<00:02, 328.99it/s] 10%|█         | 106/1051 [00:00<00:02, 345.82it/s] 14%|█▎        | 143/1051 [00:00<00:02, 353.79it/s] 17%|█▋        | 179/1051 [00:00<00:02, 339.18it/s] 20%|██        | 215/1051 [00:00<00:02, 344.08it/s] 24%|██▍       | 250/1051 [00:00<00:02, 342.45it/s] 28%|██▊       | 293/1051 [00:00<00:02, 368.94it/s] 31%|███▏      | 331/1051 [00:00<00:01, 370.29it/s] 35%|███▌      | 372/1051 [00:01<00:01, 381.96it/s] 39%|███▉      | 412/1051 [00:01<00:01, 386.26it/s] 43%|████▎     | 454/1051 [00:01<00:01, 396.27it/s] 47%|████▋     | 494/1051 [00:01<00:01, 394.04it/s] 51%|█████     | 534/1051 [00:01<00:01, 382.50it/s] 55%|█████▍    | 573/1051 [00:01<00:01, 256.64it/s] 58%|█████▊    | 612/1051 [00:01<00:01, 285.30it/s] 61%|██████▏   | 646/1051 [00:01<00:01, 296.75it/s] 65%|██████▌   | 686/1051 [00:02<00:01, 321.39it/s] 69%|██████▊   | 722/1051 [00:02<00:01, 326.86it/s] 72%|███████▏  | 758/1051 [00:02<00:00, 333.45it/s] 76%|███████▌  | 795/1051 [00:02<00:00, 341.95it/s] 79%|███████▉  | 832/1051 [00:02<00:00, 348.79it/s] 83%|████████▎ | 869/1051 [00:02<00:00, 354.39it/s] 86%|████████▌ | 906/1051 [00:02<00:00, 351.33it/s] 90%|████████▉ | 942/1051 [00:02<00:00, 342.06it/s] 93%|█████████▎| 977/1051 [00:02<00:00, 338.34it/s] 96%|█████████▋| 1012/1051 [00:02<00:00, 324.05it/s] 99%|█████████▉| 1045/1051 [00:03<00:00, 325.46it/s]100%|██████████| 1051/1051 [00:03<00:00, 339.06it/s]
+Graph information
+Node number:  2707
+Edge number:  43397
+Pagerank calculation finished
+Keyword Filtered Graph information
+Node number:  980
+Edge number:  24494
+community 0 freq: 2858 (27.00047236655645%)
+community 1 freq: 2356 (22.2579121398205%)
+community 2 freq: 2350 (22.201228153046763%)
+community 3 freq: 1688 (15.947094945677845%)
+community 4 freq: 1176 (11.110061407652339%)
+community 5 freq: 83 (0.7841284837033539%)
+community 6 freq: 74 (0.6991025035427492%)
+unmodularized Graphs: 4
+modularized Graphs: 3
+Community 3, node number: 279, freq: 27.00%
+==============================
+1 sensitize 0.005881459114570561
+2 TiO2 0.005374890663704054
+3 photoanode 0.0036287458650495637
+4 ZnO 0.0035177351131405513
+5 electrode 0.0034523595330866875
+Community 4, node number: 239, freq: 22.26%
+==============================
+1 application 0.007602282439522666
+2 study 0.005209423786265293
+3 sensitizer 0.005181093338364168
+4 efficiency 0.004958552236459789
+5 synthesis 0.004400019253391316
+Community 5, node number: 184, freq: 22.20%
+==============================
+1 dye 0.01591356115673441
+2 solar 0.013089451243831264
+3 cell 0.011738570859129908
+4 sensitized 0.008602504311050684
+5 cells 0.0033407885080049683
+Community 6, node number: 174, freq: 15.95%
+==============================
+1 performance 0.007653208362773074
+2 use 0.006827311543336716
+3 base 0.006365857056870853
+4 effect 0.006056663371441558
+5 natural 0.003149809020729611
+Community 0, node number: 63, freq: 11.11%
+==============================
+1 dssc 0.03153670933272591
+2 La 0.0006362562753056935
+3 sensitive 0.0006112317311027794
+4 porous 0.0005883015446051738
+5 module 0.0005797617091146238
+Community 1, node number: 23, freq: 0.78%
+==============================
+1 system 0.0013460532290424966
+2 power 0.0013162389617397245
+3 distribute 0.0004710643395162037
+4 resonance 0.00045238364485698015
+5 fuzzy 0.0004316224752430312
+Community 2, node number: 18, freq: 0.70%
+==============================
+1 transport 0.0011286322357811293
+2 shape 0.0007717652366707695
+3 recombination 0.0007003539923403689
+4 dynamic 0.000691341476245421
+5 solvothermal 0.00048699742146798613
+Saving graph data is done
+Save subgraph:   0%|          | 0/7 [00:00<?, ?it/s]Community 'sensitize TiO2 photoanode ZnO electrode ' has 279 nodes, 27.0% of total nodes
+Save subgraph:  14%|█▍        | 1/7 [00:01<00:11,  1.84s/it]Community 'application study sensitizer efficiency synthesis ' has 239 nodes, 22.26% of total nodes
+Save subgraph:  29%|██▊       | 2/7 [00:03<00:09,  1.81s/it]Community 'dye solar cell sensitized cells ' has 184 nodes, 22.2% of total nodes
+Save subgraph:  43%|████▎     | 3/7 [00:05<00:07,  1.86s/it]Community 'performance use base effect natural ' has 174 nodes, 15.95% of total nodes
+Save subgraph:  57%|█████▋    | 4/7 [00:07<00:05,  1.79s/it]Community 'dssc La sensitive porous module ' has 63 nodes, 11.11% of total nodes
+Save subgraph:  71%|███████▏  | 5/7 [00:08<00:03,  1.72s/it]Community 'system power distribute resonance fuzzy ' has 23 nodes, 0.78% of total nodes
+Save subgraph:  86%|████████▌ | 6/7 [00:10<00:01,  1.67s/it]Community 'transport shape recombination dynamic solvothermal ' has 18 nodes, 0.7% of total nodes
+Save subgraph: 100%|██████████| 7/7 [00:11<00:00,  1.63s/it]Save subgraph: 100%|██████████| 7/7 [00:11<00:00,  1.71s/it]
+Saving subgraph data is done
+WARNING:  Invalid HTTP request received.

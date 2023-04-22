@@ -1,5 +1,6 @@
 import os 
 import shutil
+import re
 import numpy as np
 import networkx as nx
 import jsonlines
@@ -12,7 +13,7 @@ import warnings
 warnings.filterwarnings(action="ignore", category=FutureWarning)
 
 class research_structure:
-    def __init__(self, save_path, DB_name, text_type, edge_type, start_year, end_year, modular_algorithm, modularity_resolution, modularity_seed, pagerank_filter):
+    def __init__(self, save_path, DB_name, text_type, edge_type, start_year, end_year, modular_algorithm, modularity_resolution, modularity_seed, pagerank_filter, save_docs):
         self.save_path = save_path
         self.DB_name = DB_name
         self.text_type = text_type
@@ -23,6 +24,7 @@ class research_structure:
         self.pagerank_filter = pagerank_filter
         self.community_seed = modularity_seed
         self.community_resolution = modularity_resolution
+        self.save_docs = save_docs
         self.cv = CountVectorizer(ngram_range=(1,1), stop_words = None, lowercase=False, tokenizer=lambda x: x.split(' '))
         # delete folder containing % sign
         for path, dirs, file in os.walk(f"{self.save_path}/Research_structure"):
@@ -62,16 +64,24 @@ class research_structure:
                             break
                 return count
 
-            #if "/" in word:
-            #    for w in word.split("/"):
-            #        if count_upper(word) < round(len(word)/2):
-            #            continue
-            #        if count_upper(word) == count_element(word):
-            #            return "device"
-            if count_upper(word) < round(len(word)/2):
-                return "other"
-            if count_upper(word) == count_element(word):
+            # Find value
+            # if first letter is number
+            if word[0].isdigit():
+                return "value"
+
+            # Find device
+            if "/" in word:
+                for w in word.split("/"):
+                    if count_upper(word) < round(len(word)/2):
+                        continue
+                    if count_upper(word) == count_element(word):
+                        return "device"
+
+            # Find material
+            if count_upper(word) >= round(len(word)/2) and count_upper(word) == count_element(word):
                 return "material"
+
+            # Rest are other
             return "other"
 
         def node_extraction(text_list):
@@ -201,6 +211,7 @@ class research_structure:
         node_pagerank = nx.pagerank(self.G, alpha=0.85, max_iter=20, tol=1e-06, weight="total", dangling=None)
         for key, value in self.G.nodes.data():
             self.G.nodes[key]['pagerank'] = node_pagerank[key]
+        self.G_original = self.G.copy()
         print("Pagerank calculation finished")
 
     def keyword_filter(self):
@@ -222,7 +233,6 @@ class research_structure:
         remove_nodes = [node for node in self.G.nodes if node not in alive_nodes]
 
         # filter out nodes
-        self.G_original = self.G.copy()
         for node in remove_nodes:
             self.G.remove_node(node)
 
@@ -349,16 +359,12 @@ class research_structure:
                 self.G.nodes[node]['color'] = matplotlib.colors.to_hex(colors(idx/len(community_list)))
 
     def save_graph(self):
-        # Save graph into gexf
+        # Save original graph
         nx.write_gexf(self.G_original, f"{self.save_path}/Research_structure/graph_original.gexf")
+        jsonlines.open(f"{self.save_path}/Research_structure/graph_original.json", mode='w').write(nx.node_link_data(self.G_original))
 
         # Save graph into gexf
         nx.write_gexf(self.G, f"{self.save_path}/Research_structure/graph.gexf")
-
-        # Save graph data as json
-        jsonlines.open(f"{self.save_path}/Research_structure/graph_original.json", mode='w').write(nx.node_link_data(self.G_original))
-
-        # Save graph data as json
         jsonlines.open(f"{self.save_path}/Research_structure/graph.json", mode='w').write(nx.node_link_data(self.G))
 
 
@@ -408,19 +414,20 @@ class research_structure:
                 df.to_csv(f"{self.save_path}/Research_structure/{folder_name}/pagerank.csv", index=False)
 
                 # Save docs ranks as csv
-                df = pd.DataFrame(columns=["conformity","title","DOI"])
-                total_pagerank = sum([value['pagerank'] for key, value in subgraph.nodes.data()])
-                for metadata in self.metadata_list:
-                    text_list = metadata['title_cleaned']
-                    doi = metadata['DOI']
-                    conformity = 0
-                    for node in subgraph.nodes:
-                        for text in text_list:
-                            if node in text:
-                                conformity += subgraph.nodes[node]['pagerank']
-                    df = df.append({'DOI':doi, 'title':text_list[0], 'conformity':float(f"{conformity/total_pagerank*100:.2f}")}, ignore_index=True)
-                df = df.sort_values(by=['conformity'], ascending=False)
-                df.to_csv(f"{self.save_path}/Research_structure/{folder_name}/pagerank_doc.csv", index=False)
+                if self.save_docs == True:
+                    df = pd.DataFrame(columns=["conformity","title","DOI"])
+                    total_pagerank = sum([value['pagerank'] for key, value in subgraph.nodes.data()])
+                    for metadata in self.metadata_list:
+                        text_list = metadata['title_cleaned']
+                        doi = metadata['DOI']
+                        conformity = 0
+                        for node in subgraph.nodes:
+                            for text in text_list:
+                                if node in text:
+                                    conformity += subgraph.nodes[node]['pagerank']
+                        df = df.append({'DOI':doi, 'title':text_list[0], 'conformity':float(f"{conformity/total_pagerank*100:.2f}")}, ignore_index=True)
+                    df = df.sort_values(by=['conformity'], ascending=False)
+                    df.to_csv(f"{self.save_path}/Research_structure/{folder_name}/pagerank_doc.csv", index=False)
 
                 # update progress bar
                 pbar.update(1)

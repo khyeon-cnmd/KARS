@@ -21,15 +21,15 @@
     pip install networkx[default]
     pip install tabulate
     pip install -U spacy
-    pip install torch==1.12.1+cu102  --extra-index-url https://download.pytorch.org/whl/cu102
     pip install gradio
+    pip install flask
 
 ## 3. Spacy 언어팩 설치
     python -m spacy download en_core_web_sm
     python -m spacy download en_core_web_md
 
 # Usage
-    KARS_GUI.py 실행 후, https://127.0.0.1:7860 에 접속해 관련 설정 후 제출
+    KARS_GUI2.py 실행 후, https://127.0.0.1:7860 에 접속해 관련 설정 후 제출
 
 # Results
 ## 1. n (xx.xx%) 폴더들

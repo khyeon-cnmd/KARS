@@ -1,11 +1,5 @@
-import numpy as np
-import matplotlib.pyplot as plt
+import networkx as nx
 
-x = np.random.rand(100)
-y = np.random.rand(100)
-t = np.arange(100)
+graph = nx.read_gexf("/home1/khyeon/Researches/KARS/results/khyeon/ReRAM/Research_structure/graph.gexf")
 
-plt.scatter(x, y, cmap=plt.cm.rainbow, c=t)
-# get color data of graph
-c = plt.gca().collections[0].get_facecolors()
-print(c)
+print(str(graph))

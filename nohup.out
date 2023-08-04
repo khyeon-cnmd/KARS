@@ -1,1175 +1,0 @@
-Running on local URL:  http://127.0.0.1:7860
-Running on public URL: https://5bd5df53b525ad273f.gradio.live
-
-This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
-
-Now Searching for ['LiNiO2'] exclude for [] 
-
-  0%|          | 0/218 [00:00<?, ?it/s]  0%|          | 1/218 [00:30<1:49:57, 30.40s/it] 33%|███▎      | 72/218 [00:30<00:43,  3.35it/s]  72%|███████▏  | 157/218 [00:30<00:06,  8.97it/s]100%|██████████| 218/218 [00:48<00:00,  4.47it/s]
-Deleted 0 articles because of stopword
-
-stop_list examples: []
-
-Deleted 0 articles because of not enough keywords
-
-multi_list examples: []
-
-Deleted 0 duplicates
-
-Saved 218 articles
-
-Loaded number of articles: 218
-Articles filtering...
-year filtered articles: 214
-text type filtered articles: 214
-Text cleansing...
-  0%|          | 0/214 [00:00<?, ?it/s] 29%|██▉       | 62/214 [00:00<00:00, 587.16it/s] 71%|███████   | 152/214 [00:00<00:00, 755.00it/s]100%|██████████| 214/214 [00:00<00:00, 721.20it/s]
-Text filtering...
-  0%|          | 0/214 [00:00<?, ?it/s]  7%|▋         | 14/214 [00:00<00:01, 134.06it/s] 14%|█▎        | 29/214 [00:00<00:01, 142.81it/s] 21%|██        | 44/214 [00:00<00:01, 112.76it/s] 27%|██▋       | 58/214 [00:00<00:01, 117.78it/s] 33%|███▎      | 71/214 [00:00<00:01, 104.73it/s] 40%|███▉      | 85/214 [00:00<00:01, 113.78it/s] 46%|████▋     | 99/214 [00:00<00:00, 120.40it/s] 53%|█████▎    | 114/214 [00:00<00:00, 128.73it/s] 60%|██████    | 129/214 [00:01<00:00, 133.89it/s] 67%|██████▋   | 144/214 [00:01<00:00, 136.81it/s] 74%|███████▍  | 158/214 [00:01<00:00, 129.86it/s] 80%|████████  | 172/214 [00:01<00:00, 131.51it/s] 87%|████████▋ | 186/214 [00:01<00:00, 122.27it/s] 93%|█████████▎| 200/214 [00:01<00:00, 125.12it/s]100%|█████████▉| 213/214 [00:01<00:00, 115.54it/s]100%|██████████| 214/214 [00:01<00:00, 122.30it/s]
-Composition list making...
-Composition list
-['LiNiO2', 'LiNiO2', 'Ga', 'Al', 'LiNiO2', 'LiNiO2', 'Co', 'Ti', 'Mg', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Mg', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'NiO', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'NiOH2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'Co', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiFeO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'TiO2', 'ZnO', 'La2O3', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Ni', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Ti', 'Ni', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Co', 'Mn', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'NiOH2', 'LiOH', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiO', 'Li', 'Ni', 'Li', 'Ni', 'LiNiO2', 'CO2', 'LiCoO2', 'LiNiO2', 'Fe', 'LiNiO2', 'LiNiO2', 'LiOH', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Ni', 'Ni', 'Co', 'Co', 'LiNiO2', 'LiNiO2', 'Ni', 'LiNiO2', 'US', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Mg', 'Mn', 'LiNiO2', 'Li', 'Li', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Li', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'V2O5', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Al', 'LiNiO2', 'Al', 'Ti', 'Ni', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'Zn', 'Ti', 'Ni', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Mn', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNi', 'Co', 'O2', 'LiNiO2', 'LiNiO2', 'Li', 'LiNiO2', 'mHF', 'LiNiO2', 'Ni', 'LiNiO2', 'LiNiO2', 'Al', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'NiOH2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'O2', 'NF3', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'Li', 'LiNiO2', 'Co', 'LiNiO2', 'Li', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiFeO2', 'LiCrO2', 'LiNiO2', 'LiNiO2', 'LiNi', 'LiNiO2', 'LiNiO2', 'Nb', 'LiNiO2', 'Ga', 'In', 'Tl', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Al', 'Mg', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'Al', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'Li', 'LiCoO2', 'LiNiO2', 'Sb', 'LiNiO2', 'Li', 'LiNiO2', 'Mg', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'Mn', 'Co', 'Li', 'LiNiO2', 'Ni', 'LiNiO2', 'LiNiO2', 'Mg', 'Mn', 'LiNiO2', 'LiCoO2', 'Nb', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'Li', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Zn', 'Al', 'Ti', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiOH', 'Mg', 'LiNiO2', 'CoMn', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Li', 'Mg', 'LiNiO2', 'Li', 'LiNiO2', 'Sb', 'LiNiO2', 'CoTi', 'LiNiO2', 'Li', 'Li', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Cu', 'LiNiO2', 'Li', 'Mg', 'Al', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'NiOH2', 'LiOH', 'LiNiO2', 'NiOH2', 'LiNiO2', 'CoMn', 'LiNiO2', 'LiNiO2', 'NiO', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'Li', 'LiNiO2', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'Ti', 'LiNiO2', 'LiCoO2', 'LiNiO2', 'Li', 'Mg', 'Al', 'Co', 'LiNiO2', 'LiNiO2', 'Li', 'Ni', 'LiCoO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Li', 'LiNiO2', 'AlMg', 'LiNiO2', 'LiNiO2', 'Li', 'Li', 'LiPF6', 'LiNiO2', 'Co', 'LiNiO2', 'Li', 'LiNiO2', 'Li', 'LiNiO2', 'LiNiO2', 'LiNiO2', 'Li', 'NiIV']
-Synonym checking...
-  0%|          | 0/214 [00:00<?, ?it/s]100%|██████████| 214/214 [00:00<00:00, 2893.70it/s]
-Node & Edge extraction...
-  0%|          | 0/214 [00:00<?, ?it/s] 15%|█▍        | 32/214 [00:00<00:00, 314.56it/s] 34%|███▍      | 73/214 [00:00<00:00, 370.20it/s] 53%|█████▎    | 114/214 [00:00<00:00, 388.26it/s] 72%|███████▏  | 154/214 [00:00<00:00, 390.30it/s] 91%|█████████ | 194/214 [00:00<00:00, 375.58it/s]100%|██████████| 214/214 [00:00<00:00, 370.37it/s]
-Graph information
-Node number:  600
-Edge number:  5951
-Pagerank calculation finished
-Keyword Filtered Graph information
-Node number:  255
-Edge number:  3365
-community 0 freq: 458 (28.254164096236888%)
-community 1 freq: 191 (11.782850092535472%)
-community 2 freq: 246 (15.175817396668723%)
-community 3 freq: 129 (7.95805058605799%)
-community 4 freq: 176 (10.857495373226403%)
-community 5 freq: 261 (16.10117211597779%)
-community 6 freq: 63 (3.8864898210980874%)
-community 7 freq: 83 (5.120296113510179%)
-community 8 freq: 14 (0.863664404688464%)
-unmodularized Graphs: 3
-modularized Graphs: 6
-Community 6, node number: 48, freq: 28.25%
-==============================
-1 cathode 0.017706163441077075
-2 electrochemical 0.01199969823524465
-3 property 0.009493415378000221
-4 synthesis 0.008700000377784027
-5 effect 0.007073351638334175
-Community 8, node number: 25, freq: 16.10%
-==============================
-1 LiNiO2 0.041935905314470355
-2 material 0.013829280783579024
-3 gradient 0.0016004376468207585
-4 enhance 0.0014650129751281303
-5 pengaruh 0.0014425278250144134
-Community 7, node number: 37, freq: 15.18%
-==============================
-1 lithium 0.016705309178633283
-2 LiCoO2 0.00765010448950987
-3 electrode 0.006199563586355321
-4 Co 0.004461500732741114
-5 investigation 0.00430357126375614
-Community 0, node number: 47, freq: 11.78%
-==============================
-1 study 0.008134466720284705
-2 prepare 0.0067328032328564874
-3 ray 0.004496924708490838
-4 solution 0.0041877583346002015
-5 substitute 0.004168724004239919
-Community 2, node number: 25, freq: 10.86%
-==============================
-1 ion 0.016049274849360775
-2 Li 0.007980768689873147
-3 dope 0.0063397265820596595
-4 high 0.006321841375879921
-5 first 0.0038354979403647793
-Community 1, node number: 33, freq: 7.96%
-==============================
-1 structure 0.006136266770278991
-2 layered 0.005713029275313346
-3 film 0.004654647747539546
-4 nickel 0.004413891900521461
-5 thin 0.0042242830186509095
-Community 4, node number: 11, freq: 5.12%
-==============================
-1 battery 0.014161836056847826
-2 situ 0.0035834847944575137
-3 degradation 0.003286385397769768
-4 oxide 0.002955371644658355
-5 mechanical 0.002370017274430506
-Community 3, node number: 21, freq: 3.89%
-==============================
-1 base 0.005019315634990683
-2 temperature 0.004781151795108984
-3 active 0.0030395331131914537
-4 cycling 0.002940260025347136
-5 phase 0.0026470201348302146
-Community 5, node number: 8, freq: 0.86%
-==============================
-1 system 0.004359600789064168
-2 thermodynamic 0.0012462390067020264
-3 description 0.0012462390067020264
-4 linio2nio2 0.0012462390067020264
-5 pseudo 0.0012462390067020264
-Saving graph data is done
-Save subgraph:   0%|          | 0/9 [00:00<?, ?it/s]Community 'cathode electrochemical property synthesis effect ' has 48 nodes, 28.25% of total nodes
-Save subgraph:  11%|█         | 1/9 [00:00<00:02,  2.97it/s]Community 'LiNiO2 material gradient enhance pengaruh ' has 25 nodes, 16.1% of total nodes
-Save subgraph:  22%|██▏       | 2/9 [00:00<00:02,  3.03it/s]Community 'lithium LiCoO2 electrode Co investigation ' has 37 nodes, 15.18% of total nodes
-Save subgraph:  33%|███▎      | 3/9 [00:00<00:01,  3.05it/s]Community 'study prepare ray solution substitute ' has 47 nodes, 11.78% of total nodes
-Save subgraph:  44%|████▍     | 4/9 [00:01<00:01,  3.04it/s]Community 'ion Li dope high first ' has 25 nodes, 10.86% of total nodes
-Save subgraph:  56%|█████▌    | 5/9 [00:01<00:01,  3.07it/s]Community 'structure layered film nickel thin ' has 33 nodes, 7.96% of total nodes
-Save subgraph:  67%|██████▋   | 6/9 [00:01<00:00,  3.08it/s]Community 'battery situ degradation oxide mechanical ' has 11 nodes, 5.12% of total nodes
-Save subgraph:  78%|███████▊  | 7/9 [00:02<00:00,  3.10it/s]Community 'base temperature active cycling phase ' has 21 nodes, 3.89% of total nodes
-Save subgraph:  89%|████████▉ | 8/9 [00:02<00:00,  3.11it/s]Community 'system thermodynamic description linio2nio2 pseudo ' has 8 nodes, 0.86% of total nodes
-Save subgraph: 100%|██████████| 9/9 [00:02<00:00,  3.13it/s]Save subgraph: 100%|██████████| 9/9 [00:02<00:00,  3.09it/s]
-Saving subgraph data is done
-  0%|          | 0/600 [00:00<?, ?it/s]100%|██████████| 600/600 [00:00<00:00, 22461.46it/s]
-dict_keys(['total', '0 cathode electrochemical property synthesis effect  (28.25%)', '1 LiNiO2 material gradient enhance pengaruh  (16.1%)', '2 lithium LiCoO2 electrode Co investigation  (15.18%)', '3 study prepare ray solution substitute  (11.78%)', '4 ion Li dope high first  (10.86%)', '5 structure layered film nickel thin  (7.96%)', '6 battery situ degradation oxide mechanical  (5.12%)', '7 base temperature active cycling phase  (3.89%)', '8 system thermodynamic description linio2nio2 pseudo  (0.86%)'])
-  0%|          | 0/600 [00:00<?, ?it/s]100%|██████████| 600/600 [00:00<00:00, 76246.21it/s]
-Node & Edge extraction...
-  0%|          | 0/214 [00:00<?, ?it/s]  0%|          | 0/214 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/routes.py", line 393, in run_predict
-    output = await app.get_blocks().process_api(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 1108, in process_api
-    result = await self.call_function(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 915, in call_function
-    prediction = await anyio.to_thread.run_sync(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/to_thread.py", line 31, in run_sync
-    return await get_asynclib().run_sync_in_worker_thread(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 937, in run_sync_in_worker_thread
-    return await future
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 867, in run
-    result = context.run(func, *args)
-  File "/home1/khyeon/Researches/KARS/KARS_GUI2.py", line 118, in RS
-    research_structure(self.save_path, self.DB_name, text_type, edge_type, start_year, end_year, modular_algorithm, modularity_resolution, modularity_seed, pagerank_filter)
-  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 35, in __init__
-    self.graph_dataficate()
-  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 162, in graph_dataficate
-    text_list = metadata["abstract_cleaned"]
-KeyError: 'abstract_cleaned'
-Node & Edge extraction...
-  0%|          | 0/214 [00:00<?, ?it/s]  0%|          | 0/214 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/routes.py", line 393, in run_predict
-    output = await app.get_blocks().process_api(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 1108, in process_api
-    result = await self.call_function(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 915, in call_function
-    prediction = await anyio.to_thread.run_sync(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/to_thread.py", line 31, in run_sync
-    return await get_asynclib().run_sync_in_worker_thread(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 937, in run_sync_in_worker_thread
-    return await future
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 867, in run
-    result = context.run(func, *args)
-  File "/home1/khyeon/Researches/KARS/KARS_GUI2.py", line 118, in RS
-    research_structure(self.save_path, self.DB_name, text_type, edge_type, start_year, end_year, modular_algorithm, modularity_resolution, modularity_seed, pagerank_filter)
-  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 35, in __init__
-    self.graph_dataficate()
-  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 162, in graph_dataficate
-    text_list = metadata["abstract_cleaned"]
-KeyError: 'abstract_cleaned'
-Node & Edge extraction...
-  0%|          | 0/214 [00:00<?, ?it/s]  0%|          | 0/214 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/routes.py", line 393, in run_predict
-    output = await app.get_blocks().process_api(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 1108, in process_api
-    result = await self.call_function(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 915, in call_function
-    prediction = await anyio.to_thread.run_sync(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/to_thread.py", line 31, in run_sync
-    return await get_asynclib().run_sync_in_worker_thread(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 937, in run_sync_in_worker_thread
-    return await future
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 867, in run
-    result = context.run(func, *args)
-  File "/home1/khyeon/Researches/KARS/KARS_GUI2.py", line 118, in RS
-    research_structure(self.save_path, self.DB_name, text_type, edge_type, start_year, end_year, modular_algorithm, modularity_resolution, modularity_seed, pagerank_filter)
-  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 35, in __init__
-    self.graph_dataficate()
-  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 162, in graph_dataficate
-    text_list = metadata["abstract_cleaned"]
-KeyError: 'abstract_cleaned'
-Node & Edge extraction...
-  0%|          | 0/214 [00:00<?, ?it/s]100%|██████████| 214/214 [00:00<00:00, 6677.34it/s]
-Graph information
-Node number:  600
-Edge number:  1173
-Traceback (most recent call last):
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/routes.py", line 393, in run_predict
-    output = await app.get_blocks().process_api(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 1108, in process_api
-    result = await self.call_function(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 915, in call_function
-    prediction = await anyio.to_thread.run_sync(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/to_thread.py", line 31, in run_sync
-    return await get_asynclib().run_sync_in_worker_thread(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 937, in run_sync_in_worker_thread
-    return await future
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 867, in run
-    result = context.run(func, *args)
-  File "/home1/khyeon/Researches/KARS/KARS_GUI2.py", line 118, in RS
-    research_structure(self.save_path, self.DB_name, text_type, edge_type, start_year, end_year, modular_algorithm, modularity_resolution, modularity_seed, pagerank_filter)
-  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 37, in __init__
-    self.pagerank()
-  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 199, in pagerank
-    node_pagerank = nx.pagerank(self.G, alpha=0.85, max_iter=20, tol=1e-06, weight="total", dangling=None)
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/networkx/classes/backends.py", line 145, in wrapper
-    return func(*args, **kwds)
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/networkx/algorithms/link_analysis/pagerank_alg.py", line 109, in pagerank
-    return _pagerank_scipy(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/networkx/algorithms/link_analysis/pagerank_alg.py", line 498, in _pagerank_scipy
-    raise nx.PowerIterationFailedConvergence(max_iter)
-networkx.exception.PowerIterationFailedConvergence: (PowerIterationFailedConvergence(...), 'power iteration failed to converge within 20 iterations')
-Running on local URL:  http://127.0.0.1:7860
-Running on public URL: https://190c4a140979ca7738.gradio.live
-
-This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
-Node & Edge extraction...
-  0%|          | 0/1051 [00:00<?, ?it/s] 16%|█▌        | 163/1051 [00:00<00:00, 1621.72it/s] 32%|███▏      | 333/1051 [00:00<00:00, 1895.37it/s]
-Graph information
-Node number:  4539
-Edge number:  17556
-Pagerank calculation finished
-Keyword Filtered Graph information
-Node number:  1477
-Edge number:  10745
-community 0 freq: 5825 (25.766355553589598%)
-community 1 freq: 6211 (27.473791303578537%)
-community 2 freq: 4480 (19.81687088070067%)
-community 3 freq: 2718 (12.022824788782236%)
-community 4 freq: 3125 (13.823152121024462%)
-community 5 freq: 90 (0.3981067810855045%)
-community 6 freq: 57 (0.25213429468748616%)
-community 7 freq: 16 (0.07077453885964524%)
-community 8 freq: 7 (0.030963860751094797%)
-community 9 freq: 7 (0.030963860751094797%)
-community 10 freq: 6 (0.026540452072366966%)
-community 11 freq: 9 (0.03981067810855045%)
-community 12 freq: 5 (0.022117043393639138%)
-community 13 freq: 7 (0.030963860751094797%)
-community 14 freq: 3 (0.013270226036183483%)
-community 15 freq: 3 (0.013270226036183483%)
-community 16 freq: 3 (0.013270226036183483%)
-community 17 freq: 3 (0.013270226036183483%)
-community 18 freq: 3 (0.013270226036183483%)
-community 19 freq: 2 (0.008846817357455655%)
-community 20 freq: 2 (0.008846817357455655%)
-community 21 freq: 2 (0.008846817357455655%)
-community 22 freq: 1 (0.004423408678727828%)
-community 23 freq: 2 (0.008846817357455655%)
-community 24 freq: 2 (0.008846817357455655%)
-community 25 freq: 2 (0.008846817357455655%)
-community 26 freq: 2 (0.008846817357455655%)
-community 27 freq: 1 (0.004423408678727828%)
-community 28 freq: 1 (0.004423408678727828%)
-community 29 freq: 4 (0.01769363471491131%)
-community 30 freq: 2 (0.008846817357455655%)
-community 31 freq: 2 (0.008846817357455655%)
-community 32 freq: 2 (0.008846817357455655%)
-community 33 freq: 1 (0.004423408678727828%)
-community 34 freq: 1 (0.004423408678727828%)
-unmodularized Graphs: 3
-modularized Graphs: 32
-Community 33, node number: 314, freq: 27.47%
-==============================
-1 study 0.0035655743640885195
-2 efficiency 0.0035034601282242376
-3 show 0.0034647537681346315
-4 result 0.003212736696964876
-5 energy 0.0029750029988045183
-Community 32, node number: 326, freq: 25.77%
-==============================
-1 use 0.00978723654240847
-2 TiO2 0.005079682716234425
-3 method 0.0034218331813365755
-4 layer 0.0031689588951587834
-5 material 0.0029203222619939495
-Community 34, node number: 300, freq: 19.82%
-==============================
-1 dssc 0.011447091665418067
-2 dan 0.005943299101208375
-3 yang 0.005463389531095127
-4 dengan 0.004700470707131484
-5 pada 0.003360313922549674
-Community 1, node number: 187, freq: 13.82%
-==============================
-1 dye 0.010358427433338969
-2 base 0.0032422188353526324
-3 extract 0.0028672361034171086
-4 have 0.0024682215535173227
-5 acid 0.0018050425700818324
-Community 0, node number: 187, freq: 12.02%
-==============================
-1 cell 0.004199264950091063
-2 electron 0.0027361497463147667
-3 process 0.0022498047233538835
-4 solar 0.0021852771297127165
-5 low 0.0019118962099882997
-Community 2, node number: 48, freq: 0.40%
-==============================
-1 de 0.000897423713798132
-2 el 0.0007142964088178407
-3 Las 0.0006207978562318896
-4 Se 0.00043087910719442234
-5 con 0.0004131188156108697
-Community 3, node number: 38, freq: 0.25%
-==============================
-1 olarak 0.0007766867876903889
-2 karbazol 0.0003271752883922089
-3 reaksiyonu 0.00030440567902433605
-4 ile 0.00028115145394615626
-5 boya 0.00027471870726533286
-Community 4, node number: 8, freq: 0.07%
-==============================
-1 chem 0.0003997660412571215
-2 masuda 0.00027213292395677325
-3 commun 0.00019833705917802647
-4 appl 0.00019608964073333427
-5 mater 0.00019164408948796143
-Community 8, node number: 6, freq: 0.04%
-==============================
-1 sub 0.00023689413417410368
-2 brassica 0.00019349819038905777
-3 arbor 0.000178475422958349
-4 nyctanthes 0.00017046747611100174
-5 tritis 0.00016258233593411842
-Community 6, node number: 6, freq: 0.03%
-==============================
-1 sentezlenen 0.00022813515025820686
-2 incelenmitir 0.00019258127649041546
-3 zellikleri 0.0001859185750788906
-4 hidrotermal 0.00018377758873446977
-5 termogravimetrik 0.00016686681871506403
-Community 10, node number: 5, freq: 0.03%
-==============================
-1 pekinensis 0.00017867561500759953
-2 delonix 0.00017672587064671688
-3 lawsonia 0.0001727721267071844
-4 inermis 0.00016085458838046738
-5 regia 0.00015877160581102064
-Community 5, node number: 7, freq: 0.03%
-==============================
-1 hl 0.00020824805263848175
-2 cuhlpopch2cl2 0.00020765721147167338
-3 cuhlpph32h2o 0.00020668661061265802
-4 monoanion 0.00019405899347656202
-5 COmposition 0.00019234284660519878
-Community 7, node number: 6, freq: 0.03%
-==============================
-1 pahtddt 0.0002048219683933501
-2 carbz 0.00020344688371106478
-3 S9 0.00019826374967049122
-4 ca 0.00019151551177539483
-5 meTalloporphyrin 0.0001812028687343273
-Community 9, node number: 5, freq: 0.02%
-==============================
-1 swis 0.00020133549693220922
-2 asal 0.00019744833543791824
-3 michael 0.00019454086637763393
-4 ilmuan 0.00018237786158394916
-5 gratzel 0.0001772189755933546
-Community 26, node number: 1, freq: 0.02%
-==============================
-1 101cr 0.00017889637881168924
-Community 11, node number: 3, freq: 0.01%
-==============================
-1 steric 0.00017190412772130867
-2 electrostatic 0.00016737408910547723
-3 groups3 0.00016193523719612598
-Community 12, node number: 3, freq: 0.01%
-==============================
-1 petal 0.00017547197725677392
-2 ixora 0.00017520245022873996
-3 coccinea 0.00016296046189078896
-Community 13, node number: 3, freq: 0.01%
-==============================
-1 whole 0.00017762613907644156
-2 blood 0.00017482101424683765
-3 tgf1tgf2pdgfpdgftnfin 0.00016329768934159988
-Community 14, node number: 3, freq: 0.01%
-==============================
-1 porphyrinato 0.00017381773366891687
-2 isobutylphenyl 0.00017254427061826373
-3 zinciiyl 0.00016797074160205153
-Community 15, node number: 3, freq: 0.01%
-==============================
-1 deficit 0.00018336680437817452
-2 vpd 0.00018275394110577606
-3 pressure 0.0001741807599055128
-Community 16, node number: 2, freq: 0.01%
-==============================
-1 oxyamination 0.00022674247094478885
-2 dicarbonyls 0.0001827467673862296
-Community 20, node number: 1, freq: 0.01%
-==============================
-1 framework 0.00019148138030771766
-Community 21, node number: 1, freq: 0.01%
-==============================
-1 degradation 0.00017964998809632342
-Community 22, node number: 1, freq: 0.01%
-==============================
-1 much 0.00017685905004638552
-Community 17, node number: 2, freq: 0.01%
-==============================
-1 au4x 0.00016156430936177738
-2 au5x 0.0001612227330629247
-Community 23, node number: 1, freq: 0.01%
-==============================
-1 syaraf 0.00016837995742153398
-Community 18, node number: 2, freq: 0.01%
-==============================
-1 solucin 0.00016781182098066582
-2 esta 0.00016704422036001204
-Community 27, node number: 1, freq: 0.01%
-==============================
-1 sativa 0.00016235071867649566
-Community 28, node number: 1, freq: 0.01%
-==============================
-1 plot 0.0001959247444736604
-Community 29, node number: 1, freq: 0.01%
-==============================
-1 pyrene 0.00017108372508271657
-Community 19, node number: 1, freq: 0.00%
-==============================
-1 konjuge 0.00016624441029333895
-Community 24, node number: 1, freq: 0.00%
-==============================
-1 aumentar 0.00016789211852413037
-Community 25, node number: 1, freq: 0.00%
-==============================
-1 electrn 0.00016391756503465586
-Community 30, node number: 1, freq: 0.00%
-==============================
-1 8000c 0.0001651395756731015
-Community 31, node number: 1, freq: 0.00%
-==============================
-1 concentrate 0.000165135102633917
-Saving graph data is done
-Save subgraph:   0%|          | 0/35 [00:00<?, ?it/s]Community 'study efficiency show result energy ' has 314 nodes, 27.47% of total nodes
-Save subgraph:   0%|          | 0/35 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/routes.py", line 393, in run_predict
-    output = await app.get_blocks().process_api(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 1108, in process_api
-    result = await self.call_function(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 915, in call_function
-    prediction = await anyio.to_thread.run_sync(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/to_thread.py", line 31, in run_sync
-    return await get_asynclib().run_sync_in_worker_thread(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 937, in run_sync_in_worker_thread
-    return await future
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 867, in run
-    result = context.run(func, *args)
-  File "/home1/khyeon/Researches/KARS/KARS_GUI2.py", line 118, in RS
-    research_structure(self.save_path, self.DB_name, text_type, edge_type, start_year, end_year, modular_algorithm, modularity_resolution, modularity_seed, pagerank_filter)
-  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 42, in __init__
-    self.save_subgraph()
-  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 415, in save_subgraph
-    text_list = metadata['abstract_cleaned']
-KeyError: 'abstract_cleaned'
-Running on local URL:  http://127.0.0.1:7861
-Running on local URL:  http://127.0.0.1:7861
-Running on public URL: https://13825a3e5f9c880f51.gradio.live
-
-This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
-Node & Edge extraction...
-  0%|          | 0/1051 [00:00<?, ?it/s] 14%|█▍        | 150/1051 [00:00<00:00, 1498.56it/s] 32%|███▏      | 333/1051 [00:00<00:00, 1839.52it/s]
-Graph information
-Node number:  4539
-Edge number:  17556
-Pagerank calculation finished
-Keyword Filtered Graph information
-Node number:  1477
-Edge number:  10745
-community 0 freq: 5825 (25.766355553589598%)
-community 1 freq: 6211 (27.473791303578537%)
-community 2 freq: 4480 (19.81687088070067%)
-community 3 freq: 2718 (12.022824788782236%)
-community 4 freq: 3125 (13.823152121024462%)
-community 5 freq: 90 (0.3981067810855045%)
-community 6 freq: 57 (0.25213429468748616%)
-community 7 freq: 16 (0.07077453885964524%)
-community 8 freq: 7 (0.030963860751094797%)
-community 9 freq: 7 (0.030963860751094797%)
-community 10 freq: 6 (0.026540452072366966%)
-community 11 freq: 9 (0.03981067810855045%)
-community 12 freq: 5 (0.022117043393639138%)
-community 13 freq: 7 (0.030963860751094797%)
-community 14 freq: 3 (0.013270226036183483%)
-community 15 freq: 3 (0.013270226036183483%)
-community 16 freq: 3 (0.013270226036183483%)
-community 17 freq: 3 (0.013270226036183483%)
-community 18 freq: 3 (0.013270226036183483%)
-community 19 freq: 2 (0.008846817357455655%)
-community 20 freq: 2 (0.008846817357455655%)
-community 21 freq: 2 (0.008846817357455655%)
-community 22 freq: 1 (0.004423408678727828%)
-community 23 freq: 2 (0.008846817357455655%)
-community 24 freq: 2 (0.008846817357455655%)
-community 25 freq: 2 (0.008846817357455655%)
-community 26 freq: 2 (0.008846817357455655%)
-community 27 freq: 1 (0.004423408678727828%)
-community 28 freq: 1 (0.004423408678727828%)
-community 29 freq: 4 (0.01769363471491131%)
-community 30 freq: 2 (0.008846817357455655%)
-community 31 freq: 2 (0.008846817357455655%)
-community 32 freq: 2 (0.008846817357455655%)
-community 33 freq: 1 (0.004423408678727828%)
-community 34 freq: 1 (0.004423408678727828%)
-unmodularized Graphs: 3
-modularized Graphs: 32
-Community 33, node number: 314, freq: 27.47%
-==============================
-1 study 0.0035655743640885195
-2 efficiency 0.0035034601282242376
-3 show 0.0034647537681346315
-4 result 0.003212736696964876
-5 energy 0.0029750029988045183
-Community 32, node number: 326, freq: 25.77%
-==============================
-1 use 0.00978723654240847
-2 TiO2 0.005079682716234425
-3 method 0.0034218331813365755
-4 layer 0.0031689588951587834
-5 material 0.0029203222619939495
-Community 34, node number: 300, freq: 19.82%
-==============================
-1 dssc 0.011447091665418067
-2 dan 0.005943299101208375
-3 yang 0.005463389531095127
-4 dengan 0.004700470707131484
-5 pada 0.003360313922549674
-Community 1, node number: 187, freq: 13.82%
-==============================
-1 dye 0.010358427433338969
-2 base 0.0032422188353526324
-3 extract 0.0028672361034171086
-4 have 0.0024682215535173227
-5 acid 0.0018050425700818324
-Community 0, node number: 187, freq: 12.02%
-==============================
-1 cell 0.004199264950091063
-2 electron 0.0027361497463147667
-3 process 0.0022498047233538835
-4 solar 0.0021852771297127165
-5 low 0.0019118962099882997
-Community 2, node number: 48, freq: 0.40%
-==============================
-1 de 0.000897423713798132
-2 el 0.0007142964088178407
-3 Las 0.0006207978562318896
-4 Se 0.00043087910719442234
-5 con 0.0004131188156108697
-Community 3, node number: 38, freq: 0.25%
-==============================
-1 olarak 0.0007766867876903889
-2 karbazol 0.0003271752883922089
-3 reaksiyonu 0.00030440567902433605
-4 ile 0.00028115145394615626
-5 boya 0.00027471870726533286
-Community 4, node number: 8, freq: 0.07%
-==============================
-1 chem 0.0003997660412571215
-2 masuda 0.00027213292395677325
-3 commun 0.00019833705917802647
-4 appl 0.00019608964073333427
-5 mater 0.00019164408948796143
-Community 8, node number: 6, freq: 0.04%
-==============================
-1 sub 0.00023689413417410368
-2 brassica 0.00019349819038905777
-3 arbor 0.000178475422958349
-4 nyctanthes 0.00017046747611100174
-5 tritis 0.00016258233593411842
-Community 6, node number: 6, freq: 0.03%
-==============================
-1 sentezlenen 0.00022813515025820686
-2 incelenmitir 0.00019258127649041546
-3 zellikleri 0.0001859185750788906
-4 hidrotermal 0.00018377758873446977
-5 termogravimetrik 0.00016686681871506403
-Community 10, node number: 5, freq: 0.03%
-==============================
-1 pekinensis 0.00017867561500759953
-2 delonix 0.00017672587064671688
-3 lawsonia 0.0001727721267071844
-4 inermis 0.00016085458838046738
-5 regia 0.00015877160581102064
-Community 5, node number: 7, freq: 0.03%
-==============================
-1 hl 0.00020824805263848175
-2 cuhlpopch2cl2 0.00020765721147167338
-3 cuhlpph32h2o 0.00020668661061265802
-4 monoanion 0.00019405899347656202
-5 COmposition 0.00019234284660519878
-Community 7, node number: 6, freq: 0.03%
-==============================
-1 pahtddt 0.0002048219683933501
-2 carbz 0.00020344688371106478
-3 S9 0.00019826374967049122
-4 ca 0.00019151551177539483
-5 meTalloporphyrin 0.0001812028687343273
-Community 9, node number: 5, freq: 0.02%
-==============================
-1 swis 0.00020133549693220922
-2 asal 0.00019744833543791824
-3 michael 0.00019454086637763393
-4 ilmuan 0.00018237786158394916
-5 gratzel 0.0001772189755933546
-Community 26, node number: 1, freq: 0.02%
-==============================
-1 101cr 0.00017889637881168924
-Community 11, node number: 3, freq: 0.01%
-==============================
-1 steric 0.00017190412772130867
-2 electrostatic 0.00016737408910547723
-3 groups3 0.00016193523719612598
-Community 12, node number: 3, freq: 0.01%
-==============================
-1 petal 0.00017547197725677392
-2 ixora 0.00017520245022873996
-3 coccinea 0.00016296046189078896
-Community 13, node number: 3, freq: 0.01%
-==============================
-1 whole 0.00017762613907644156
-2 blood 0.00017482101424683765
-3 tgf1tgf2pdgfpdgftnfin 0.00016329768934159988
-Community 14, node number: 3, freq: 0.01%
-==============================
-1 porphyrinato 0.00017381773366891687
-2 isobutylphenyl 0.00017254427061826373
-3 zinciiyl 0.00016797074160205153
-Community 15, node number: 3, freq: 0.01%
-==============================
-1 deficit 0.00018336680437817452
-2 vpd 0.00018275394110577606
-3 pressure 0.0001741807599055128
-Community 16, node number: 2, freq: 0.01%
-==============================
-1 oxyamination 0.00022674247094478885
-2 dicarbonyls 0.0001827467673862296
-Community 20, node number: 1, freq: 0.01%
-==============================
-1 framework 0.00019148138030771766
-Community 21, node number: 1, freq: 0.01%
-==============================
-1 degradation 0.00017964998809632342
-Community 22, node number: 1, freq: 0.01%
-==============================
-1 much 0.00017685905004638552
-Community 17, node number: 2, freq: 0.01%
-==============================
-1 au4x 0.00016156430936177738
-2 au5x 0.0001612227330629247
-Community 23, node number: 1, freq: 0.01%
-==============================
-1 syaraf 0.00016837995742153398
-Community 18, node number: 2, freq: 0.01%
-==============================
-1 solucin 0.00016781182098066582
-2 esta 0.00016704422036001204
-Community 27, node number: 1, freq: 0.01%
-==============================
-1 sativa 0.00016235071867649566
-Community 28, node number: 1, freq: 0.01%
-==============================
-1 plot 0.0001959247444736604
-Community 29, node number: 1, freq: 0.01%
-==============================
-1 pyrene 0.00017108372508271657
-Community 19, node number: 1, freq: 0.00%
-==============================
-1 konjuge 0.00016624441029333895
-Community 24, node number: 1, freq: 0.00%
-==============================
-1 aumentar 0.00016789211852413037
-Community 25, node number: 1, freq: 0.00%
-==============================
-1 electrn 0.00016391756503465586
-Community 30, node number: 1, freq: 0.00%
-==============================
-1 8000c 0.0001651395756731015
-Community 31, node number: 1, freq: 0.00%
-==============================
-1 concentrate 0.000165135102633917
-Saving graph data is done
-Save subgraph:   0%|          | 0/35 [00:00<?, ?it/s]Community 'study efficiency show result energy ' has 314 nodes, 27.47% of total nodes
-Save subgraph:   0%|          | 0/35 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/routes.py", line 393, in run_predict
-    output = await app.get_blocks().process_api(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 1108, in process_api
-    result = await self.call_function(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 915, in call_function
-    prediction = await anyio.to_thread.run_sync(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/to_thread.py", line 31, in run_sync
-    return await get_asynclib().run_sync_in_worker_thread(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 937, in run_sync_in_worker_thread
-    return await future
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 867, in run
-    result = context.run(func, *args)
-  File "/home1/khyeon/Researches/KARS/KARS_GUI2.py", line 118, in RS
-    research_structure(self.save_path, self.DB_name, text_type, edge_type, start_year, end_year, modular_algorithm, modularity_resolution, modularity_seed, pagerank_filter)
-  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 42, in __init__
-    self.save_subgraph()
-  File "/home1/khyeon/Researches/KARS/network/research_structure.py", line 415, in save_subgraph
-    text_list = metadata['abstract_cleaned']
-KeyError: 'abstract_cleaned'
-Running on local URL:  http://127.0.0.1:7861
-Running on public URL: https://6101ae4839a63e828e.gradio.live
-
-This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
-Running on local URL:  http://127.0.0.1:7860
-Running on public URL: https://a7abf8e19251526196.gradio.live
-
-This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
-Node & Edge extraction...
-  0%|          | 0/1051 [00:00<?, ?it/s] 16%|█▌        | 166/1051 [00:00<00:00, 1653.68it/s] 32%|███▏      | 333/1051 [00:00<00:00, 1918.39it/s]
-Graph information
-Node number:  4539
-Edge number:  17556
-Pagerank calculation finished
-Keyword Filtered Graph information
-Node number:  1477
-Edge number:  10745
-community 0 freq: 5825 (25.766355553589598%)
-community 1 freq: 6211 (27.473791303578537%)
-community 2 freq: 4480 (19.81687088070067%)
-community 3 freq: 2718 (12.022824788782236%)
-community 4 freq: 3125 (13.823152121024462%)
-community 5 freq: 90 (0.3981067810855045%)
-community 6 freq: 57 (0.25213429468748616%)
-community 7 freq: 16 (0.07077453885964524%)
-community 8 freq: 7 (0.030963860751094797%)
-community 9 freq: 7 (0.030963860751094797%)
-community 10 freq: 6 (0.026540452072366966%)
-community 11 freq: 9 (0.03981067810855045%)
-community 12 freq: 5 (0.022117043393639138%)
-community 13 freq: 7 (0.030963860751094797%)
-community 14 freq: 3 (0.013270226036183483%)
-community 15 freq: 3 (0.013270226036183483%)
-community 16 freq: 3 (0.013270226036183483%)
-community 17 freq: 3 (0.013270226036183483%)
-community 18 freq: 3 (0.013270226036183483%)
-community 19 freq: 2 (0.008846817357455655%)
-community 20 freq: 2 (0.008846817357455655%)
-community 21 freq: 2 (0.008846817357455655%)
-community 22 freq: 1 (0.004423408678727828%)
-community 23 freq: 2 (0.008846817357455655%)
-community 24 freq: 2 (0.008846817357455655%)
-community 25 freq: 2 (0.008846817357455655%)
-community 26 freq: 2 (0.008846817357455655%)
-community 27 freq: 1 (0.004423408678727828%)
-community 28 freq: 1 (0.004423408678727828%)
-community 29 freq: 4 (0.01769363471491131%)
-community 30 freq: 2 (0.008846817357455655%)
-community 31 freq: 2 (0.008846817357455655%)
-community 32 freq: 2 (0.008846817357455655%)
-community 33 freq: 1 (0.004423408678727828%)
-community 34 freq: 1 (0.004423408678727828%)
-unmodularized Graphs: 3
-modularized Graphs: 32
-Community 33, node number: 314, freq: 27.47%
-==============================
-1 study 0.0035655743640885195
-2 efficiency 0.0035034601282242376
-3 show 0.0034647537681346315
-4 result 0.003212736696964876
-5 energy 0.0029750029988045183
-Community 32, node number: 326, freq: 25.77%
-==============================
-1 use 0.00978723654240847
-2 TiO2 0.005079682716234425
-3 method 0.0034218331813365755
-4 layer 0.0031689588951587834
-5 material 0.0029203222619939495
-Community 34, node number: 300, freq: 19.82%
-==============================
-1 dssc 0.011447091665418067
-2 dan 0.005943299101208375
-3 yang 0.005463389531095127
-4 dengan 0.004700470707131484
-5 pada 0.003360313922549674
-Community 1, node number: 187, freq: 13.82%
-==============================
-1 dye 0.010358427433338969
-2 base 0.0032422188353526324
-3 extract 0.0028672361034171086
-4 have 0.0024682215535173227
-5 acid 0.0018050425700818324
-Community 0, node number: 187, freq: 12.02%
-==============================
-1 cell 0.004199264950091063
-2 electron 0.0027361497463147667
-3 process 0.0022498047233538835
-4 solar 0.0021852771297127165
-5 low 0.0019118962099882997
-Community 2, node number: 48, freq: 0.40%
-==============================
-1 de 0.000897423713798132
-2 el 0.0007142964088178407
-3 Las 0.0006207978562318896
-4 Se 0.00043087910719442234
-5 con 0.0004131188156108697
-Community 3, node number: 38, freq: 0.25%
-==============================
-1 olarak 0.0007766867876903889
-2 karbazol 0.0003271752883922089
-3 reaksiyonu 0.00030440567902433605
-4 ile 0.00028115145394615626
-5 boya 0.00027471870726533286
-Community 4, node number: 8, freq: 0.07%
-==============================
-1 chem 0.0003997660412571215
-2 masuda 0.00027213292395677325
-3 commun 0.00019833705917802647
-4 appl 0.00019608964073333427
-5 mater 0.00019164408948796143
-Community 8, node number: 6, freq: 0.04%
-==============================
-1 sub 0.00023689413417410368
-2 brassica 0.00019349819038905777
-3 arbor 0.000178475422958349
-4 nyctanthes 0.00017046747611100174
-5 tritis 0.00016258233593411842
-Community 6, node number: 6, freq: 0.03%
-==============================
-1 sentezlenen 0.00022813515025820686
-2 incelenmitir 0.00019258127649041546
-3 zellikleri 0.0001859185750788906
-4 hidrotermal 0.00018377758873446977
-5 termogravimetrik 0.00016686681871506403
-Community 10, node number: 5, freq: 0.03%
-==============================
-1 pekinensis 0.00017867561500759953
-2 delonix 0.00017672587064671688
-3 lawsonia 0.0001727721267071844
-4 inermis 0.00016085458838046738
-5 regia 0.00015877160581102064
-Community 5, node number: 7, freq: 0.03%
-==============================
-1 hl 0.00020824805263848175
-2 cuhlpopch2cl2 0.00020765721147167338
-3 cuhlpph32h2o 0.00020668661061265802
-4 monoanion 0.00019405899347656202
-5 COmposition 0.00019234284660519878
-Community 7, node number: 6, freq: 0.03%
-==============================
-1 pahtddt 0.0002048219683933501
-2 carbz 0.00020344688371106478
-3 S9 0.00019826374967049122
-4 ca 0.00019151551177539483
-5 meTalloporphyrin 0.0001812028687343273
-Community 9, node number: 5, freq: 0.02%
-==============================
-1 swis 0.00020133549693220922
-2 asal 0.00019744833543791824
-3 michael 0.00019454086637763393
-4 ilmuan 0.00018237786158394916
-5 gratzel 0.0001772189755933546
-Community 26, node number: 1, freq: 0.02%
-==============================
-1 101cr 0.00017889637881168924
-Community 11, node number: 3, freq: 0.01%
-==============================
-1 steric 0.00017190412772130867
-2 electrostatic 0.00016737408910547723
-3 groups3 0.00016193523719612598
-Community 12, node number: 3, freq: 0.01%
-==============================
-1 petal 0.00017547197725677392
-2 ixora 0.00017520245022873996
-3 coccinea 0.00016296046189078896
-Community 13, node number: 3, freq: 0.01%
-==============================
-1 whole 0.00017762613907644156
-2 blood 0.00017482101424683765
-3 tgf1tgf2pdgfpdgftnfin 0.00016329768934159988
-Community 14, node number: 3, freq: 0.01%
-==============================
-1 porphyrinato 0.00017381773366891687
-2 isobutylphenyl 0.00017254427061826373
-3 zinciiyl 0.00016797074160205153
-Community 15, node number: 3, freq: 0.01%
-==============================
-1 deficit 0.00018336680437817452
-2 vpd 0.00018275394110577606
-3 pressure 0.0001741807599055128
-Community 16, node number: 2, freq: 0.01%
-==============================
-1 oxyamination 0.00022674247094478885
-2 dicarbonyls 0.0001827467673862296
-Community 20, node number: 1, freq: 0.01%
-==============================
-1 framework 0.00019148138030771766
-Community 21, node number: 1, freq: 0.01%
-==============================
-1 degradation 0.00017964998809632342
-Community 22, node number: 1, freq: 0.01%
-==============================
-1 much 0.00017685905004638552
-Community 17, node number: 2, freq: 0.01%
-==============================
-1 au4x 0.00016156430936177738
-2 au5x 0.0001612227330629247
-Community 23, node number: 1, freq: 0.01%
-==============================
-1 syaraf 0.00016837995742153398
-Community 18, node number: 2, freq: 0.01%
-==============================
-1 solucin 0.00016781182098066582
-2 esta 0.00016704422036001204
-Community 27, node number: 1, freq: 0.01%
-==============================
-1 sativa 0.00016235071867649566
-Community 28, node number: 1, freq: 0.01%
-==============================
-1 plot 0.0001959247444736604
-Community 29, node number: 1, freq: 0.01%
-==============================
-1 pyrene 0.00017108372508271657
-Community 19, node number: 1, freq: 0.00%
-==============================
-1 konjuge 0.00016624441029333895
-Community 24, node number: 1, freq: 0.00%
-==============================
-1 aumentar 0.00016789211852413037
-Community 25, node number: 1, freq: 0.00%
-==============================
-1 electrn 0.00016391756503465586
-Community 30, node number: 1, freq: 0.00%
-==============================
-1 8000c 0.0001651395756731015
-Community 31, node number: 1, freq: 0.00%
-==============================
-1 concentrate 0.000165135102633917
-Saving graph data is done
-Save subgraph:   0%|          | 0/35 [00:00<?, ?it/s]Community 'study efficiency show result energy ' has 314 nodes, 27.47% of total nodes
-Save subgraph:   3%|▎         | 1/35 [00:01<00:58,  1.73s/it]Community 'use TiO2 method layer material ' has 326 nodes, 25.77% of total nodes
-Save subgraph:   6%|▌         | 2/35 [00:03<00:56,  1.72s/it]Community 'dssc dan yang dengan pada ' has 300 nodes, 19.82% of total nodes
-Save subgraph:   9%|▊         | 3/35 [00:05<00:54,  1.70s/it]Community 'dye base extract have acid ' has 187 nodes, 13.82% of total nodes
-Save subgraph:  11%|█▏        | 4/35 [00:06<00:51,  1.66s/it]Community 'cell electron process solar low ' has 187 nodes, 12.02% of total nodes
-Save subgraph:  14%|█▍        | 5/35 [00:08<00:49,  1.64s/it]Community 'de el Las Se con ' has 48 nodes, 0.4% of total nodes
-Save subgraph:  17%|█▋        | 6/35 [00:09<00:46,  1.61s/it]Community 'olarak karbazol reaksiyonu ile boya ' has 38 nodes, 0.25% of total nodes
-Save subgraph:  20%|██        | 7/35 [00:11<00:44,  1.58s/it]Community 'chem masuda commun appl mater ' has 8 nodes, 0.07% of total nodes
-Save subgraph:  23%|██▎       | 8/35 [00:12<00:42,  1.56s/it]Community 'sub brassica arbor nyctanthes tritis ' has 6 nodes, 0.04% of total nodes
-Save subgraph:  26%|██▌       | 9/35 [00:14<00:40,  1.55s/it]Community 'sentezlenen incelenmitir zellikleri hidrotermal termogravimetrik ' has 6 nodes, 0.03% of total nodes
-Save subgraph:  29%|██▊       | 10/35 [00:15<00:38,  1.54s/it]Community 'pekinensis delonix lawsonia inermis regia ' has 5 nodes, 0.03% of total nodes
-Save subgraph:  31%|███▏      | 11/35 [00:17<00:36,  1.53s/it]Community 'hl cuhlpopch2cl2 cuhlpph32h2o monoanion COmposition ' has 7 nodes, 0.03% of total nodes
-Save subgraph:  34%|███▍      | 12/35 [00:18<00:35,  1.52s/it]Community 'pahtddt carbz S9 ca meTalloporphyrin ' has 6 nodes, 0.03% of total nodes
-Save subgraph:  37%|███▋      | 13/35 [00:20<00:33,  1.52s/it]Community 'swis asal michael ilmuan gratzel ' has 5 nodes, 0.02% of total nodes
-Save subgraph:  40%|████      | 14/35 [00:21<00:31,  1.52s/it]Community '101cr ' has 1 nodes, 0.02% of total nodes
-Save subgraph:  43%|████▎     | 15/35 [00:23<00:31,  1.57s/it]Community 'steric electrostatic groups3 ' has 3 nodes, 0.01% of total nodes
-Save subgraph:  46%|████▌     | 16/35 [00:25<00:29,  1.54s/it]Community 'petal ixora coccinea ' has 3 nodes, 0.01% of total nodes
-Save subgraph:  49%|████▊     | 17/35 [00:26<00:27,  1.53s/it]Community 'whole blood tgf1tgf2pdgfpdgftnfin ' has 3 nodes, 0.01% of total nodes
-Save subgraph:  51%|█████▏    | 18/35 [00:28<00:26,  1.56s/it]Community 'porphyrinato isobutylphenyl zinciiyl ' has 3 nodes, 0.01% of total nodes
-Save subgraph:  54%|█████▍    | 19/35 [00:29<00:24,  1.53s/it]Community 'deficit vpd pressure ' has 3 nodes, 0.01% of total nodes
-Save subgraph:  57%|█████▋    | 20/35 [00:31<00:22,  1.51s/it]Community 'oxyamination dicarbonyls ' has 2 nodes, 0.01% of total nodes
-Save subgraph:  60%|██████    | 21/35 [00:32<00:20,  1.50s/it]Community 'framework ' has 1 nodes, 0.01% of total nodes
-Save subgraph:  63%|██████▎   | 22/35 [00:34<00:19,  1.49s/it]Community 'degradation ' has 1 nodes, 0.01% of total nodes
-Save subgraph:  66%|██████▌   | 23/35 [00:35<00:17,  1.49s/it]Community 'much ' has 1 nodes, 0.01% of total nodes
-Save subgraph:  69%|██████▊   | 24/35 [00:37<00:16,  1.54s/it]Community 'au4x au5x ' has 2 nodes, 0.01% of total nodes
-Save subgraph:  71%|███████▏  | 25/35 [00:39<00:15,  1.60s/it]Community 'syaraf ' has 1 nodes, 0.01% of total nodes
-Save subgraph:  74%|███████▍  | 26/35 [00:40<00:14,  1.64s/it]Community 'solucin esta ' has 2 nodes, 0.01% of total nodes
-Save subgraph:  77%|███████▋  | 27/35 [00:42<00:12,  1.60s/it]Community 'sativa ' has 1 nodes, 0.01% of total nodes
-Save subgraph:  80%|████████  | 28/35 [00:43<00:10,  1.57s/it]Community 'plot ' has 1 nodes, 0.01% of total nodes
-Save subgraph:  83%|████████▎ | 29/35 [00:45<00:09,  1.55s/it]Community 'pyrene ' has 1 nodes, 0.01% of total nodes
-Save subgraph:  86%|████████▌ | 30/35 [00:46<00:07,  1.54s/it]Community 'konjuge ' has 1 nodes, 0.0% of total nodes
-Save subgraph:  89%|████████▊ | 31/35 [00:48<00:06,  1.53s/it]Community 'aumentar ' has 1 nodes, 0.0% of total nodes
-Save subgraph:  91%|█████████▏| 32/35 [00:49<00:04,  1.52s/it]Community 'electrn ' has 1 nodes, 0.0% of total nodes
-Save subgraph:  94%|█████████▍| 33/35 [00:51<00:03,  1.52s/it]Community '8000c ' has 1 nodes, 0.0% of total nodes
-Save subgraph:  97%|█████████▋| 34/35 [00:52<00:01,  1.52s/it]Community 'concentrate ' has 1 nodes, 0.0% of total nodes
-Save subgraph: 100%|██████████| 35/35 [00:54<00:00,  1.52s/it]Save subgraph: 100%|██████████| 35/35 [00:54<00:00,  1.55s/it]
-Saving subgraph data is done
-  0%|          | 0/4539 [00:00<?, ?it/s] 12%|█▏        | 544/4539 [00:00<00:00, 5429.97it/s] 24%|██▍       | 1091/4539 [00:00<00:00, 5450.50it/s] 36%|███▌      | 1637/4539 [00:00<00:00, 5453.21it/s] 48%|████▊     | 2184/4539 [00:00<00:00, 5459.04it/s] 60%|██████    | 2732/4539 [00:00<00:00, 5465.59it/s] 75%|███████▍  | 3383/4539 [00:00<00:00, 5819.62it/s] 90%|████████▉ | 4084/4539 [00:00<00:00, 6206.42it/s]100%|██████████| 4539/4539 [00:00<00:00, 5919.48it/s]
-dict_keys(['total', '0 study efficiency show result energy  (27.47%)', '1 use TiO2 method layer material  (25.77%)', '2 dssc dan yang dengan pada  (19.82%)', '3 dye base extract have acid  (13.82%)', '4 cell electron process solar low  (12.02%)', '5 de el Las Se con  (0.4%)', '6 olarak karbazol reaksiyonu ile boya  (0.25%)', '7 chem masuda commun appl mater  (0.07%)', '8 sub brassica arbor nyctanthes tritis  (0.04%)', '9 sentezlenen incelenmitir zellikleri hidrotermal termogravimetrik  (0.03%)', '10 pekinensis delonix lawsonia inermis regia  (0.03%)', '11 hl cuhlpopch2cl2 cuhlpph32h2o monoanion COmposition  (0.03%)', '12 pahtddt carbz S9 ca meTalloporphyrin  (0.03%)', '13 swis asal michael ilmuan gratzel  (0.02%)', '14 101cr  (0.02%)', '15 steric electrostatic groups3  (0.01%)', '16 petal ixora coccinea  (0.01%)', '17 whole blood tgf1tgf2pdgfpdgftnfin  (0.01%)', '18 porphyrinato isobutylphenyl zinciiyl  (0.01%)', '19 deficit vpd pressure  (0.01%)', '20 oxyamination dicarbonyls  (0.01%)', '21 framework  (0.01%)', '22 degradation  (0.01%)', '23 much  (0.01%)', '24 au4x au5x  (0.01%)', '25 syaraf  (0.01%)', '26 solucin esta  (0.01%)', '27 sativa  (0.01%)', '28 plot  (0.01%)', '29 pyrene  (0.01%)', '30 konjuge  (0.0%)', '31 aumentar  (0.0%)', '32 electrn  (0.0%)', '33 8000c  (0.0%)', '34 concentrate  (0.0%)'])
-  0%|          | 0/4539 [00:00<?, ?it/s] 74%|███████▍  | 3371/4539 [00:00<00:00, 33706.82it/s]100%|██████████| 4539/4539 [00:00<00:00, 34159.14it/s]
-Running on local URL:  http://127.0.0.1:7860
-Running on public URL: https://87b84add82c20a6e26.gradio.live
-
-This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
-  0%|          | 0/4539 [00:00<?, ?it/s] 10%|█         | 472/4539 [00:00<00:00, 4713.48it/s] 25%|██▍       | 1121/4539 [00:00<00:00, 5753.98it/s] 40%|████      | 1819/4539 [00:00<00:00, 6310.35it/s] 56%|█████▌    | 2521/4539 [00:00<00:00, 6588.87it/s] 71%|███████   | 3225/4539 [00:00<00:00, 6750.16it/s] 87%|████████▋ | 3930/4539 [00:00<00:00, 6851.48it/s]100%|██████████| 4539/4539 [00:00<00:00, 6610.33it/s]
-dict_keys(['total', '0 study efficiency show result energy  (27.47%)', '1 use TiO2 method layer material  (25.77%)', '2 dssc dan yang dengan pada  (19.82%)', '3 dye base extract have acid  (13.82%)', '4 cell electron process solar low  (12.02%)', '5 de el Las Se con  (0.4%)', '6 olarak karbazol reaksiyonu ile boya  (0.25%)', '7 chem masuda commun appl mater  (0.07%)', '8 sub brassica arbor nyctanthes tritis  (0.04%)', '9 sentezlenen incelenmitir zellikleri hidrotermal termogravimetrik  (0.03%)', '10 pekinensis delonix lawsonia inermis regia  (0.03%)', '11 hl cuhlpopch2cl2 cuhlpph32h2o monoanion COmposition  (0.03%)', '12 pahtddt carbz S9 ca meTalloporphyrin  (0.03%)', '13 swis asal michael ilmuan gratzel  (0.02%)', '14 101cr  (0.02%)', '15 steric electrostatic groups3  (0.01%)', '16 petal ixora coccinea  (0.01%)', '17 whole blood tgf1tgf2pdgfpdgftnfin  (0.01%)', '18 porphyrinato isobutylphenyl zinciiyl  (0.01%)', '19 deficit vpd pressure  (0.01%)', '20 oxyamination dicarbonyls  (0.01%)', '21 framework  (0.01%)', '22 degradation  (0.01%)', '23 much  (0.01%)', '24 au4x au5x  (0.01%)', '25 syaraf  (0.01%)', '26 solucin esta  (0.01%)', '27 sativa  (0.01%)', '28 plot  (0.01%)', '29 pyrene  (0.01%)', '30 konjuge  (0.0%)', '31 aumentar  (0.0%)', '32 electrn  (0.0%)', '33 8000c  (0.0%)', '34 concentrate  (0.0%)'])
-  0%|          | 0/4539 [00:00<?, ?it/s] 66%|██████▌   | 3005/4539 [00:00<00:00, 30042.44it/s]100%|██████████| 4539/4539 [00:00<00:00, 30575.73it/s]
-Keyboard interruption in main thread... closing server.
-Killing tunnel 127.0.0.1:7860 <> https://87b84add82c20a6e26.gradio.live
-Running on local URL:  http://127.0.0.1:7860
-Running on public URL: https://b13eb4f2b281de9f45.gradio.live
-
-This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
-  0%|          | 0/4539 [00:00<?, ?it/s] 10%|▉         | 433/4539 [00:00<00:00, 4326.24it/s] 24%|██▍       | 1079/4539 [00:00<00:00, 5578.19it/s] 39%|███▉      | 1774/4539 [00:00<00:00, 6200.28it/s] 54%|█████▍    | 2469/4539 [00:00<00:00, 6494.30it/s] 70%|██████▉   | 3169/4539 [00:00<00:00, 6675.17it/s] 85%|████████▌ | 3868/4539 [00:00<00:00, 6781.26it/s]100%|██████████| 4539/4539 [00:00<00:00, 6516.98it/s]
-dict_keys(['total', '0 study efficiency show result energy  (27.47%)', '1 use TiO2 method layer material  (25.77%)', '2 dssc dan yang dengan pada  (19.82%)', '3 dye base extract have acid  (13.82%)', '4 cell electron process solar low  (12.02%)', '5 de el Las Se con  (0.4%)', '6 olarak karbazol reaksiyonu ile boya  (0.25%)', '7 chem masuda commun appl mater  (0.07%)', '8 sub brassica arbor nyctanthes tritis  (0.04%)', '9 sentezlenen incelenmitir zellikleri hidrotermal termogravimetrik  (0.03%)', '10 pekinensis delonix lawsonia inermis regia  (0.03%)', '11 hl cuhlpopch2cl2 cuhlpph32h2o monoanion COmposition  (0.03%)', '12 pahtddt carbz S9 ca meTalloporphyrin  (0.03%)', '13 swis asal michael ilmuan gratzel  (0.02%)', '14 101cr  (0.02%)', '15 steric electrostatic groups3  (0.01%)', '16 petal ixora coccinea  (0.01%)', '17 whole blood tgf1tgf2pdgfpdgftnfin  (0.01%)', '18 porphyrinato isobutylphenyl zinciiyl  (0.01%)', '19 deficit vpd pressure  (0.01%)', '20 oxyamination dicarbonyls  (0.01%)', '21 framework  (0.01%)', '22 degradation  (0.01%)', '23 much  (0.01%)', '24 au4x au5x  (0.01%)', '25 syaraf  (0.01%)', '26 solucin esta  (0.01%)', '27 sativa  (0.01%)', '28 plot  (0.01%)', '29 pyrene  (0.01%)', '30 konjuge  (0.0%)', '31 aumentar  (0.0%)', '32 electrn  (0.0%)', '33 8000c  (0.0%)', '34 concentrate  (0.0%)'])
-  0%|          | 0/4539 [00:00<?, ?it/s] 70%|███████   | 3180/4539 [00:00<00:00, 31797.07it/s]100%|██████████| 4539/4539 [00:00<00:00, 33806.29it/s]
-Traceback (most recent call last):
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/routes.py", line 393, in run_predict
-    output = await app.get_blocks().process_api(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 1108, in process_api
-    result = await self.call_function(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 915, in call_function
-    prediction = await anyio.to_thread.run_sync(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/to_thread.py", line 31, in run_sync
-    return await get_asynclib().run_sync_in_worker_thread(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 937, in run_sync_in_worker_thread
-    return await future
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 867, in run
-    result = context.run(func, *args)
-  File "/home1/khyeon/Researches/KARS/KARS_GUI2.py", line 151, in TA
-    trend_analysis(self.save_path, start_year, end_year, fitting_method, community_limit)
-  File "/home1/khyeon/Researches/KARS/analysis/trend_analysis.py", line 24, in __init__
-    self.plot_total_year_trend()
-  File "/home1/khyeon/Researches/KARS/analysis/trend_analysis.py", line 266, in plot_total_year_trend
-    legend.remove("total")
-ValueError: list.remove(x): x not in list
-Keyboard interruption in main thread... closing server.
-Killing tunnel 127.0.0.1:7860 <> https://b13eb4f2b281de9f45.gradio.live
-Running on local URL:  http://127.0.0.1:7860
-Running on public URL: https://4589fa75916320d7bf.gradio.live
-
-This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
-  0%|          | 0/4539 [00:00<?, ?it/s] 11%|█         | 479/4539 [00:00<00:00, 4782.29it/s] 25%|██▌       | 1143/4539 [00:00<00:00, 5873.31it/s] 40%|████      | 1833/4539 [00:00<00:00, 6338.85it/s] 56%|█████▌    | 2528/4539 [00:00<00:00, 6579.26it/s] 71%|███████   | 3223/4539 [00:00<00:00, 6710.53it/s] 86%|████████▋ | 3918/4539 [00:00<00:00, 6790.90it/s]100%|██████████| 4539/4539 [00:00<00:00, 6579.02it/s]
-dict_keys(['total', '0 study efficiency show result energy  (27.47%)', '1 use TiO2 method layer material  (25.77%)', '2 dssc dan yang dengan pada  (19.82%)', '3 dye base extract have acid  (13.82%)', '4 cell electron process solar low  (12.02%)', '5 de el Las Se con  (0.4%)', '6 olarak karbazol reaksiyonu ile boya  (0.25%)', '7 chem masuda commun appl mater  (0.07%)', '8 sub brassica arbor nyctanthes tritis  (0.04%)', '9 sentezlenen incelenmitir zellikleri hidrotermal termogravimetrik  (0.03%)', '10 pekinensis delonix lawsonia inermis regia  (0.03%)', '11 hl cuhlpopch2cl2 cuhlpph32h2o monoanion COmposition  (0.03%)', '12 pahtddt carbz S9 ca meTalloporphyrin  (0.03%)', '13 swis asal michael ilmuan gratzel  (0.02%)', '14 101cr  (0.02%)', '15 steric electrostatic groups3  (0.01%)', '16 petal ixora coccinea  (0.01%)', '17 whole blood tgf1tgf2pdgfpdgftnfin  (0.01%)', '18 porphyrinato isobutylphenyl zinciiyl  (0.01%)', '19 deficit vpd pressure  (0.01%)', '20 oxyamination dicarbonyls  (0.01%)', '21 framework  (0.01%)', '22 degradation  (0.01%)', '23 much  (0.01%)', '24 au4x au5x  (0.01%)', '25 syaraf  (0.01%)', '26 solucin esta  (0.01%)', '27 sativa  (0.01%)', '28 plot  (0.01%)', '29 pyrene  (0.01%)', '30 konjuge  (0.0%)', '31 aumentar  (0.0%)', '32 electrn  (0.0%)', '33 8000c  (0.0%)', '34 concentrate  (0.0%)'])
-  0%|          | 0/4539 [00:00<?, ?it/s] 69%|██████▊   | 3113/4539 [00:00<00:00, 31128.55it/s]100%|██████████| 4539/4539 [00:00<00:00, 31614.73it/s]
-Running on local URL:  http://127.0.0.1:7860
-Running on public URL: https://2ae7c3224e0759a5c3.gradio.live
-
-This share link expires in 72 hours. For free permanent hosting and GPU upgrades (NEW!), check out Spaces: https://huggingface.co/spaces
-
-Now Searching for ['DSSC'] exclude for [] 
-
-Traceback (most recent call last):
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/requests/models.py", line 971, in json
-    return complexjson.loads(self.text, **kwargs)
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/json/__init__.py", line 346, in loads
-    return _default_decoder.decode(s)
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/json/decoder.py", line 337, in decode
-    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/json/decoder.py", line 355, in raw_decode
-    raise JSONDecodeError("Expecting value", s, err.value) from None
-json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/routes.py", line 393, in run_predict
-    output = await app.get_blocks().process_api(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 1108, in process_api
-    result = await self.call_function(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/gradio/blocks.py", line 915, in call_function
-    prediction = await anyio.to_thread.run_sync(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/to_thread.py", line 31, in run_sync
-    return await get_asynclib().run_sync_in_worker_thread(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 937, in run_sync_in_worker_thread
-    return await future
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/anyio/_backends/_asyncio.py", line 867, in run
-    result = context.run(func, *args)
-  File "/home1/khyeon/Researches/KARS/KARS_GUI.py", line 66, in AC
-    crossref(keywords, self.save_path, self.DB_name, self.email)
-  File "/home1/khyeon/Researches/KARS/collect/crossref.py", line 28, in __init__
-    self.Article_search_keyword()
-  File "/home1/khyeon/Researches/KARS/collect/crossref.py", line 55, in Article_search_keyword
-    count = self.API.query(bibliographic=keyword[0]).filter(type="journal-article").count()
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/crossref/restful.py", line 211, in count
-    result = self.do_http_request(
-  File "/home/khyeon/anaconda3/envs/KBRS/lib/python3.9/site-packages/requests/models.py", line 975, in json
-    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
-requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
-
-Now Searching for ['solarcell'] exclude for ['perovskite'] 
-
-  0%|          | 0/9 [00:00<?, ?it/s] 11%|█         | 1/9 [00:40<05:23, 40.43s/it]100%|██████████| 9/9 [01:02<00:00,  6.91s/it]
-Deleted 8 articles because of stopword
-
-stop_list examples: ['PERANCANGAN LAMPU TAMAN SOLARCELL OTOMATIS UNTUK MENGGUNAKAN MICROCONTROLLER ARDUINO UNO', 'Synthesis of cds/zns quantum dots for solarcell applications', 'Studi Analisis Pemanfaatan Transistor 2n3055 Menjadi Solarcell Sebagai Alternatif Pengecasan Handphone', 'Anatase Phase TiO$_2$ Anode of a Dye-Sensitized SolarCell Prepared by using RMFMS', 'Robotic arm controlled by Android app through Bluetooth connection for organic solarcell manipulation']
-
-Deleted 0 articles because of not enough keywords
-
-multi_list examples: []
-
-Deleted 0 duplicates
-
-Saved 1 articles
-
-Node & Edge extraction...
-  0%|          | 0/1051 [00:00<?, ?it/s]  3%|▎         | 32/1051 [00:00<00:03, 305.94it/s]  6%|▋         | 68/1051 [00:00<00:02, 328.99it/s] 10%|█         | 106/1051 [00:00<00:02, 345.82it/s] 14%|█▎        | 143/1051 [00:00<00:02, 353.79it/s] 17%|█▋        | 179/1051 [00:00<00:02, 339.18it/s] 20%|██        | 215/1051 [00:00<00:02, 344.08it/s] 24%|██▍       | 250/1051 [00:00<00:02, 342.45it/s] 28%|██▊       | 293/1051 [00:00<00:02, 368.94it/s] 31%|███▏      | 331/1051 [00:00<00:01, 370.29it/s] 35%|███▌      | 372/1051 [00:01<00:01, 381.96it/s] 39%|███▉      | 412/1051 [00:01<00:01, 386.26it/s] 43%|████▎     | 454/1051 [00:01<00:01, 396.27it/s] 47%|████▋     | 494/1051 [00:01<00:01, 394.04it/s] 51%|█████     | 534/1051 [00:01<00:01, 382.50it/s] 55%|█████▍    | 573/1051 [00:01<00:01, 256.64it/s] 58%|█████▊    | 612/1051 [00:01<00:01, 285.30it/s] 61%|██████▏   | 646/1051 [00:01<00:01, 296.75it/s] 65%|██████▌   | 686/1051 [00:02<00:01, 321.39it/s] 69%|██████▊   | 722/1051 [00:02<00:01, 326.86it/s] 72%|███████▏  | 758/1051 [00:02<00:00, 333.45it/s] 76%|███████▌  | 795/1051 [00:02<00:00, 341.95it/s] 79%|███████▉  | 832/1051 [00:02<00:00, 348.79it/s] 83%|████████▎ | 869/1051 [00:02<00:00, 354.39it/s] 86%|████████▌ | 906/1051 [00:02<00:00, 351.33it/s] 90%|████████▉ | 942/1051 [00:02<00:00, 342.06it/s] 93%|█████████▎| 977/1051 [00:02<00:00, 338.34it/s] 96%|█████████▋| 1012/1051 [00:02<00:00, 324.05it/s] 99%|█████████▉| 1045/1051 [00:03<00:00, 325.46it/s]100%|██████████| 1051/1051 [00:03<00:00, 339.06it/s]
-Graph information
-Node number:  2707
-Edge number:  43397
-Pagerank calculation finished
-Keyword Filtered Graph information
-Node number:  980
-Edge number:  24494
-community 0 freq: 2858 (27.00047236655645%)
-community 1 freq: 2356 (22.2579121398205%)
-community 2 freq: 2350 (22.201228153046763%)
-community 3 freq: 1688 (15.947094945677845%)
-community 4 freq: 1176 (11.110061407652339%)
-community 5 freq: 83 (0.7841284837033539%)
-community 6 freq: 74 (0.6991025035427492%)
-unmodularized Graphs: 4
-modularized Graphs: 3
-Community 3, node number: 279, freq: 27.00%
-==============================
-1 sensitize 0.005881459114570561
-2 TiO2 0.005374890663704054
-3 photoanode 0.0036287458650495637
-4 ZnO 0.0035177351131405513
-5 electrode 0.0034523595330866875
-Community 4, node number: 239, freq: 22.26%
-==============================
-1 application 0.007602282439522666
-2 study 0.005209423786265293
-3 sensitizer 0.005181093338364168
-4 efficiency 0.004958552236459789
-5 synthesis 0.004400019253391316
-Community 5, node number: 184, freq: 22.20%
-==============================
-1 dye 0.01591356115673441
-2 solar 0.013089451243831264
-3 cell 0.011738570859129908
-4 sensitized 0.008602504311050684
-5 cells 0.0033407885080049683
-Community 6, node number: 174, freq: 15.95%
-==============================
-1 performance 0.007653208362773074
-2 use 0.006827311543336716
-3 base 0.006365857056870853
-4 effect 0.006056663371441558
-5 natural 0.003149809020729611
-Community 0, node number: 63, freq: 11.11%
-==============================
-1 dssc 0.03153670933272591
-2 La 0.0006362562753056935
-3 sensitive 0.0006112317311027794
-4 porous 0.0005883015446051738
-5 module 0.0005797617091146238
-Community 1, node number: 23, freq: 0.78%
-==============================
-1 system 0.0013460532290424966
-2 power 0.0013162389617397245
-3 distribute 0.0004710643395162037
-4 resonance 0.00045238364485698015
-5 fuzzy 0.0004316224752430312
-Community 2, node number: 18, freq: 0.70%
-==============================
-1 transport 0.0011286322357811293
-2 shape 0.0007717652366707695
-3 recombination 0.0007003539923403689
-4 dynamic 0.000691341476245421
-5 solvothermal 0.00048699742146798613
-Saving graph data is done
-Save subgraph:   0%|          | 0/7 [00:00<?, ?it/s]Community 'sensitize TiO2 photoanode ZnO electrode ' has 279 nodes, 27.0% of total nodes
-Save subgraph:  14%|█▍        | 1/7 [00:01<00:11,  1.84s/it]Community 'application study sensitizer efficiency synthesis ' has 239 nodes, 22.26% of total nodes
-Save subgraph:  29%|██▊       | 2/7 [00:03<00:09,  1.81s/it]Community 'dye solar cell sensitized cells ' has 184 nodes, 22.2% of total nodes
-Save subgraph:  43%|████▎     | 3/7 [00:05<00:07,  1.86s/it]Community 'performance use base effect natural ' has 174 nodes, 15.95% of total nodes
-Save subgraph:  57%|█████▋    | 4/7 [00:07<00:05,  1.79s/it]Community 'dssc La sensitive porous module ' has 63 nodes, 11.11% of total nodes
-Save subgraph:  71%|███████▏  | 5/7 [00:08<00:03,  1.72s/it]Community 'system power distribute resonance fuzzy ' has 23 nodes, 0.78% of total nodes
-Save subgraph:  86%|████████▌ | 6/7 [00:10<00:01,  1.67s/it]Community 'transport shape recombination dynamic solvothermal ' has 18 nodes, 0.7% of total nodes
-Save subgraph: 100%|██████████| 7/7 [00:11<00:00,  1.63s/it]Save subgraph: 100%|██████████| 7/7 [00:11<00:00,  1.71s/it]
-Saving subgraph data is done
-WARNING:  Invalid HTTP request received.

@@ -1,0 +1,6 @@
+ReRAM/
+HE_steel/
+__pycache__/
+.vscode
+nohup.out
+*.pyc

@@ -2,8 +2,9 @@ from KARS import KARS
 
 if __name__ == "__main__":
     # name the database
-    DB_name = "HE_steel"
+    #DB_name = "HE_steel"
     #DB_name = "ReRAM"
+    DB_name = "ReRAM_1st_year_para_classificated"
 
     # load KARs
     kars = KARS(DB_name)
@@ -44,10 +45,10 @@ if __name__ == "__main__":
     #kars.collect_metadata(engine_list, keyword_list)
 
     # construct PSPP network
-    #kars.construct_PSPP_network()
+    kars.construct_PSPP_network()
 
     # research trend analysis
-    kars.research_trend_analysis()
+    #kars.research_trend_analysis()
 
     # PSPP relation analysis
     #kars.PSPP_relation_analysis()

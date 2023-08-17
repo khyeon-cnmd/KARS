@@ -64,7 +64,7 @@ class research_trend:
         for index in self.modularity_dict.copy():
             community_weight = sum([self.G.nodes[key]['weight'] for key in self.modularity_dict[index]])
 
-            if community_weight / Total_weight < weight_limit:
+            if community_weight / Total_weight * 100 < weight_limit:
                 print(f"Community {index} is deleted")
                 self.G.remove_nodes_from(self.modularity_dict[index]) 
                 del self.modularity_dict[index]
@@ -133,6 +133,8 @@ class research_trend:
             output_file(f"{self.DB_path}/research_maturity.html")
             save(p)
 
+            return p
+
         print("Research maturity started")
         # extract year weight from self.G
         year_weight = {}
@@ -189,9 +191,10 @@ class research_trend:
         }
 
         # plot the graph
-        interactive_graph(x,y,x_est,y_est, self.PLC_classification)
+        plot = interactive_graph(x,y,x_est,y_est, self.PLC_classification)
 
         print("Research maturity finished")
+        return plot
 
     def community_year_trend(self, start_PLC):
         def interactive_graph(community_year_weight, PLC_classification):
@@ -250,6 +253,8 @@ class research_trend:
             # save as html
             output_file(f"{self.DB_path}/community_year_trend.html")
             save(p)
+
+            return p
 
         print("Community trend started")
         # extract year weight from self.G
@@ -310,8 +315,10 @@ class research_trend:
                 community_year_weight[community][year] = round(community_year_weight[community][year] / total_year_weight[year] * 100, 2)
 
         # plot the graph
-        interactive_graph(community_year_weight, self.PLC_classification)
+        plot = interactive_graph(community_year_weight, self.PLC_classification)
         print("Community trend finished")
+
+        return plot
 
     def keyword_evolution(self, top_rank, start_PLC, end_PLC):
         """
@@ -399,8 +406,10 @@ class research_trend:
             p = gridplot([plot_list], sizing_mode='stretch_both')
 
             # save as html
-            output_file(f"{self.DB_path}/keyword_change.html")
+            output_file(f"{self.DB_path}/keyword_evolution.html")
             save(p)
+
+            return p
 
         print("keyword_evolution started")
         # find top keywords in each community
@@ -467,5 +476,6 @@ class research_trend:
             keyword_evolution[community]["decrease"] = dict(sorted(keyword_evolution[community]["decrease"].items(), key=lambda item: item[1], reverse=False))
 
         # plot the graph
-        interactive_graph(keyword_evolution)
+        plot = interactive_graph(keyword_evolution)
         print("keyword_evolution finished")
+        return plot

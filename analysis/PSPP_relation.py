@@ -1,17 +1,127 @@
+import os
 import networkx as nx
 import pandas as pd
 from tqdm import tqdm
 
 class PSPP_relation:
-    def __init__(self, DB_path):
-        self.DB_path = DB_path + "/KARS"
-        self.tree_G = nx.read_gexf(self.DB_path + "/PSPP_abstract_network.gexf")
+    def __init__(self, DB_path, para_type):
+        self.KARS_path = DB_path + "/KARS"
+        self.DB_path = DB_path + "/database"
+        self.tree_G = nx.read_gexf(self.KARS_path + f"/PSPP_{para_type}_tree.gexf")
         # save weight_rev 
         for edge in self.tree_G.edges():
             self.tree_G.edges[edge]["weight_rev"] = 1 / self.tree_G.edges[edge]["weight"]
             
         print(self.tree_G)
         pass
+
+    def construct_PSPP_tree(self, para_type, node_weight_limit, edge_weight_limit):
+            print("Construct PSPP tree")
+
+            # Load PSPP_abstract_network
+            G = nx.read_gexf(f"{self.DB_path}/KARS/PSPP_{para_type}_network.gexf")
+            G_copy = G.copy()
+            print(G_copy)
+            tree_G = nx.DiGraph()
+
+            # 3. filter nodes
+            for node in G_copy.copy().nodes():
+                # 길이가 1글자면 제외
+                if len(node) <= 1:
+                    G_copy.remove_node(node)
+                    continue
+
+                # 빈도수가 3이하면 제외
+                if G_copy.nodes[node]["weight"] <= node_weight_limit:
+                    G_copy.remove_node(node)
+                    continue
+
+            # 4. filter edges
+            for edge in G_copy.copy().edges():
+                # 빈도수가 3이하면 제외
+                if G_copy.edges[edge]["weight"] <= edge_weight_limit:
+                    G_copy.remove_edge(edge[0], edge[1])
+                    if G_copy.degree(edge[0]) == 0:
+                        G_copy.remove_node(edge[0])
+                    if G_copy.degree(edge[1]) == 0:
+                        G_copy.remove_node(edge[1])
+                    continue
+            print(G_copy)
+            
+            # find root nodes 
+            print("Find root nodes")
+            root_node_list = [] 
+            for node in tqdm(G_copy.nodes()):
+                root_node = False
+                for node2 in G_copy.nodes():
+                    if node == node2:
+                        continue
+
+                    if not G.has_edge(node, node2):
+                        node_to_node2_weight = 0
+                    else:
+                        node_to_node2_weight = G.edges[node, node2]["weight"]
+
+                    if not G.has_edge(node2, node):
+                        node2_to_node_weight = 0
+                    else:
+                        node2_to_node_weight = G.edges[node2, node]["weight"]
+
+                    if node_to_node2_weight == 0 and node2_to_node_weight == 0:
+                        continue
+
+                    # root_node 가 모든 root_node2 대비 좌->우 인접 빈도가 더 크고 root_node 의 빈도가 root_node2 의 빈도보다 크면 진짜 root node
+                    if node_to_node2_weight > node2_to_node_weight and G.nodes[node]["weight"] < G.nodes[node2]["weight"]:
+                        root_node = False
+                        break
+                    else:
+                        root_node = True
+
+                if root_node == True:
+                    root_node_list.append(node)
+            
+            # root node 중, node weight 로 최후의 root node 선정
+            root_node_list = sorted(root_node_list, key=lambda x: G.nodes[x]["weight"], reverse=True)
+            parent_node_list = root_node_list[:1]
+            tree_G.add_node(root_node_list[0], **G.nodes[root_node_list[0]])
+            tree_G.nodes[root_node_list[0]]["depth"] = 0
+
+            # construct tree
+            while parent_node_list:
+                new_parent_node_list = []
+                print(f"parent_node_list: {parent_node_list}")
+                for parent_node in tqdm(parent_node_list):
+                    for child_node in G_copy.nodes():
+                        # 자기 자신은 제외
+                        if child_node == parent_node:
+                            continue
+
+                        # shortest path 탐색
+                        try:
+                            path = nx.shortest_path(G_copy, source=child_node, target=parent_node, weight='weight_rev')
+                        except:
+                            continue
+
+                        # path 길이 확인
+                        if not len(path) == 2:
+                            continue
+
+                        # Tree G 에 추가
+                        if not child_node in parent_node_list:
+                            new_parent_node_list.append(child_node)
+                            tree_G.add_node(child_node, **G.nodes[child_node])
+                            tree_G.nodes[child_node]["depth"] = tree_G.nodes[parent_node]["depth"] - 1
+                        tree_G.add_edge(child_node, parent_node, **G.edges[child_node, parent_node])
+
+                # remove nodes of G_copy 
+                for node in parent_node_list:
+                    G_copy.remove_node(node)
+
+                # make new_parent_node_list into parent_node_list
+                parent_node_list = list(set(new_parent_node_list))
+
+            # save tree
+            nx.write_gexf(tree_G, f"{self.DB_path}/KARS/PSPP_{para_type}_tree.gexf")
 
     def community_detection(self):
         # using louvain's modularity maximization
@@ -114,7 +224,7 @@ class PSPP_relation:
             print(df)
             print()
 
-    def search_path(self, edge_weight_limit, target_node):
+    def search_path(self, edge_weight_limit, target_node, except_node_list):
         # 1. limit edges by weight
         for edge in self.tree_G.copy().edges:
             if self.tree_G.edges[edge]["weight"] < edge_weight_limit:
@@ -124,6 +234,10 @@ class PSPP_relation:
         for node in self.tree_G.copy().nodes:
             if not self.tree_G.degree[node]:
                 self.tree_G.remove_node(node)
+
+        # 3. remove except_node_list
+        for node in except_node_list:
+            self.tree_G.remove_node(node)
 
         # 3. find high weighted paths
         self.path_list = []
@@ -135,12 +249,62 @@ class PSPP_relation:
                 pass
 
         # 4. sort path_list by path length
-        #self.path_list = sorted(self.path_list, key=lambda x: sum([self.tree_G.edges[edge]["weight"] for edge in zip(x[:-1], x[1:])]), reverse=True)
-        self.path_list = sorted(self.path_list, key=lambda x: len(x), reverse=False)
+        self.path_list = sorted(self.path_list, key=lambda x: sum([self.tree_G.edges[edge]["weight"] for edge in zip(x[:-1], x[1:])]), reverse=False)
+        #self.path_list = sorted(self.path_list, key=lambda x: len(x), reverse=False)
 
         # 5. print path_list
         for path in self.path_list:
             print(path, sum([self.tree_G.edges[edge]["weight"] for edge in zip(path[:-1], path[1:])]))
 
-        
+    def search_path_by_paper(self, source_node, target_node):
+        # 1. find for papers
+        source_target_path = {}
+        Total_G = nx.DiGraph()
+        for index in tqdm(os.listdir(self.DB_path)):
+            if os.path.isfile(f"{self.DB_path}/{index}/PSPP_abstract.gexf"):
+                G = nx.read_gexf(f"{self.DB_path}/{index}/PSPP_abstract.gexf")
+
+                # find shortest path from source_node to target_node
+                try:
+                    path = nx.shortest_path(G, source=source_node, target=target_node, weight="weight")
+                    source_target_path[index] = path
+                except:
+                    continue
+
+                # make a tree graph using Path
+                for i in range(len(path)-1):
+                    if not Total_G.has_edge(path[i], path[i+1]):
+                        Total_G.add_edge(path[i], path[i+1], weight=G.edges[path[i], path[i+1]]["weight"], paper_index=index)
+                    else:
+                        Total_G.edges[path[i], path[i+1]]["weight"] += G.edges[path[i], path[i+1]]["weight"]
+                        Total_G.edges[path[i], path[i+1]]["paper_index"] += f",{index}"
+
+                for node in path:
+                    depth = 1 / len(path) * path.index(node)
+                    # if not Total_G.has_node(node):
+                    #     Total_G.add_node(node, weight=G.nodes[node]["weight"], depth=i)
+                    if "weight" not in Total_G.nodes[node]:
+                        Total_G.nodes[node]["weight"] = G.nodes[node]["weight"]
+                    else:
+                        Total_G.nodes[node]["weight"] += G.nodes[node]["weight"]
+
+                    if "depth" not in Total_G.nodes[node]:
+                        Total_G.nodes[node]["depth"] = depth
+                    elif i > Total_G.nodes[node]["depth"]:
+                        Total_G.nodes[node]["depth"] = depth
+
+        # Reset Id of edges
+        for i, edge in enumerate(Total_G.edges()):
+            Total_G[edge[0]][edge[1]]['id'] = i
+
+        # 2. sort path_list by path length
+        source_target_path = sorted(source_target_path.items(), key=lambda x: len(x[1]), reverse=False)
+
+        # 3. print path_list
+        for path in source_target_path:
+            print(path)
+
+        # save Total_G
+        nx.write_gexf(Total_G, f"{self.KARS_path}/{source_node}_{target_node}.gexf")
+
 

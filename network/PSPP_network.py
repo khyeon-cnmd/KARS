@@ -12,38 +12,49 @@ import io  # Use BytesIO as a stand-in for a Python file object
 class PSPP_network:
     def __init__(self, DB_path):
         self.DB_path = DB_path
-        if os.path.isdir(self.DB_path) == False:
-            os.mkdir(self.DB_path)
+        if os.path.isdir(self.DB_path + "/KARS") == False:
+            os.mkdir(self.DB_path + "/KARS")
         self.spacy_model = spacy.load("en_core_sci_sm")
         self.spacy_model.tokenizer = Tokenizer(self.spacy_model.vocab, token_match=re.compile(r'\S+').match)
 
-    def PSPP_relationship(self):
+    def PSPP_relationship(self, file_type, para_type):
         print("PSPP_relationship")
+        if file_type == "KBSE":
+            data_loc = "cover_data"
+        elif file_type == "DEFT":
+            data_loc = "text_data"
+
         for paper_index in tqdm(os.listdir(f"{self.DB_path}/database")):
-            if os.path.isfile(f"{self.DB_path}/database/{paper_index}/KBSE.json"):
+            if os.path.isfile(f"{self.DB_path}/database/{paper_index}/{file_type}.json"):
                 # read json to dict
-                text_dict = json.load(open(f"{self.DB_path}/database/{paper_index}/KBSE.json", "r", encoding="utf-8-sig"))
+                text_dict = json.load(open(f"{self.DB_path}/database/{paper_index}/{file_type}.json", "r", encoding="utf-8-sig"))
 
                 # if it is not major cluster paper, pass
-                if text_dict["cover_data"]["cluster_label"] != "-1":
+                if data_loc == "cover_data" and text_dict[data_loc]["cluster_label"] != "-1":
                     continue
                 
                 # if there is no published_date, pass
-                if not text_dict["cover_data"]["published_date"]:
-                    continue
-                else:
-                    if isinstance(text_dict["cover_data"]["published_date"][0], list):
-                        year = text_dict["cover_data"]["published_date"][0][0]
-                    else:
-                        year = text_dict["cover_data"]["published_date"][0]
+                # if not text_dict[data_loc]["published_date"]:
+                #     continue
+                # else:
+                #     if isinstance(text_dict[data_loc]["published_date"][0], list):
+                #         year = text_dict[data_loc]["published_date"][0][0]
+                #     else:
+                #         year = text_dict[data_loc]["published_date"][0]
                     
-                    if len(str(year)) != 4:
-                        continue
+                #     if len(str(year)) != 4:
+                #         continue
 
                 # if there is no para_type, pass
-                if not "abstract" in text_dict["cover_data"].keys() or text_dict["cover_data"]["abstract"] == None:
+                if not para_type in text_dict[data_loc].keys() or text_dict[data_loc][para_type] == None:
                     continue
-                text = text_dict["cover_data"]["abstract"]["0"]
+
+                # merge all paragraph into one string
+                text = ""
+                for para_index in text_dict[data_loc][para_type].keys():
+                    text += text_dict[data_loc][para_type][para_index]
+                if text == "":
+                    continue
 
                 # split string into sentence
                 sentence_list = text.split(". ")
@@ -103,8 +114,10 @@ class PSPP_network:
 
                                     if not G.has_edge(root_word_lemma, root_word2_lemma):
                                         G.add_edge(root_word_lemma, root_word2_lemma, weight=1)
+                                        #G[root_word_lemma][root_word2_lemma][str(paper_index)] = 1
                                     else:
                                         G[root_word_lemma][root_word2_lemma]["weight"] += 1
+                                        #G[root_word_lemma][root_word2_lemma][str(paper_index)] += 1
                                     connection = True
                                     break
 
@@ -144,8 +157,10 @@ class PSPP_network:
                             # new_root_lemma = ' '.join([token.lemma_.replace(".", "").replace(",", "").replace(";", "").replace(":", "") for token in new_root])
                             if not G.has_edge(root_word_lemma, new_root_lemma):
                                 G.add_edge(root_word_lemma, new_root_lemma, weight=1)
+                                #G[root_word_lemma][new_root_lemma][str(paper_index)] = 1
                             else:
                                 G[root_word_lemma][new_root_lemma]["weight"] += 1
+                                #G[root_word_lemma][new_root_lemma][str(paper_index)] += 1
                 
                     # add node weight
                     for keyword in keyword_list:
@@ -157,13 +172,13 @@ class PSPP_network:
                             else:
                                 G.nodes[node]["weight"] += 1
 
-                            if not str(year) in G.nodes[node]:
-                                G.nodes[node][str(year)] = 1
-                            else:
-                                G.nodes[node][str(year)] += 1
+                            # if not str(year) in G.nodes[node]:
+                            #     G.nodes[node][str(year)] = 1
+                            # else:
+                            #     G.nodes[node][str(year)] += 1
 
                 # save network
-                nx.write_gexf(G, f"{self.DB_path}/database/{paper_index}/PSPP_abstract.gexf")
+                nx.write_gexf(G, f"{self.DB_path}/database/{paper_index}/PSPP_{para_type}.gexf")
 
     def PSPP_co_occurrence(self):
         print("PSPP_co_occurrence")
@@ -255,11 +270,11 @@ class PSPP_network:
                 # save network
                 nx.write_gexf(G, f"{self.DB_path}/database/{paper_index}/PSPP_title.gexf")
 
-    def construct_PSPP_network(self, para_type):
-        print(f"Construct PSPP {para_type} network")
-        if para_type == "abstract":
+    def construct_PSPP_network(self, edge_type, para_type):
+        print(f"Construct PSPP network")
+        if edge_type == "relationship":
             Total_G = nx.DiGraph()
-        elif para_type == "title":
+        elif edge_type == "co_occurrence":
             Total_G = nx.Graph()
 
         for paper_index in tqdm(os.listdir(f"{self.DB_path}/database")):
@@ -272,7 +287,7 @@ class PSPP_network:
                         # 기존 노드가 있는 경우, 속성 값을 합산
                         existing_node = Total_G.nodes[node_id]
                         for attr_name, attr_value in node_data.items():
-                            if not attr_name in "Label":
+                            if not attr_name == "label":
                                 existing_node[attr_name] = existing_node.get(attr_name, 0) + attr_value
                     else:
                         # 기존 노드가 없는 경우, 노드와 속성 추가
@@ -292,5 +307,9 @@ class PSPP_network:
         # Reset Id of edges
         for i, edge in enumerate(Total_G.edges()):
             Total_G[edge[0]][edge[1]]['id'] = i
+
+        # Add weight_rev for edges
+        for edge in Total_G.edges():
+            Total_G[edge[0]][edge[1]]['weight_rev'] = 1 / Total_G[edge[0]][edge[1]]['weight']
 
         nx.write_gexf(Total_G, f"{self.DB_path}/KARS/PSPP_{para_type}_network.gexf")

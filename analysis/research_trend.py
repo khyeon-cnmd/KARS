@@ -1,7 +1,8 @@
 import os
 import networkx as nx
 import datetime
-from bokeh.layouts import gridplot
+from bokeh.io import export_png
+from bokeh.models import TabPanel, Tabs
 from scipy.optimize import curve_fit
 from bokeh.plotting import figure, output_file, save
 from bokeh.models import HoverTool, Span, Label, Legend, ColumnDataSource, LabelSet
@@ -11,10 +12,10 @@ import numpy as np
 
 
 class research_trend:
-    def __init__(self, DB_name, DB_path):
-        self.DB_name = DB_name
+    def __init__(self, DB_path):
+        self.DB_name = DB_path.split("/")[-1]
         self.DB_path = DB_path + "/KARS"
-        self.G = nx.read_gexf(os.path.join(self.DB_path, "PSPP_title_network.gexf"))
+        self.G = nx.read_gexf(os.path.join(self.DB_path, "KARS.gexf"))
         pass
 
     def keyword_selection(self, keyword_limit):
@@ -364,7 +365,7 @@ class research_trend:
                 # ColumnDataSource 생성
                 source_increase = ColumnDataSource(data=increase_data)
                 source_decrease = ColumnDataSource(data=decrease_data)
-                p = figure(title=community, y_range=y_range, x_axis_label='frequency change %', height=400, width=300)
+                p = figure(title=community, y_range=y_range, x_axis_label='frequency change %', height=600, width=600)
 
                 # 가로 막대 그래프 그리기 (왼쪽 데이터셋)
                 bars_increase = p.hbar(y='rank', right='change', height=0.4, color='green', source=source_increase)
@@ -399,17 +400,18 @@ class research_trend:
                 hover.tooltips = [("keyword", "@keyword"), ("Freq %", "@change")]
                 p.add_tools(hover)
 
-                # save as html
-                plot_list.append(p)
-            
-            # make gridplot
-            p = gridplot([plot_list], sizing_mode='stretch_both')
+                # 탭 생성
+                tab = TabPanel(child=p, title=f"community {i}")
+                plot_list.append(tab)
+        
+            # 탭 생성
+            plot = Tabs(tabs=plot_list)
 
             # save as html
             output_file(f"{self.DB_path}/keyword_evolution.html")
-            save(p)
-
-            return p
+            save(plot)
+            
+            return plot
 
         print("keyword_evolution started")
         # find top keywords in each community
@@ -478,4 +480,5 @@ class research_trend:
         # plot the graph
         plot = interactive_graph(keyword_evolution)
         print("keyword_evolution finished")
+
         return plot

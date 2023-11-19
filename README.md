@@ -5,23 +5,26 @@
 키워드에 기반해 논문의 메타데이터를 자동으로 수집, 연구 구조화, 연구 트랜드 분석을 자동화합니다.
 
 # Installation
-## 1. anaconda 설치
+## 1. Github repository 로드
+    git clone --recurse-submodules https://github.com/khyeon-cnmd/KARS.git
+
+## 2. anaconda 설치
     conda create -n KARS python==3.10
     conda activate KARS
 
-## 2. python libraries 설치
+## 3. python libraries 설치
     pip install jsonlines
-    pip install gradio
+    pip install gradio==3.47.0
     pip install networkx[default]
     pip install tqdm
     pip install pandas
     pip install scipy
     pip install bokeh
+    pip install spacy
 
 ## 3. Spacy 언어팩 설치
-
-    #python -m spacy download en_core_web_sm
-    #python -m spacy download en_core_web_md
+    python -m spacy download en_core_web_sm
+    python -m spacy download en_core_web_trf
 
 # Usage
     KARS_GUI2.py 실행 후, https://127.0.0.1:7860 에 접속해 관련 설정 후 제출

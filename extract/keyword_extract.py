@@ -6,12 +6,12 @@ from spacy.tokenizer import Tokenizer
 from tqdm import tqdm
 
 class keyword_extraction:
-    def __init__(self, DB_path, tokenizer):
+    def __init__(self, DB_path, UPOS_model="efficiency"):
         self.DB_path = f"{DB_path}/database"
-        self.tokenizer = tokenizer
-        if self.tokenizer == "efficiency":
+        self.UPOS_model = UPOS_model
+        if self.UPOS_model == "efficiency":
             self.spacy_model = spacy.load("en_core_web_sm")
-        elif self.tokenizer == "accuracy":
+        elif self.UPOS_model == "accuracy":
             self.spacy_model = spacy.load("en_core_web_trf")
         self.spacy_model.tokenizer = Tokenizer(self.spacy_model.vocab, token_match=re.compile(r'\S+').match)
 

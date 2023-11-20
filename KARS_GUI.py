@@ -18,14 +18,11 @@ class Logger:
 
 class KARS_GUI:
     def __init__(self):
-        # Load KARS class
-        self.KARS_class = KARS()
-
         # Load DB interface
         self.load_DB_interface = gr.Interface(
             self.load_DB,
             [
-                gr.Textbox(lines=1, label="DB name (write name of DB constructed by KBSE)")
+                gr.Textbox(lines=1, label="DB path (write path of DB constructed by KBSE)")
             ],
             [
                 # inhibit add column and rows
@@ -34,19 +31,31 @@ class KARS_GUI:
             ]
         )
 
-        # construct PSPP network interface
-        self.construct_PSPP_network = gr.Interface(
-            self.construct_PSPP_network,
+        # keyword_extraction interface
+        self.keyword_extraction_interface = gr.Interface(
+            self.keyword_extraction,
+            [
+                gr.Radio(["efficiency", "accuracy"], label="UPOS_model", value="efficient", description="The model for UPOS tagging (efficiency: en_core_web_sm, accuracy: en_core_web_trf)"),
+            ],
+            [
+                # print run-time status
+                gr.Textbox(lines=1, label="keyword extraction status")
+            ]
+        )
+
+        # network_construction interface
+        self.network_construction_interface = gr.Interface(
+            self.network_construction,
             [
             ],
             [
                 # print run-time status
-                gr.Textbox(lines=1, label="PSPP network status")
+                gr.Textbox(lines=1, label="network construction status")
             ]
         )
 
         # research trend analysis interface 
-        self.research_trend_analysis = gr.Interface(
+        self.research_trend_analysis_interface = gr.Interface(
             self.research_trend_analysis,
             [
                 gr.Number(label="keyword limit", value=80, step=1, min_value=1, max_value=100, description="The % of keywords to be selected"),
@@ -68,44 +77,38 @@ class KARS_GUI:
         self.tab_interface = gr.TabbedInterface(
             [
                 self.load_DB_interface,
-                self.construct_PSPP_network,
-                self.research_trend_analysis
+                self.keyword_extraction_interface,
+                self.network_construction_interface,
+                self.research_trend_analysis_interface
             ],
             [
-                "login_session",
                 "load_DB",
-                "collect_metadata",
-                "construct_PSPP_network",
+                "keyword_extraction",
+                "network_construction",
                 "research_trend_analysis"
             ]
         ).queue(concurrency_count=1).launch(share=True)
 
-    def load_DB(self, DB_name):
-        self.DB_name = DB_name
-        # 만일 self.DB_list 가 존재하지 않는다면,
-        if not hasattr(self, "DB_list"):
-            self.DB_list = [[]]
-        if self.User == "":
-            return self.DB_list, "Please login first"
-        
-        if DB_name == "":
-            # 현존하는 DB Loading
-            self.DB_list = [[DB] for DB in os.listdir(f"")]
-            return self.DB_list, "DB list is loaded"
-        elif DB_name in os.listdir(f"{self.DB_path}/{self.User}"):
-            self.DB_list = [[DB] for DB in os.listdir(f"")]
-            return self.DB_list, f"{DB_name} is loaded"
-        else:
-            os.makedirs(f"{self.DB_path}/{self.User}/{self.DB_name}")
-            self.DB_list = [[DB] for DB in os.listdir(f"")]
-            return self.DB_list, f"{DB_name} is created"
+    def load_DB(self, DB_path):
+        self.DB_path = DB_path
 
-    def construct_PSPP_network(self, progress=gr.Progress()):
-        # progress
+        # 만일 self.DB_path 가 존재하지 않는다면,
+        if os.path.isdir(self.DB_path) == False:
+            return [], "Please check your DB path"
+        else:
+            # Load KARS class
+            self.KARS_class = KARS(self.DB_path)
+        
+            # DB_path 안에 있는 모든 폴더를 DB_list에 저장합니다.
+            Folder_list = [[DB] for DB in os.listdir(self.DB_path)]
+            return Folder_list, "DB is loaded"
+
+    def keyword_extraction(self, UPOS_model, progress=gr.Progress()):
+       # progress
         progress(0, desc="Please wait for a while...")
 
         # 터미널 출력을 저장할 파일의 경로를 지정합니다.
-        log_filename = f"{self.DB_path}/{self.User}/{self.DB_name}/construct_PSPP_network.log"
+        log_filename = f"{self.DB_path}/KARS/keyword_extraction.log"
 
         # 이전의 sys.stdout을 저장해둡니다.
         original_stdout = sys.stdout
@@ -113,9 +116,33 @@ class KARS_GUI:
         # Logger 클래스의 인스턴스를 생성하여 sys.stdout을 변경합니다.
         sys.stdout = Logger(log_filename)
 
-        # collect metadata
-        DB_path = self.DB_path + "/" + self.User + "/" + self.DB_name
-        self.KARS_class.construct_PSPP_network(DB_path)
+        # keyword_extraction
+        self.KARS_class.keyword_extraction(UPOS_model)
+
+        # 원래의 sys.stdout으로 돌아갑니다.
+        sys.stdout = original_stdout
+
+        # read log file
+        with open(log_filename, "r") as f:
+            log = f.read()
+
+        return log
+
+    def network_construction(self, progress=gr.Progress()):
+        # progress
+        progress(0, desc="Please wait for a while...")
+
+        # 터미널 출력을 저장할 파일의 경로를 지정합니다.
+        log_filename = f"{self.DB_path}/KARS/network_construction.log"
+
+        # 이전의 sys.stdout을 저장해둡니다.
+        original_stdout = sys.stdout
+
+        # Logger 클래스의 인스턴스를 생성하여 sys.stdout을 변경합니다.
+        sys.stdout = Logger(log_filename)
+
+        # network construction
+        self.KARS_class.network_construction()
 
         # 원래의 sys.stdout으로 돌아갑니다.
         sys.stdout = original_stdout

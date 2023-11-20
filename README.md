@@ -1,8 +1,7 @@
-<p align="center"><img src="./KARS_logo.png" width="250" height="250">
+<p align="center"><img src="./examples/KARS_logo.png" width="250" height="250">
 
 # Keyword-based Automatic Research Structurization (KARS)
-
-키워드에 기반해 논문의 메타데이터를 자동으로 수집, 연구 구조화, 연구 트랜드 분석을 자동화합니다.
+    과학 연구 분야의 서지 정보를 바탕으로 연구 키워드 추출, 연구 구조화, 연구 동향 분석을 자동화하여 연구자에게 연구의 공간적 형태 및 시간적 흐름을 시각적으로 제공하는 프로그램
 
 # Installation
 ## 1. Github repository 로드
@@ -27,34 +26,23 @@
     python -m spacy download en_core_web_trf
 
 # Usage
-    KARS_GUI2.py 실행 후, https://127.0.0.1:7860 에 접속해 관련 설정 후 제출
+    KARS_GUI.py 실행 후, https://127.0.0.1:7860 에 접속해 관련 설정 후 제출
 
 # Results
-## 1. n (xx.xx%) 폴더들
-    연구 분야를 구조화한 결과로, 각 커뮤니티별로 구분되어 있습니다.
-    1) n: 구분된 커뮤니티의 index
-    2) (xx.xx%): 전체 키워드의 Pagerank 대비 커뮤니티의 키워드 Pagerank 비율
+## 1. KARS.gexf
+    PageRank Algorithm을 통한 주요 키워드 선별, Louvain's Modularity를 통해 구축한 모듈화된 키워드 네트워크 결과로, 노드 크기를 통해 키워드 중요도, 노드 색을 통해 키워드 커뮤니티를 나타냄 (Gephi 프로그램을 통해 분석)
 
-    폴더 내에 존재하는 파일은 다음과 같습니다.
-    1) community.html: 구조화된 커뮤니티의 키워드 interactive graph
-    2) pagerank.csv: 구조화된 커뮤니티의 주요 키워드를 1순위부터 기술
-    3) pagerank_doc.csv: 구조화된 커뮤니티의 주요 키워드를 포함하는 논문 정보를 1순위부터 기술
-    4) subgraph.json: 구조화된 커뮤니티의 그래프 데이터
+## 2. research_maturity.html
+    전체 커뮤니티의 연도에 따른 키워드 수의 변화 그래프
+    제품 수명 주기 (PLC model)에 기반해 해당 연구 분야의 연구 성숙도를 평가
+<p align="center"><img src="./examples/research_maturity.png" width="250" height="250">
 
-    또한, 해당 커뮤니티의 키워드 분포 비율이 >20% 인 경우, 커뮤니티를 한번 더 세분화 합니다.
+## 3. community_year_trend.html
+    연구 커뮤니티 별 연도에 따른 키워드 분포의 변화 그래프
+    연구 구조화를 통해 확인된 연구 커뮤니티 별 연구 동향 분석에 활용
+<p align="center"><img src="./examples/community_year_trend.png" width="250" height="250">
 
-## 2. total_year_trend.png
-    전체 커뮤니티의 연도에 따른 키워드 수의 변화입니다.
-    해당 연구 분야의 전체적인 연구 트렌드 현황을 분석하는데 사용됩니다.
-
-## 3. community_year_trend.png
-    각 커뮤니티 별 연도에 따른 키워드 분포의 변화입니다.
-    해당 연구 분야의 특정 커뮤니티의 연구 트렌드 현황 분석에 사용됩니다.
-
-## 4. gaussian_interpolation.png
-    전체 연구 트렌드를 Product Life Cycle (PLC) 이론에 기반해 가우시안 추정한 결과입니다.
-    그림내에서 점선은 각각 다음을 의미합니다.
-    1) 첫번쨰 점선: Development 단계 - Introduction 단계. mu-3sigma
-    2) 두번째 점선: Introduction 단계 - Growth 단계. mu-2sigma
-    3) 세번째 점선: Growth 단계 - Maturity 단계. mu
-    4) 네번째 점선: Maturity 단계 - Decline 단계. mu+sigma
+## 4. keyword_evolution.html
+    연구 커뮤니티 별 성숙도에 따른 상위 키워드의 비율 변화 그래프
+    연구 구조화를 통해 확인된 연구 커뮤니티 별 시간에 따른 상위 키워드의 빈도 변화를 평가
+<p align="center"><img src="./examples/keyword_evolution.png" width="250" height="250">

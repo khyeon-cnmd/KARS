@@ -163,7 +163,7 @@ class KARS_GUI:
         progress(0, desc="Please wait for a while...")
 
         # 터미널 출력을 저장할 파일의 경로를 지정합니다.
-        log_filename = f"{self.DB_path}/{self.User}/{self.DB_name}/research_trend_analysis.log"
+        log_filename = f"{self.DB_path}/KARS/research_trend_analysis.log"
 
         # 이전의 sys.stdout을 저장해둡니다.
         original_stdout = sys.stdout
@@ -172,9 +172,7 @@ class KARS_GUI:
         sys.stdout = Logger(log_filename)
 
         # collect metadata
-        DB_path = self.DB_path + "/" + self.User + "/" + self.DB_name
-        DB_name = self.DB_name
-        research_maturity_plot, community_year_trend_plot, keyword_evolution_plot = self.KARS_class.research_trend_analysis(DB_path, DB_name, keyword_limit, weight_limit, min_year, start_PLC, end_PLC, top_rank)
+        research_maturity_plot, community_year_trend_plot, keyword_evolution_plot = self.KARS_class.research_trend_analysis(keyword_limit, weight_limit, min_year, start_PLC, end_PLC, top_rank)
 
         # 원래의 sys.stdout으로 돌아갑니다.
         sys.stdout = original_stdout

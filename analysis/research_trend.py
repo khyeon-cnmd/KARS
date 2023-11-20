@@ -71,6 +71,9 @@ class research_trend:
                 del self.modularity_dict[index]
         print("total community number: ", len(self.modularity_dict))
 
+        # save network
+        nx.write_gexf(self.G, f"{self.DB_path}/KARS_community.gexf")
+
         print("Community detection finished")
 
     def research_maturity(self, min_year):

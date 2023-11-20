@@ -34,12 +34,12 @@ PageRank Algorithm을 통한 주요 키워드 선별, Louvain's Modularity를 �
 
 ## 2. research_maturity.html
 전체 커뮤니티의 연도에 따른 키워드 수의 변화 그래프. 제품 수명 주기 (PLC model)에 기반해 해당 연구 분야의 연구 성숙도를 평가
-<p align="center"><img src="./examples/research_maturity.png" width="250" height="250">
+<p align="center"><img src="./examples/research_maturity.png">
 
 ## 3. community_year_trend.html
 연구 커뮤니티 별 연도에 따른 키워드 분포의 변화 그래프. 연구 구조화를 통해 확인된 연구 커뮤니티 별 연구 동향 분석에 활용
-<p align="center"><img src="./examples/community_year_trend.png" width="250" height="250">
+<p align="center"><img src="./examples/community_year_trend.png">
 
 ## 4. keyword_evolution.html
 연구 커뮤니티 별 성숙도에 따른 상위 키워드의 비율 변화 그래프. 연구 구조화를 통해 확인된 연구 커뮤니티 별 시간에 따른 상위 키워드의 빈도 변화를 평가
-<p align="center"><img src="./examples/keyword_evolution.png" width="250" height="250">
+<p align="center"><img src="./examples/keyword_evolution.png">

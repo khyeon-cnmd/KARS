@@ -43,3 +43,19 @@ PageRank Algorithm을 통한 주요 키워드 선별, Louvain's Modularity를 �
 ## 4. keyword_evolution.html
 연구 커뮤니티 별 성숙도에 따른 상위 키워드의 비율 변화 그래프. 연구 구조화를 통해 확인된 연구 커뮤니티 별 시간에 따른 상위 키워드의 빈도 변화를 평가
 <p align="center"><img src="./examples/keyword_evolution.png">
+
+## Contributor
+```
+Conceptualization: 김현, 이동화
+Data Curation: 김현
+Formal Analysis: 김현, 이동화
+Funding Acquisition: 이동화
+Investigation: 김현, 이동화
+Methodology: 김현, 이동화
+Project Administration: 김현, 이동화
+Resources: 이동화
+Software: 이동화
+Supervision: 이동화
+Validation: 김현, 이동화
+Visualization: 김현, 이동화
+```

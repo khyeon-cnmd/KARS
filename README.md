@@ -59,8 +59,8 @@ Conceptualization: Hyeon Kim, Donghwa Lee
 Data Curation: Hyeon Kim
 Formal Analysis: Hyeon Kim, Donghwa Lee
 Funding Acquisition: Donghwa Lee
-Investigation: Hyeon Kim, Donghwa Lee
-Methodology: Hyeon Kim, Donghwa Lee
+Investigation: Hyeon Kim, Eun Ho Kim, Jun Hyeong Gu, Donghwa Lee
+Methodology: Hyeon Kim, Seong Hun Kim, Jaeseon Kim, Donghwa Lee
 Project Administration: Hyeon Kim, Donghwa Lee
 Resources: Donghwa Lee
 Software: Donghwa Lee

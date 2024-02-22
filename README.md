@@ -1,17 +1,17 @@
 <p align="center"><img src="./examples/KARS_logo.png" width="250" height="250">
 
 # Keyword-based Automatic Research Structurization (KARS)
-과학 연구 분야의 서지 정보를 바탕으로 연구 키워드 추출, 연구 구조화, 연구 동향 분석을 자동화하여 연구자에게 연구의 공간적 형태 및 시간적 흐름을 시각적으로 제공하는 프로그램
+A program that automates the extraction of keywords from scientific research based on bibliographic information, structures the research, and analyzes research trends. It visually presents researchers with the spatial form and temporal flow of their research.
 
 # Installation
-## 1. Github repository 로드
+## 1. Clone Github repository
     git clone --recurse-submodules https://github.com/khyeon-cnmd/KARS.git
 
-## 2. anaconda 설치
+## 2. Setup anaconda
     conda create -n KARS python==3.10
     conda activate KARS
 
-## 3. python libraries 설치
+## 3. Install python libraries 
     pip install jsonlines
     pip install gradio==3.47.0
     pip install networkx[default]
@@ -21,41 +21,41 @@
     pip install bokeh
     pip install spacy
 
-## 3. Spacy 언어팩 설치
+## 4. Install spacy dataset
     python -m spacy download en_core_web_sm
     python -m spacy download en_core_web_trf
 
 # Usage
-KARS_GUI.py 실행 후, https://127.0.0.1:7860 에 접속해 관련 설정 후 제출
+After executing KARS_GUI.py, connect to https://127.0.0.1:7860, configure relevant settings, and submit.
 
 # Results
 ## 1. KARS.gexf
-PageRank Algorithm을 통한 주요 키워드 선별, Louvain's Modularity를 통해 구축한 모듈화된 키워드 네트워크 결과로, 노드 크기를 통해 키워드 중요도, 노드 색을 통해 키워드 커뮤니티를 나타냄 (Gephi 프로그램을 통해 분석)
+The PageRank algorithm is utilized to identify significant keywords, and the Louvain's Modularity is employed to construct a modularized keyword network. The results, represented in the Gephi program, display node size indicating keyword importance and node color representing keyword communities within the network.
 
 ## 2. research_maturity.html
-전체 커뮤니티의 연도에 따른 키워드 수의 변화 그래프. 제품 수명 주기 (PLC model)에 기반해 해당 연구 분야의 연구 성숙도를 평가
+A graph illustrating the fluctuation in the number of keywords across years for the entire community. This graph evaluates the research maturity of the field based on the Product Life Cycle (PLC) model, reflecting the lifecycle stages of research within the respective domain.
 <p align="center"><img src="./examples/research_maturity.png">
 
 ## 3. community_year_trend.html
-연구 커뮤니티 별 연도에 따른 키워드 분포의 변화 그래프. 연구 구조화를 통해 확인된 연구 커뮤니티 별 연구 동향 분석에 활용
+A graph depicting the evolution of keyword distribution over the years for each research community. This graph is instrumental in analyzing research trends within each community, as identified through research structuring.
 <p align="center"><img src="./examples/community_year_trend.png">
 
 ## 4. keyword_evolution.html
-연구 커뮤니티 별 성숙도에 따른 상위 키워드의 비율 변화 그래프. 연구 구조화를 통해 확인된 연구 커뮤니티 별 시간에 따른 상위 키워드의 빈도 변화를 평가
+A graph illustrating the proportionate changes in top keywords over time based on the maturity level of each research community. This graph evaluates the frequency variations of top keywords over time within each community, as identified through research structuring.
 <p align="center"><img src="./examples/keyword_evolution.png">
 
 ## Contributor
 ```
-Conceptualization: 김현, 이동화
-Data Curation: 김현
-Formal Analysis: 김현, 이동화
-Funding Acquisition: 이동화
-Investigation: 김현, 이동화
-Methodology: 김현, 이동화
-Project Administration: 김현, 이동화
-Resources: 이동화
-Software: 이동화
-Supervision: 이동화
-Validation: 김현, 이동화
-Visualization: 김현, 이동화
+Conceptualization: Hyeon Kim, Donghwa Lee
+Data Curation: Hyeon Kim
+Formal Analysis: Hyeon Kim, Donghwa Lee
+Funding Acquisition: Donghwa Lee
+Investigation: Hyeon Kim, Donghwa Lee
+Methodology: Hyeon Kim, Donghwa Lee
+Project Administration: Hyeon Kim, Donghwa Lee
+Resources: Donghwa Lee
+Software: Donghwa Lee
+Supervision: Donghwa Lee
+Validation: Hyeon Kim, Donghwa Lee
+Visualization: Hyeon Kim, Donghwa Lee
 ```
